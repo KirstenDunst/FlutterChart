@@ -159,7 +159,7 @@ class ChartBarPainter extends BasePainter {
     if (xDialValues != null && xDialValues.length > 0) {
       for (int i = 0; i < xDialValues.length; i++) {
         double x = startX + (rectPadding + rectWidth) * i;
-        TextPainter(
+        TextPainter tpX = TextPainter(
             ellipsis: '.',
             maxLines: 1,
             textAlign: TextAlign.center,
@@ -169,9 +169,8 @@ class ChartBarPainter extends BasePainter {
                 style: xDialValues[i].titleStyle != null ? xDialValues[i].titleStyle : TextStyle(
                   color: fontColor != null ? fontColor : defaultColor,
                   fontSize: fontSize,
-                )))
-          ..layout(minWidth: cellWidth, maxWidth: cellWidth)
-          ..paint(canvas, Offset(x, startY + basePadding));
+                )))..layout();
+          tpX.paint(canvas, Offset(x+cellWidth/2-tpX.width/2, startY + basePadding));
       }
     }
   }
