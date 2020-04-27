@@ -11,7 +11,7 @@ class ChartBarPainter extends BasePainter {
   List<ChartBeanY> yDialValues; //y轴左侧刻度显示，不传则没有
   double yMax; //y轴最大值
   Color xyColor; //xy轴的颜色
-  bool isShowX, isShowY; //是否显示x轴 y轴的文本, 是否展示xy轴
+  bool isShowX; //是否显示x轴文本, 
   double rectWidth; //柱状图的宽度,如果小的话按照这个显示，如果过于宽，则按照平均宽度减去最小间距5得出的宽度
   double fontSize; //刻度文本大小
   Color fontColor; //刻度文本颜色
@@ -40,7 +40,6 @@ class ChartBarPainter extends BasePainter {
     this.xyColor,
     this.value = 1,
     this.isShowX = false,
-    this.isShowY = false,
     this.rectWidth = 20.0,
     this.fontSize = 12,
     this.fontColor,

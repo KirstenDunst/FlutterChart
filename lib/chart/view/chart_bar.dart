@@ -12,7 +12,7 @@ class ChartBar extends StatefulWidget {
   final double yMax; //y轴最大值
   final Color xyColor; //xy轴的颜色
   final Color backgroundColor; //绘制的背景色
-  final bool isShowX,isShowY, isShowXY; //是否显示x刻度 y刻度
+  final bool isShowX; //是否显示x刻度
   final double rectWidth; //柱状图的宽度
   //以下的四周圆角只有在 rectRadius 为0的时候才生效
   final double rectRadiusTopLeft,
@@ -37,8 +37,6 @@ class ChartBar extends StatefulWidget {
     this.duration = const Duration(milliseconds: 800),
     this.backgroundColor,
     this.isShowX = false,
-    this.isShowY = false,
-    this.isShowXY = false,
     this.rectWidth = 20,
     this.offsetLeftX = 0,
     this.isAnimation = true,
@@ -102,7 +100,6 @@ class ChartBarState extends State<ChartBar>
       xyColor: widget.xyColor,
       yMax: widget.yMax,
       isShowX: widget.isShowX,
-      isShowY: widget.isShowY,
       rectWidth: widget.rectWidth,
       value: _value,
       fontSize: widget.fontSize,

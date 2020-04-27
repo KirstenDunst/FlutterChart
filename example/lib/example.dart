@@ -48,7 +48,8 @@ class RandomWordsState extends State<RandomWords> {
         index++;
       });
     }
-    return ListView(
+    return Scaffold(body:
+    ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
         //FN专注力样式图
@@ -66,7 +67,7 @@ class RandomWordsState extends State<RandomWords> {
         //饼状图
         _buildChartPie(context),
       ],
-    );
+    ) ,);
   }
 
   @override
@@ -373,13 +374,17 @@ class RandomWordsState extends State<RandomWords> {
           MediaQuery.of(context).size.height / 5 * 1.8),
       isShowX: true,
       yMax: 100.0,
-      offsetLeftX: 16,
+      rectWidth: 50.0,
       fontColor: Colors.white,
       rectShadowColor: Colors.white.withOpacity(0.5),
+      isReverse: false,
+      isCanTouch: true,
+      isShowTouchShadow: true,
+      isShowTouchValue: true,
       rectRadiusTopLeft: 4,
       rectRadiusTopRight: 4,
+      offsetLeftX: 16.0,
       duration: Duration(milliseconds: 1000),
-      
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
