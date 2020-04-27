@@ -39,7 +39,7 @@ class ChartBar extends StatefulWidget {
     this.isShowX = false,
     this.isShowY = false,
     this.isShowXY = false,
-    this.rectWidth,
+    this.rectWidth = 20,
     this.offsetLeftX = 0,
     this.isAnimation = true,
     this.isReverse = false,

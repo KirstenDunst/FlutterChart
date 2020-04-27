@@ -36,6 +36,8 @@ class ChartBeanY {
 class ChartBeanX {
   //x轴显示的内容
   String title;
+  //刻度标志样式
+  TextStyle titleStyle;
   //数值，用来处理柱体的高度。这里不用比值来操作是因为如果外部没有传最大值内部会有最大y值计算。
   double value;
   //柱体的渐变色数组

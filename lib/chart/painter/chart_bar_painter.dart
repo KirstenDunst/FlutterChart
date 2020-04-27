@@ -119,17 +119,17 @@ class ChartBarPainter extends BasePainter {
       ///绘制y轴文本
       var yValue = tempYModel.title;
       var yLength = tempYModel.positionRetioy * _fixedHeight;
-      TextPainter(
+      TextPainter tpTitle = TextPainter(
           textAlign: TextAlign.right,
           ellipsis: '.',
           maxLines: 1,
           text: TextSpan(text: '$yValue', style: tempYModel.titleStyle),
           textDirection: TextDirection.rtl)
-        ..layout(minWidth: 30, maxWidth: 30)
-        ..paint(
+        ..layout(minWidth: 30, maxWidth: 30);
+        tpTitle.paint(
             canvas,
             Offset(startX - 40,
-                startY - yLength - tempYModel.titleStyle.fontSize / 2));
+                startY - yLength - tpTitle.height / 2));
       //副文本
       var subLength = (yDialValues[i].titleValue -
               (i == yDialValues.length - 1
@@ -167,7 +167,7 @@ class ChartBarPainter extends BasePainter {
             textDirection: TextDirection.ltr,
             text: TextSpan(
                 text: xDialValues[i].title,
-                style: TextStyle(
+                style: xDialValues[i].titleStyle != null ? xDialValues[i].titleStyle : TextStyle(
                   color: fontColor != null ? fontColor : defaultColor,
                   fontSize: fontSize,
                 )))

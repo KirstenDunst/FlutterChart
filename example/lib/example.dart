@@ -314,6 +314,7 @@ class RandomWordsState extends State<RandomWords> {
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
       isShowX: true,
+      yMax: 100.0,
       rectWidth: 50.0,
       fontColor: Colors.white,
       rectShadowColor: Colors.white.withOpacity(0.5),
@@ -368,20 +369,17 @@ class RandomWordsState extends State<RandomWords> {
           centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
           positionRetioy: 35 / 100)
     ],
-      size: Size(MediaQuery.of(context).size.width,
+     size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
       isShowX: true,
-      rectWidth: 20.0,
+      yMax: 100.0,
+      offsetLeftX: 16,
       fontColor: Colors.white,
       rectShadowColor: Colors.white.withOpacity(0.5),
-      isReverse: false,
-      isCanTouch: true,
-      isShowTouchShadow: true,
-      isShowTouchValue: true,
       rectRadiusTopLeft: 4,
       rectRadiusTopRight: 4,
-      offsetLeftX: 16,
       duration: Duration(milliseconds: 1000),
+      
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
