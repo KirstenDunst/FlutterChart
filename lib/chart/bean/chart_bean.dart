@@ -43,5 +43,5 @@ class ChartBeanX {
   //柱体的渐变色数组
   List<Color> gradualColor;
 
-  ChartBeanX({this.title, this.value, this.gradualColor});
+  ChartBeanX({this.title, this.titleStyle, this.value, this.gradualColor});
 }
