@@ -7,16 +7,16 @@ import 'package:flutter_chart/chart/painter/chart_bar_painter.dart';
 class ChartBar extends StatefulWidget {
   final Duration duration;
   final Size size;
-  final List<ChartBean> chartBeans;
-  final Color rectColor; //柱状图默认的颜色
+  final List<ChartBeanX> xDialValues; //x轴刻度显示，不传则没有
+  final List<ChartBeanY> yDialValues; //y轴左侧刻度显示，不传则没有
+  final double yMax; //y轴最大值
+  final Color xyColor; //xy轴的颜色
   final Color backgroundColor; //绘制的背景色
-  final bool isShowX; //是否显示x刻度
-  final double rectRadius; //矩形的圆角
+  final bool isShowX,isShowY, isShowXY; //是否显示x刻度 y刻度
+  final double rectWidth; //柱状图的宽度
   //以下的四周圆角只有在 rectRadius 为0的时候才生效
   final double rectRadiusTopLeft,
-      rectRadiusTopRight,
-      rectRadiusBottomLeft,
-      rectRadiusBottomRight;
+      rectRadiusTopRight;
   final bool isAnimation; //是否执行动画
   final bool isReverse; //是否循环执行动画
   final double fontSize; //刻度文本大小
@@ -25,15 +25,22 @@ class ChartBar extends StatefulWidget {
   final Color rectShadowColor; //触摸时显示的阴影颜色
   final bool isShowTouchShadow; //触摸时是否显示阴影
   final bool isShowTouchValue; //触摸时是否显示值
+  final double offsetLeftX; //距离左侧设备边的距离，用来计算长按的文案显示位置计算。
+  final double basePadding; //默认的边距
 
   const ChartBar({
     Key key,
     @required this.size,
-    @required this.chartBeans,
+    @required this.xDialValues,
+    this.yDialValues,
+    this.xyColor,
     this.duration = const Duration(milliseconds: 800),
-    this.rectColor,
     this.backgroundColor,
     this.isShowX = false,
+    this.isShowY = false,
+    this.isShowXY = false,
+    this.rectWidth,
+    this.offsetLeftX = 0,
     this.isAnimation = true,
     this.isReverse = false,
     this.fontSize = 12,
@@ -42,12 +49,11 @@ class ChartBar extends StatefulWidget {
     this.isCanTouch = false,
     this.isShowTouchShadow = true,
     this.isShowTouchValue = false,
-    this.rectRadius = 0,
     this.rectRadiusTopLeft = 0,
     this.rectRadiusTopRight = 0,
-    this.rectRadiusBottomLeft = 0,
-    this.rectRadiusBottomRight = 0,
-  })  : assert(rectColor != null),
+    this.basePadding = 16,
+    this.yMax,
+  })  : 
         super(key: key);
 
   @override
@@ -91,9 +97,13 @@ class ChartBarState extends State<ChartBar>
   @override
   Widget build(BuildContext context) {
     var painter = ChartBarPainter(
-      widget.chartBeans,
-      widget.rectColor,
+      widget.xDialValues,
+      yDialValues: widget.yDialValues,
+      xyColor: widget.xyColor,
+      yMax: widget.yMax,
       isShowX: widget.isShowX,
+      isShowY: widget.isShowY,
+      rectWidth: widget.rectWidth,
       value: _value,
       fontSize: widget.fontSize,
       fontColor: widget.fontColor,
@@ -102,23 +112,21 @@ class ChartBarState extends State<ChartBar>
       isShowTouchValue: widget.isShowTouchValue,
       rectShadowColor: widget.rectShadowColor,
       globalPosition: globalPosition,
-      rectRadius: widget.rectRadius,
       rectRadiusTopLeft: widget.rectRadiusTopLeft,
       rectRadiusTopRight: widget.rectRadiusTopRight,
-      rectRadiusBottomLeft: widget.rectRadiusBottomLeft,
-      rectRadiusBottomRight: widget.rectRadiusBottomRight,
+      basePadding: widget.basePadding,
     );
 
     if (widget.isCanTouch) {
       return GestureDetector(
         onLongPressStart: (details) {
           setState(() {
-            globalPosition = details.globalPosition;
+            globalPosition = Offset(details.globalPosition.dx-widget.offsetLeftX, details.globalPosition.dy);
           });
         },
         onLongPressMoveUpdate: (details) {
           setState(() {
-            globalPosition = details.globalPosition;
+            globalPosition = Offset(details.globalPosition.dx-widget.offsetLeftX, details.globalPosition.dy);
           });
         },
         onLongPressUp: () async {

@@ -282,19 +282,39 @@ class RandomWordsState extends State<RandomWords> {
   ///bar-circle
   Widget _buildChartBarCircle(context) {
     var chartBar = ChartBar(
-      chartBeans: [
-        ChartBean(x: '12-01', y: 30, color: Colors.red),
-        ChartBean(x: '12-02', y: 100, color: Colors.yellow),
-        ChartBean(x: '12-03', y: 70, color: Colors.green),
-        ChartBean(x: '12-04', y: 70, color: Colors.blue),
-        ChartBean(x: '12-05', y: 30, color: Colors.deepPurple),
-        ChartBean(x: '12-06', y: 90, color: Colors.deepOrange),
-        ChartBean(x: '12-07', y: 50, color: Colors.greenAccent)
+      xDialValues: [
+        ChartBeanX(title: '12-01', value: 30, gradualColor: [Colors.red,Colors.red]),
+        ChartBeanX(title: '12-02', value: 100, gradualColor: [Colors.yellow,Colors.yellow]),
+        ChartBeanX(title: '12-03', value: 70, gradualColor: [Colors.green,Colors.green]),
+        ChartBeanX(title: '12-04', value: 70, gradualColor: [Colors.blue,Colors.blue]),
+        ChartBeanX(title: '12-05', value: 30, gradualColor: [Colors.deepPurple,Colors.deepPurple]),
+        ChartBeanX(title: '12-06', value: 90, gradualColor: [Colors.deepOrange,Colors.deepOrange]),
+        ChartBeanX(title: '12-07', value: 50, gradualColor: [Colors.greenAccent,Colors.greenAccent])
       ],
+      yDialValues: [
+      ChartBeanY(
+          title: '100',
+          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+          centerSubTitle: 'Calm',
+          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+          positionRetioy: 100 / 100),
+      ChartBeanY(
+          title: '65',
+          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+          centerSubTitle: 'Aware',
+          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+          positionRetioy: 65 / 100),
+      ChartBeanY(
+          title: '35',
+          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+          centerSubTitle: 'Focused',
+          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+          positionRetioy: 35 / 100)
+    ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
-      rectColor: Colors.deepPurple,
       isShowX: true,
+      rectWidth: 50.0,
       fontColor: Colors.white,
       rectShadowColor: Colors.white.withOpacity(0.5),
       isReverse: false,
@@ -303,6 +323,7 @@ class RandomWordsState extends State<RandomWords> {
       isShowTouchValue: true,
       rectRadiusTopLeft: 50,
       rectRadiusTopRight: 50,
+      offsetLeftX: 16.0,
       duration: Duration(milliseconds: 1000),
     );
     return Card(
@@ -318,19 +339,39 @@ class RandomWordsState extends State<RandomWords> {
   ///bar-round
   Widget _buildChartBarRound(context) {
     var chartBar = ChartBar(
-      chartBeans: [
-        ChartBean(x: '12-01', y: 30, color: Colors.red),
-        ChartBean(x: '12-02', y: 100, color: Colors.deepOrange),
-        ChartBean(x: '12-03', y: 70, color: Colors.yellow),
-        ChartBean(x: '12-04', y: 70, color: Colors.green),
-        ChartBean(x: '12-05', y: 30, color: Colors.greenAccent),
-        ChartBean(x: '12-06', y: 90, color: Colors.blue),
-        ChartBean(x: '12-07', y: 50, color: Colors.deepPurple)
+      xDialValues: [
+        ChartBeanX(title: '12-01', value: 30, gradualColor: [Colors.red,Colors.red]),
+        ChartBeanX(title: '12-02', value: 100, gradualColor: [Colors.yellow,Colors.yellow]),
+        ChartBeanX(title: '12-03', value: 70, gradualColor: [Colors.green,Colors.green]),
+        ChartBeanX(title: '12-04', value: 70, gradualColor: [Colors.blue,Colors.blue]),
+        ChartBeanX(title: '12-05', value: 30, gradualColor: [Colors.deepPurple,Colors.deepPurple]),
+        ChartBeanX(title: '12-06', value: 90, gradualColor: [Colors.deepOrange,Colors.deepOrange]),
+        ChartBeanX(title: '12-07', value: 50, gradualColor: [Colors.greenAccent,Colors.greenAccent])
       ],
+      yDialValues: [
+      ChartBeanY(
+          title: '100',
+          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+          centerSubTitle: 'Calm',
+          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+          positionRetioy: 100 / 100),
+      ChartBeanY(
+          title: '65',
+          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+          centerSubTitle: 'Aware',
+          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+          positionRetioy: 65 / 100),
+      ChartBeanY(
+          title: '35',
+          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+          centerSubTitle: 'Focused',
+          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+          positionRetioy: 35 / 100)
+    ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
-      rectColor: Colors.deepPurple,
       isShowX: true,
+      rectWidth: 20.0,
       fontColor: Colors.white,
       rectShadowColor: Colors.white.withOpacity(0.5),
       isReverse: false,
@@ -339,6 +380,7 @@ class RandomWordsState extends State<RandomWords> {
       isShowTouchValue: true,
       rectRadiusTopLeft: 4,
       rectRadiusTopRight: 4,
+      offsetLeftX: 16,
       duration: Duration(milliseconds: 1000),
     );
     return Card(

@@ -6,20 +6,17 @@ import 'package:flutter_chart/chart/painter/base_painter.dart';
 class ChartBarPainter extends BasePainter {
   double _fixedHeight, _fixedWidth; //宽高
   double value; //当前动画值
-  List<ChartBean> chartBeans;
   double startX, endX, startY, endY;
-  List<double> maxMin = [0, 0]; //存储极值
-  Color rectColor; //柱状图默认的颜色
-  bool isShowX; //是否显示x轴的文本
-  double rectWidth; //柱状图的宽度
+  List<ChartBeanX> xDialValues; //x轴刻度显示，不传则没有
+  List<ChartBeanY> yDialValues; //y轴左侧刻度显示，不传则没有
+  double yMax; //y轴最大值
+  Color xyColor; //xy轴的颜色
+  bool isShowX, isShowY; //是否显示x轴 y轴的文本, 是否展示xy轴
+  double rectWidth; //柱状图的宽度,如果小的话按照这个显示，如果过于宽，则按照平均宽度减去最小间距5得出的宽度
   double fontSize; //刻度文本大小
-  Color fontColor; //文本颜色
-  double rectRadius; //矩形的圆角
-  //以下的四周圆角只有在 rectRadius 为0的时候才生效
-  double rectRadiusTopLeft,
-      rectRadiusTopRight,
-      rectRadiusBottomLeft,
-      rectRadiusBottomRight;
+  Color fontColor; //刻度文本颜色
+  //以下的四周圆角
+  double rectRadiusTopLeft, rectRadiusTopRight;
   bool _isAnimationEnd = false;
   bool isCanTouch;
   Color rectShadowColor; //触摸时显示的阴影颜色
@@ -27,17 +24,24 @@ class ChartBarPainter extends BasePainter {
   bool isShowTouchValue; //触摸时是否显示值
   Offset globalPosition; //触摸位置
   Map<Rect, double> rectMap = new Map();
+  double basePadding; //默认的边距
 
-  static const double defaultRectPadding = 8; //默认柱状图的间隔
-  static const double basePadding = 16; //默认的边距
   static const Color defaultColor = Colors.deepPurple;
   static const Color defaultRectShadowColor = Colors.white;
+  double rectPadding; //柱状图的间距
+  double cellWidth; //每一个柱状图的基本宽度
+  //坐标轴多出的长度
+  static const double overPadding = 5;
 
   ChartBarPainter(
-    this.chartBeans,
-    this.rectColor, {
+    this.xDialValues, {
+    this.yDialValues,
+    this.yMax,
+    this.xyColor,
     this.value = 1,
     this.isShowX = false,
+    this.isShowY = false,
+    this.rectWidth = 20.0,
     this.fontSize = 12,
     this.fontColor,
     this.isCanTouch = false,
@@ -45,16 +49,15 @@ class ChartBarPainter extends BasePainter {
     this.isShowTouchValue = false,
     this.rectShadowColor,
     this.globalPosition,
-    this.rectRadius = 0,
     this.rectRadiusTopLeft = 0,
     this.rectRadiusTopRight = 0,
-    this.rectRadiusBottomLeft = 0,
-    this.rectRadiusBottomRight = 0,
+    this.basePadding = 16,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     _init(size);
+    _drawXy(canvas, size); //xy轴
     _drawX(canvas, size); //x轴刻度
     _drawBar(canvas, size); //柱状图
     _drawOnPressed(canvas, size); //绘制触摸
@@ -68,36 +71,107 @@ class ChartBarPainter extends BasePainter {
 
   ///初始化
   void _init(Size size) {
-    startX = basePadding;
+    startX = basePadding * 2.5;
     endX = size.width - basePadding;
     startY = size.height - (isShowX ? basePadding * 3 : basePadding);
     endY = basePadding * 2;
     _fixedHeight = startY - endY;
     _fixedWidth = endX - startX;
-    maxMin = calculateMaxMin(chartBeans);
+    if (yMax == null || yMax == 0) {
+      yMax = calculateMaxMinNew(xDialValues).first;
+    }
 
-    //去除所有间隔之后的所有柱状图宽度(最多7个柱状图,6段)
-    var maxRectsWidth = _fixedWidth - 6 * defaultRectPadding;
-    rectWidth = maxRectsWidth / 7; //单个柱状图的宽度
+    rectPadding = 5; //最小间距安排到5
+    cellWidth = _fixedWidth / xDialValues.length;
+    if (rectWidth > (cellWidth - rectWidth)) {
+      rectWidth = cellWidth - rectPadding;
+    } else {
+      rectPadding = cellWidth - rectWidth;
+    }
+    if (xyColor == null) {
+      xyColor = defaultColor;
+    }
+  }
+
+  ///x,y轴
+  void _drawXy(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..isAntiAlias = true
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round
+      ..color = xyColor
+      ..style = PaintingStyle.stroke;
+    canvas.drawLine(
+        Offset(startX, startY), Offset(endX + overPadding, startY), paint); //x轴
+    canvas.drawLine(
+        Offset(startX, startY), Offset(startX, endY - overPadding), paint); //y轴
+    _drawRuler(canvas, size);
+  }
+
+  //y轴刻度
+  void _drawRuler(Canvas canvas, Size size) {
+    if (yDialValues == null || yDialValues.length == 0) {
+      return;
+    }
+    for (int i = 0; i < yDialValues.length; i++) {
+      var tempYModel = yDialValues[i];
+
+      ///绘制y轴文本
+      var yValue = tempYModel.title;
+      var yLength = tempYModel.positionRetioy * _fixedHeight;
+      TextPainter(
+          textAlign: TextAlign.right,
+          ellipsis: '.',
+          maxLines: 1,
+          text: TextSpan(text: '$yValue', style: tempYModel.titleStyle),
+          textDirection: TextDirection.rtl)
+        ..layout(minWidth: 30, maxWidth: 30)
+        ..paint(
+            canvas,
+            Offset(startX - 40,
+                startY - yLength - tempYModel.titleStyle.fontSize / 2));
+      //副文本
+      var subLength = (yDialValues[i].titleValue -
+              (i == yDialValues.length - 1
+                  ? 0
+                  : yDialValues[i + 1].titleValue)) /
+          2 /
+          yMax *
+          _fixedHeight;
+      TextDirection textDirection = TextDirection.rtl;
+      TextPainter tp = TextPainter(
+          textAlign: TextAlign.center,
+          ellipsis: '.',
+          maxLines: 1,
+          text: TextSpan(
+              text: tempYModel.centerSubTitle,
+              style: tempYModel.centerSubTextStyle),
+          textDirection: textDirection)
+        ..layout(minWidth: 40, maxWidth: 40);
+      tp.paint(
+          canvas,
+          Offset(
+              startX - 40, startY - yLength + subLength.abs() - tp.height / 2));
+    }
   }
 
   ///x轴刻度
   void _drawX(Canvas canvas, Size size) {
-    if (chartBeans != null && chartBeans.length > 0) {
-      for (int i = 0; i < chartBeans.length; i++) {
-        double x = startX + defaultRectPadding * i + rectWidth * i;
+    if (xDialValues != null && xDialValues.length > 0) {
+      for (int i = 0; i < xDialValues.length; i++) {
+        double x = startX + (rectPadding + rectWidth) * i;
         TextPainter(
             ellipsis: '.',
             maxLines: 1,
             textAlign: TextAlign.center,
             textDirection: TextDirection.ltr,
             text: TextSpan(
-                text: chartBeans[i].x,
+                text: xDialValues[i].title,
                 style: TextStyle(
                   color: fontColor != null ? fontColor : defaultColor,
                   fontSize: fontSize,
                 )))
-          ..layout(minWidth: rectWidth, maxWidth: rectWidth)
+          ..layout(minWidth: cellWidth, maxWidth: cellWidth)
           ..paint(canvas, Offset(x, startY + basePadding));
       }
     }
@@ -105,42 +179,41 @@ class ChartBarPainter extends BasePainter {
 
   ///柱状图
   void _drawBar(Canvas canvas, Size size) {
-    if (chartBeans == null || chartBeans.length == 0) return;
+    if (xDialValues == null || xDialValues.length == 0) return;
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = 12
       ..strokeCap = StrokeCap.round
-      ..color = rectColor
       ..style = PaintingStyle.fill;
 
-    if (maxMin[0] <= 0) return;
-    //最多只绘制7组数据
+    if (yMax <= 0) return;
     rectMap.clear();
-    var length = chartBeans.length > 7 ? 7 : chartBeans.length;
+    var length = xDialValues.length;
     for (int i = 0; i < length; i++) {
-      if (chartBeans[i].color != null) {
-        paint.color = chartBeans[i].color;
-      } else {
-        paint.color = rectColor;
+      List<Color> gradualColors = [rectShadowColor, rectShadowColor];
+      if (xDialValues[i].gradualColor != null) {
+        gradualColors = xDialValues[i].gradualColor;
       }
-      double left = startX + defaultRectPadding * i + rectWidth * i;
+      double left = startX +
+          (rectPadding + rectWidth) * i +
+          cellWidth / 2 -
+          rectWidth / 2;
       double right = left + rectWidth;
       double currentHeight =
-          startY - chartBeans[i].y / maxMin[0] * _fixedHeight * value;
+          startY - xDialValues[i].value / yMax * _fixedHeight * value;
       var rect = Rect.fromLTRB(left, currentHeight, right, startY);
-      if (rectRadius != 0) {
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(rect, Radius.circular(rectRadius)), paint);
-      } else {
-        canvas.drawRRect(
-            RRect.fromRectAndCorners(rect,
-                topLeft: Radius.circular(rectRadiusTopLeft),
-                topRight: Radius.circular(rectRadiusTopRight),
-                bottomLeft: Radius.circular(rectRadiusBottomLeft),
-                bottomRight: Radius.circular(rectRadiusBottomRight)),
-            paint);
-      }
-      if (!rectMap.containsKey(rect)) rectMap[rect] = chartBeans[i].y;
+      paint.shader = LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              tileMode: TileMode.mirror,
+              colors: gradualColors)
+          .createShader(rect);
+      canvas.drawRRect(
+          RRect.fromRectAndCorners(rect,
+              topLeft: Radius.circular(rectRadiusTopLeft),
+              topRight: Radius.circular(rectRadiusTopRight)),
+          paint);
+      if (!rectMap.containsKey(rect)) rectMap[rect] = xDialValues[i].value;
     }
   }
 
@@ -148,7 +221,7 @@ class ChartBarPainter extends BasePainter {
   void _drawOnPressed(Canvas canvas, Size size) {
     if (!_isAnimationEnd) return;
     if (globalPosition == null) return;
-    if (chartBeans == null || chartBeans.length == 0 || maxMin[0] <= 0) return;
+    if (xDialValues == null || xDialValues.length == 0 || yMax <= 0) return;
     try {
       Offset pointer = globalPosition;
 
@@ -160,8 +233,8 @@ class ChartBarPainter extends BasePainter {
       Rect currentRect;
       var yValue;
       rectMap.forEach((rect, value) {
-        if (rect.left - defaultRectPadding <= pointer.dx &&
-            pointer.dx <= rect.right + defaultRectPadding) {
+        if ((rect.left - rectPadding / 2) <= (pointer.dx) &&
+            (pointer.dx) <= (rect.right + rectPadding / 2)) {
           currentRect = rect;
           yValue = value;
         }
@@ -173,20 +246,12 @@ class ChartBarPainter extends BasePainter {
             ..color = rectShadowColor == null
                 ? defaultRectShadowColor.withOpacity(0.5)
                 : rectShadowColor;
-          if (rectRadius != 0) {
-            canvas.drawRRect(
-                RRect.fromRectAndRadius(
-                    currentRect, Radius.circular(rectRadius)),
-                paint);
-          } else {
-            canvas.drawRRect(
-                RRect.fromRectAndCorners(currentRect,
-                    topLeft: Radius.circular(rectRadiusTopLeft),
-                    topRight: Radius.circular(rectRadiusTopRight),
-                    bottomLeft: Radius.circular(rectRadiusBottomLeft),
-                    bottomRight: Radius.circular(rectRadiusBottomRight)),
-                paint);
-          }
+
+          canvas.drawRRect(
+              RRect.fromRectAndCorners(currentRect,
+                  topLeft: Radius.circular(rectRadiusTopLeft),
+                  topRight: Radius.circular(rectRadiusTopRight)),
+              paint);
         }
 
         ///绘制文本
