@@ -48,26 +48,27 @@ class RandomWordsState extends State<RandomWords> {
         index++;
       });
     }
-    return Scaffold(body:
-    ListView(
-      physics: BouncingScrollPhysics(),
-      children: <Widget>[
-        //FN专注力样式图
-        _buildFocusChartLine(context),
-        //柱状顶部半圆型
-        _buildChartBarCircle(context),
-        //柱状图顶部自定义弧角
-        _buildChartBarRound(context),
-        //平滑曲线带填充颜色
-        _buildChartCurve(context),
-        //折线带填充颜色
-        _buildChartLine(context),
-        //双折线
-        _buildDoubleChartLine(context),
-        //饼状图
-        _buildChartPie(context),
-      ],
-    ) ,);
+    return Scaffold(
+      body: ListView(
+        physics: BouncingScrollPhysics(),
+        children: <Widget>[
+          //FN专注力样式图
+          _buildFocusChartLine(context),
+          //柱状顶部半圆型
+          _buildChartBarCircle(context),
+          //柱状图顶部自定义弧角
+          _buildChartBarRound(context),
+          //平滑曲线带填充颜色
+          _buildChartCurve(context),
+          //折线带填充颜色
+          _buildChartLine(context),
+          //双折线
+          _buildDoubleChartLine(context),
+          //饼状图
+          _buildChartPie(context),
+        ],
+      ),
+    );
   }
 
   @override
@@ -93,7 +94,8 @@ class RandomWordsState extends State<RandomWords> {
     }
     List yValues = ['100', '65', '35', '0'];
     List xValues = ["0", "20'", "40'", "60'"];
-    List yTexts = ["忘我","一般","走神",''];
+    List xPositionRetioy = [0.0,0.33,0.66,1.0];
+    List yTexts = ["忘我", "一般", "走神", ''];
     List yTextColors = [
       Color(0xEEF75E36),
       Color(0xEEFFC278),
@@ -104,7 +106,8 @@ class RandomWordsState extends State<RandomWords> {
     for (var i = 0; i < yValues.length; i++) {
       xArr.add(DialStyle(
           titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-          title: xValues[i]));
+          title: xValues[i],
+          positionRetioy: xPositionRetioy[i],));
 
       yArr.add(DialStyle(
           title: yValues[i],
@@ -284,34 +287,53 @@ class RandomWordsState extends State<RandomWords> {
   Widget _buildChartBarCircle(context) {
     var chartBar = ChartBar(
       xDialValues: [
-        ChartBeanX(title: '12-01', value: 30, gradualColor: [Colors.red,Colors.red]),
-        ChartBeanX(title: '12-02', value: 100, gradualColor: [Colors.yellow,Colors.yellow]),
-        ChartBeanX(title: '12-03', value: 70, gradualColor: [Colors.green,Colors.green]),
-        ChartBeanX(title: '12-04', value: 70, gradualColor: [Colors.blue,Colors.blue]),
-        ChartBeanX(title: '12-05', value: 30, gradualColor: [Colors.deepPurple,Colors.deepPurple]),
-        ChartBeanX(title: '12-06', value: 90, gradualColor: [Colors.deepOrange,Colors.deepOrange]),
-        ChartBeanX(title: '12-07', value: 50, gradualColor: [Colors.greenAccent,Colors.greenAccent])
+        ChartBeanX(
+            title: '12-01', value: 30, gradualColor: [Colors.red, Colors.red]),
+        ChartBeanX(
+            title: '12-02',
+            value: 100,
+            gradualColor: [Colors.yellow, Colors.yellow]),
+        ChartBeanX(
+            title: '12-03',
+            value: 70,
+            gradualColor: [Colors.green, Colors.green]),
+        ChartBeanX(
+            title: '12-04',
+            value: 70,
+            gradualColor: [Colors.blue, Colors.blue]),
+        ChartBeanX(
+            title: '12-05',
+            value: 30,
+            gradualColor: [Colors.deepPurple, Colors.deepPurple]),
+        ChartBeanX(
+            title: '12-06',
+            value: 90,
+            gradualColor: [Colors.deepOrange, Colors.deepOrange]),
+        ChartBeanX(
+            title: '12-07',
+            value: 50,
+            gradualColor: [Colors.greenAccent, Colors.greenAccent])
       ],
       yDialValues: [
-      ChartBeanY(
-          title: '100',
-          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-          centerSubTitle: 'Calm',
-          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-          positionRetioy: 100 / 100),
-      ChartBeanY(
-          title: '65',
-          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-          centerSubTitle: 'Aware',
-          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-          positionRetioy: 65 / 100),
-      ChartBeanY(
-          title: '35',
-          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-          centerSubTitle: 'Focused',
-          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-          positionRetioy: 35 / 100)
-    ],
+        ChartBeanY(
+            title: '100',
+            titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+            centerSubTitle: 'Calm',
+            centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+            positionRetioy: 100 / 100),
+        ChartBeanY(
+            title: '65',
+            titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+            centerSubTitle: 'Aware',
+            centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+            positionRetioy: 65 / 100),
+        ChartBeanY(
+            title: '35',
+            titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+            centerSubTitle: 'Focused',
+            centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+            positionRetioy: 35 / 100)
+      ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
       isShowX: true,
@@ -342,35 +364,54 @@ class RandomWordsState extends State<RandomWords> {
   Widget _buildChartBarRound(context) {
     var chartBar = ChartBar(
       xDialValues: [
-        ChartBeanX(title: '12-01', value: 30, gradualColor: [Colors.red,Colors.red]),
-        ChartBeanX(title: '12-02', value: 100, gradualColor: [Colors.yellow,Colors.yellow]),
-        ChartBeanX(title: '12-03', value: 70, gradualColor: [Colors.green,Colors.green]),
-        ChartBeanX(title: '12-04', value: 70, gradualColor: [Colors.blue,Colors.blue]),
-        ChartBeanX(title: '12-05', value: 30, gradualColor: [Colors.deepPurple,Colors.deepPurple]),
-        ChartBeanX(title: '12-06', value: 90, gradualColor: [Colors.deepOrange,Colors.deepOrange]),
-        ChartBeanX(title: '12-07', value: 50, gradualColor: [Colors.greenAccent,Colors.greenAccent])
+        ChartBeanX(
+            title: '12-01', value: 30, gradualColor: [Colors.red, Colors.red]),
+        ChartBeanX(
+            title: '12-02',
+            value: 100,
+            gradualColor: [Colors.yellow, Colors.yellow]),
+        ChartBeanX(
+            title: '12-03',
+            value: 70,
+            gradualColor: [Colors.green, Colors.green]),
+        ChartBeanX(
+            title: '12-04',
+            value: 70,
+            gradualColor: [Colors.blue, Colors.blue]),
+        ChartBeanX(
+            title: '12-05',
+            value: 30,
+            gradualColor: [Colors.deepPurple, Colors.deepPurple]),
+        ChartBeanX(
+            title: '12-06',
+            value: 90,
+            gradualColor: [Colors.deepOrange, Colors.deepOrange]),
+        ChartBeanX(
+            title: '12-07',
+            value: 50,
+            gradualColor: [Colors.greenAccent, Colors.greenAccent])
       ],
       yDialValues: [
-      ChartBeanY(
-          title: '100',
-          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-          centerSubTitle: 'Calm',
-          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-          positionRetioy: 100 / 100),
-      ChartBeanY(
-          title: '65',
-          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-          centerSubTitle: 'Aware',
-          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-          positionRetioy: 65 / 100),
-      ChartBeanY(
-          title: '35',
-          titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-          centerSubTitle: 'Focused',
-          centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-          positionRetioy: 35 / 100)
-    ],
-     size: Size(MediaQuery.of(context).size.width,
+        ChartBeanY(
+            title: '100',
+            titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+            centerSubTitle: 'Calm',
+            centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+            positionRetioy: 100 / 100),
+        ChartBeanY(
+            title: '65',
+            titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+            centerSubTitle: 'Aware',
+            centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+            positionRetioy: 65 / 100),
+        ChartBeanY(
+            title: '35',
+            titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+            centerSubTitle: 'Focused',
+            centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+            positionRetioy: 35 / 100)
+      ],
+      size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
       isShowX: true,
       yMax: 100.0,

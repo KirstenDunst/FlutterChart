@@ -114,9 +114,12 @@ class ChartLineFocusPainter extends BasePainter {
 
   ///x,y轴刻度 & 辅助线
   void drawRuler(Canvas canvas, Paint paint) {
-    double dw = fixedWidth / (xDialValues.length - 1); //两个点之间的x方向距离
     for (int i = 0; i < xDialValues.length; i++) {
       var tempXDigalModel = xDialValues[i];
+      double dw = 0;
+      if (tempXDigalModel.positionRetioy != null) {
+        dw = fixedWidth * tempXDigalModel.positionRetioy;//两个点之间的x方向距离
+      }
 
       ///绘制x轴文本
       TextPainter(
@@ -126,14 +129,14 @@ class ChartLineFocusPainter extends BasePainter {
               text: tempXDigalModel.title, style: tempXDigalModel.titleStyle),
           textDirection: TextDirection.ltr)
         ..layout(minWidth: 40, maxWidth: 40)
-        ..paint(canvas, Offset(startX + dw * i - 20, startY + basePadding));
+        ..paint(canvas, Offset(startX + dw - 20, startY + basePadding));
 
       if (isShowHintY && i != 0) {
         //y轴辅助线
         Path hitYPath = Path();
         hitYPath
-          ..moveTo(startX + dw * i, startY)
-          ..lineTo(startX + dw * i, endY - overPadding);
+          ..moveTo(startX + dw, startY)
+          ..lineTo(startX + dw, endY - overPadding);
         if (isHintLineImaginary) {
           canvas.drawPath(
             dashPath(
@@ -147,8 +150,8 @@ class ChartLineFocusPainter extends BasePainter {
         }
       }
       // ///x轴刻度
-      // canvas.drawLine(Offset(startX + dw * i, startY),
-      //     Offset(startX + dw * i, startY - rulerWidth), paint..color = xyColor);
+      // canvas.drawLine(Offset(startX + dw, startY),
+      //     Offset(startX + dw, startY - rulerWidth), paint..color = xyColor);
     }
     bool isShowSub = true;
     double xSub = startX - 40;

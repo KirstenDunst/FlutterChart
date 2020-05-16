@@ -1,3 +1,12 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2020-03-29 10:26:09
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-05-16 09:19:25
+ * @Description: 
+ * @Email: cao_shixin@yahoo.com
+ * @Company: BrainCo
+ */ 
 import 'package:flutter/material.dart';
 
 class ChartBeanFocus {
@@ -23,10 +32,10 @@ class DialStyle {
   //刻度标志样式
   TextStyle titleStyle;
   //两个刻度之间的标注文案（向前绘制即x轴在该刻度左侧绘制，y轴在该刻度下面绘制）,不需要的话不设置
-  String centerSubTitle = '';
+  String centerSubTitle;
   //标注文案样式
   TextStyle centerSubTextStyle;
-  //与最大y轴数值的比率，用来计算绘制刻度的位置使用。(x轴无效，默认均匀分布)
+  //与最大数值的比率，用来计算绘制刻度的位置使用。
   double positionRetioy;
 
   DialStyle({this.title,this.titleStyle, this.centerSubTitle, this.centerSubTextStyle,this.positionRetioy});
