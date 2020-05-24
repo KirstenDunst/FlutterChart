@@ -133,7 +133,7 @@ class RandomWordsState extends State<RandomWords> {
       hintLineColor: Colors.blue,
       isHintLineImaginary: false,
       centerSubTitlePosition: CenterSubTitlePosition.Right,
-      xMax: 60,
+      xMax: 10,
       yMax: 100.0,
       xDialValues: xArr,
       yDialValues: yArr,

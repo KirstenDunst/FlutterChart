@@ -118,7 +118,7 @@ class ChartLineFocusPainter extends BasePainter {
       var tempXDigalModel = xDialValues[i];
       double dw = 0;
       if (tempXDigalModel.positionRetioy != null) {
-        dw = fixedWidth * tempXDigalModel.positionRetioy;//两个点之间的x方向距离
+        dw = fixedWidth * tempXDigalModel.positionRetioy; //两个点之间的x方向距离
       }
 
       ///绘制x轴文本
@@ -189,7 +189,9 @@ class ChartLineFocusPainter extends BasePainter {
                 startY - yLength - tempYModel.titleStyle.fontSize / 2));
       if (isShowSub) {
         var subLength = (yDialValues[i].titleValue -
-                (i == yDialValues.length-1 ? 0 : yDialValues[i+1].titleValue)) /
+                (i == yDialValues.length - 1
+                    ? 0
+                    : yDialValues[i + 1].titleValue)) /
             2 /
             yMax *
             fixedHeight;
@@ -276,8 +278,7 @@ class ChartLineFocusPainter extends BasePainter {
             path.moveTo(currentX, value);
             Path shadowPath = new Path();
             shadowPath.moveTo(currentX, startY);
-            shadowPath.lineTo(currentX - gradualStep, value);
-            shadowPath.lineTo(currentX - gradualStep, value);
+            shadowPath.lineTo(currentX, value);
             oldShadowPath = shadowPath;
             stepBegainX = currentX;
           }
@@ -303,7 +304,10 @@ class ChartLineFocusPainter extends BasePainter {
                   currentY,
                   currentX - gradualStep,
                   currentY);
-              oldShadowPath.lineTo(currentX + gradualStep, currentY);
+              double tempX = (currentX + gradualStep) < endX
+                  ? (currentX + gradualStep)
+                  : endX;
+              oldShadowPath.lineTo(tempX, currentY);
             } else {
               Path shadowPath = new Path();
               if (valueArr[i - 1] > valueArr[i]) {
@@ -339,7 +343,10 @@ class ChartLineFocusPainter extends BasePainter {
                     currentX - gradualStep,
                     currentY);
               }
-              shadowPath.lineTo(currentX + gradualStep, currentY);
+              double tempX = (currentX + gradualStep) < endX
+                  ? (currentX + gradualStep)
+                  : endX;
+              shadowPath.lineTo(tempX, currentY);
               shadowPaths.add(new ShadowSub(
                   focusPath: oldShadowPath,
                   rectGradient: _shader(i - 1, stepBegainX, currentX)));
@@ -364,12 +371,12 @@ class ChartLineFocusPainter extends BasePainter {
           }
         }
 
-        if (currentX > (fixedWidth + startX)) {
+        if (currentX + gradualStep > (fixedWidth + startX)) {
           // 绘制结束
           if (path != null && oldShadowPath != null) {
             pathArr.add(path);
             oldShadowPath
-              ..lineTo(currentX + gradualStep, startY)
+              ..lineTo(fixedWidth + startX, startY)
               ..lineTo(stepBegainX, startY)
               ..close();
             shadowPaths.add(new ShadowSub(
