@@ -6,6 +6,14 @@ import 'base_painter.dart';
 
 class ChartLineFocusPainter extends BasePainter {
   List<ChartBeanFocus> chartBeans;
+  //双曲线，比对的beans
+  List<ChartBeanFocus> contrastChartBeans;
+  //双曲线，对比线条的颜色
+  Color contrastLineColor;
+  //双曲线，对比的数据在用户当前位置的头像显示
+  Widget centerContrastPoint;
+  //用户进行位置的头像显示
+  Widget centerPoint;
   bool isLinkBreak; //beans的时间轴如果断开，true： 是继续上一个有数值的值绘制，还是 false：断开。按照多条绘制
   Color xyColor; //xy轴的颜色
   double basePadding; //默认的边距16
@@ -36,6 +44,10 @@ class ChartLineFocusPainter extends BasePainter {
     this.chartBeans,
     this.isLinkBreak,
     this.lineColor, {
+    this.contrastChartBeans,
+    this.contrastLineColor,
+    this.centerPoint,
+    this.centerContrastPoint,
     this.isShowHintX = false,
     this.isShowHintY = false,
     this.xyColor = defaultColor,
@@ -385,7 +397,9 @@ class ChartLineFocusPainter extends BasePainter {
             path = null;
             oldShadowPath = null;
           }
-          this.canvasEnd();
+          if (this.canvasEnd != null) {
+            this.canvasEnd();
+          }
           return;
         }
         oldX = currentX;

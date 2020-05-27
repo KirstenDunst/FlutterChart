@@ -4,6 +4,14 @@ import 'package:flutter_chart/chart/painter/chart_line_focus_painter.dart';
 import 'package:flutter_chart/flutter_chart.dart';
 
 class ChartLineFocus extends StatefulWidget {
+  //双曲线，比对的beans
+  final List<ChartBeanFocus> contrastChartBeans;
+  //双曲线，对比线条的颜色
+  final Color contrastLineColor;
+  //双曲线，对比的数据在用户当前位置的头像显示
+  final Widget centerContrastPoint;
+  //用户进行位置的头像显示
+  final Widget centerPoint;
   final Size size; //内容宽高
   final Color backgroundColor; //绘制的内容背景色
   final double lineWidth; //曲线或折线的线宽
@@ -27,6 +35,10 @@ class ChartLineFocus extends StatefulWidget {
   const ChartLineFocus({
     Key key,
     @required this.size,
+    this.contrastChartBeans,
+    this.contrastLineColor,
+    this.centerContrastPoint,
+    this.centerPoint,
     this.chartBeans,
     this.isLinkBreak = false,
     @required this.canvasEnd,
@@ -74,6 +86,10 @@ class ChartLineFocusState extends State<ChartLineFocus>
   @override
   Widget build(BuildContext context) {
     var painter = ChartLineFocusPainter(chartBeanList, widget.isLinkBreak, widget.lineColor,
+        contrastChartBeans: widget.contrastChartBeans,
+        contrastLineColor: widget.contrastLineColor,
+        centerContrastPoint: widget.centerContrastPoint,
+        centerPoint: widget.centerPoint,
         lineWidth: widget.lineWidth,
         xyColor: widget.xyColor,
         isShowHintX: widget.isShowHintX,
