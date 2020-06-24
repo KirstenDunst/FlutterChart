@@ -11,7 +11,7 @@ class ChartBarPainter extends BasePainter {
   List<ChartBeanY> yDialValues; //y轴左侧刻度显示，不传则没有
   double yMax; //y轴最大值
   Color xyColor; //xy轴的颜色
-  bool isShowX; //是否显示x轴文本, 
+  bool isShowX; //是否显示x轴文本,
   double rectWidth; //柱状图的宽度,如果小的话按照这个显示，如果过于宽，则按照平均宽度减去最小间距5得出的宽度
   double fontSize; //刻度文本大小
   Color fontColor; //刻度文本颜色
@@ -79,9 +79,9 @@ class ChartBarPainter extends BasePainter {
     if (yMax == null || yMax == 0) {
       yMax = calculateMaxMinNew(xDialValues).first;
     }
-
     rectPadding = 5; //最小间距安排到5
-    cellWidth = _fixedWidth / xDialValues.length;
+    cellWidth =
+        _fixedWidth / (xDialValues.length == 0 ? 1 : xDialValues.length);
     if (rectWidth > (cellWidth - rectWidth)) {
       rectWidth = cellWidth - rectPadding;
     } else {
@@ -125,10 +125,8 @@ class ChartBarPainter extends BasePainter {
           text: TextSpan(text: '$yValue', style: tempYModel.titleStyle),
           textDirection: TextDirection.rtl)
         ..layout(minWidth: 30, maxWidth: 30);
-        tpTitle.paint(
-            canvas,
-            Offset(startX - 40,
-                startY - yLength - tpTitle.height / 2));
+      tpTitle.paint(
+          canvas, Offset(startX - 40, startY - yLength - tpTitle.height / 2));
       //副文本
       var subLength = (yDialValues[i].titleValue -
               (i == yDialValues.length - 1
@@ -166,11 +164,15 @@ class ChartBarPainter extends BasePainter {
             textDirection: TextDirection.ltr,
             text: TextSpan(
                 text: xDialValues[i].title,
-                style: xDialValues[i].titleStyle != null ? xDialValues[i].titleStyle : TextStyle(
-                  color: fontColor != null ? fontColor : defaultColor,
-                  fontSize: fontSize,
-                )))..layout();
-          tpX.paint(canvas, Offset(x+cellWidth/2-tpX.width/2, startY + basePadding));
+                style: xDialValues[i].titleStyle != null
+                    ? xDialValues[i].titleStyle
+                    : TextStyle(
+                        color: fontColor != null ? fontColor : defaultColor,
+                        fontSize: fontSize,
+                      )))
+          ..layout();
+        tpX.paint(canvas,
+            Offset(x + cellWidth / 2 - tpX.width / 2, startY + basePadding));
       }
     }
   }
