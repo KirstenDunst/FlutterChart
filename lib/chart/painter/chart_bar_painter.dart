@@ -51,7 +51,7 @@ class ChartBarPainter extends BasePainter {
     this.rectRadiusTopLeft = 0,
     this.rectRadiusTopRight = 0,
     this.basePadding = 16,
-  });
+  }) : assert(xDialValues != null);
 
   @override
   void paint(Canvas canvas, Size size) {
