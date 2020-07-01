@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:32:05
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-06-24 18:02:23
+ * @LastEditTime: 2020-06-29 10:17:08
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -13,6 +13,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class ChartBarCirclePage extends StatefulWidget {
   static const String routeName = 'chart_bar_circle';
+  static const String title = '柱状顶部半圆型';
   @override
   _ChartBarCircleState createState() => _ChartBarCircleState();
 }
@@ -22,7 +23,7 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
   Widget build(BuildContext context) {
     return Scaffold(
        appBar: AppBar(
-        title: Text('柱状顶部半圆型'),
+        title: Text(ChartBarCirclePage.title),
       ),
       body: _buildChartBarCircle(context),
     );

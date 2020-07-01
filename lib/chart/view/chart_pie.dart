@@ -1,6 +1,16 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2020-03-29 10:26:09
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-06-30 10:36:20
+ * @Description: 饼状图绘制区域
+ * @Email: cao_shixin@yahoo.com
+ * @Company: BrainCo
+ */ 
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/chart/bean/chart_pie_bean.dart';
+import 'package:flutter_chart/chart/enum/chart_pie_enum.dart';
 import 'package:flutter_chart/chart/painter/chart_pie_painter.dart';
 
 class ChartPie extends StatefulWidget {
@@ -27,7 +37,7 @@ class ChartPie extends StatefulWidget {
     this.centerR,
     this.centerColor,
     this.divisionWidth = 0,
-    this.assistTextShowType = AssistTextShowType.None,
+    this.assistTextShowType = AssistTextShowType.OnlyName,
     this.assistBGColor,
     this.decimalDigits = 0,
   }) : super(key: key);

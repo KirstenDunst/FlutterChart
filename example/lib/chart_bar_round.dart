@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:33:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 13:42:47
+ * @LastEditTime: 2020-06-29 10:17:43
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -12,6 +12,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class ChartBarRoundPage extends StatefulWidget {
   static const String routeName = 'chart_bar_round';
+  static const String title = '柱状图顶部自定义弧角';
   @override
   _ChartBarRoundState createState() => _ChartBarRoundState();
 }
@@ -21,7 +22,7 @@ class _ChartBarRoundState extends State<ChartBarRoundPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('柱状图顶部自定义弧角'),
+        title: Text(ChartBarRoundPage.title),
       ),
       body: _buildChartBarRound(context),
     );

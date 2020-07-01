@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 13:44:15
+ * @LastEditTime: 2020-06-29 10:19:09
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -12,6 +12,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class DoubleChartlinePage extends StatefulWidget {
   static const String routeName = 'double_chart_line';
+  static const String title = '双折线';
   @override
   _DoubleChartlineState createState() => _DoubleChartlineState();
 }
@@ -21,7 +22,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('双折线'),
+        title: Text(DoubleChartlinePage.title),
       ),
       body: _buildDoubleChartLine(context),
     );

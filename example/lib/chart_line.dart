@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:05
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 13:43:52
+ * @LastEditTime: 2020-06-29 10:18:44
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -12,6 +12,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class ChartLinePage extends StatefulWidget {
   static const String routeName = 'chart_line';
+  static const String title = '折线带填充颜色';
   @override
   _ChartLineState createState() => _ChartLineState();
 }
@@ -21,7 +22,7 @@ class _ChartLineState extends State<ChartLinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('折线带填充颜色'),
+        title: Text(ChartLinePage.title),
       ),
       body: _buildChartLine(context),
     );

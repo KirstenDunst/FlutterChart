@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 13:41:04
+ * @LastEditTime: 2020-06-29 10:16:10
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -16,6 +16,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class FocusChartLinePage extends StatefulWidget {
   static const String routeName = 'focus_chart_line';
+  static const String title = 'FN专注力样式图';
   @override
   _FocusChartLineState createState() => _FocusChartLineState();
 }
@@ -42,8 +43,8 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('FN专注力样式图'),
+      appBar: AppBar( 
+        title: Text(FocusChartLinePage.title),
       ),
       body: _buildFocusChartLine(context),
     );

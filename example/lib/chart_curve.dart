@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:33:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 13:43:25
+ * @LastEditTime: 2020-06-29 10:18:10
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -12,6 +12,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class ChartCurvePage extends StatefulWidget {
   static const String routeName = 'chart_curve';
+  static const String title = '平滑曲线带填充颜色';
   @override
   _ChartCurveState createState() => _ChartCurveState();
 }
@@ -21,7 +22,7 @@ class _ChartCurveState extends State<ChartCurvePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('平滑曲线带填充颜色'),
+        title: Text(ChartCurvePage.title),
       ),
       body: _buildChartCurve(context),
     );

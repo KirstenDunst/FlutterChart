@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 14:53:20
+ * @LastEditTime: 2020-06-29 10:20:43
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -64,13 +64,13 @@ class _MyAppPageState extends State<MyAppPage> {
   void initState() {
     super.initState();
     _demoTitleArr = [
-      CellModel(title: 'FN专注力样式图', routeName: FocusChartLinePage.routeName),
-      CellModel(title: '柱状顶部半圆型', routeName: ChartBarCirclePage.routeName),
-      CellModel(title: '柱状图顶部自定义弧角', routeName: ChartBarRoundPage.routeName),
-      CellModel(title: '平滑曲线带填充颜色', routeName: ChartCurvePage.routeName),
-      CellModel(title: '折线带填充颜色', routeName: ChartLinePage.routeName),
-      CellModel(title: '双折线', routeName: DoubleChartlinePage.routeName),
-      CellModel(title: '饼状图', routeName: ChartPiePage.routeName)
+      CellModel(title: FocusChartLinePage.title, routeName: FocusChartLinePage.routeName),
+      CellModel(title: ChartBarCirclePage.title, routeName: ChartBarCirclePage.routeName),
+      CellModel(title: ChartBarRoundPage.title, routeName: ChartBarRoundPage.routeName),
+      CellModel(title: ChartCurvePage.title, routeName: ChartCurvePage.routeName),
+      CellModel(title: ChartLinePage.title, routeName: ChartLinePage.routeName),
+      CellModel(title: DoubleChartlinePage.title, routeName: DoubleChartlinePage.routeName),
+      CellModel(title: ChartPiePage.title, routeName: ChartPiePage.routeName)
     ];
   }
 

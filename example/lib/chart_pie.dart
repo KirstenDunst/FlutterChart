@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-05-27 13:44:43
+ * @LastEditTime: 2020-06-30 10:38:47
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -12,6 +12,7 @@ import 'package:flutter_chart/flutter_chart.dart';
 
 class ChartPiePage extends StatefulWidget {
   static const String routeName = 'chart_pie';
+  static const String title = '饼状图';
   @override
   _ChartPieState createState() => _ChartPieState();
 }
@@ -21,7 +22,7 @@ class _ChartPieState extends State<ChartPiePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('饼状图'),
+        title: Text(ChartPiePage.title),
       ),
       body: _buildChartPie(context),
     );
@@ -62,7 +63,7 @@ class _ChartPieState extends State<ChartPiePage> {
             color: Colors.orange,
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.red)),
       ],
-      assistTextShowType: AssistTextShowType.CenterNamePercentage,
+      assistTextShowType: AssistTextShowType.NamePercentage,
       assistBGColor: Color(0xFFF6F6F6),
       decimalDigits: 1,
       divisionWidth: 2,
