@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-06-29 10:20:43
+ * @LastEditTime: 2020-07-02 17:14:42
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -13,6 +13,7 @@ import 'package:example/chart_curve.dart';
 import 'package:example/chart_line.dart';
 import 'package:example/chart_pie.dart';
 import 'package:example/double_chart_line.dart';
+import 'package:example/focus_chart_double_line.dart';
 import 'package:example/focus_chart_line.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,8 @@ void main() => runApp(MyApp());
 final Map<String, WidgetBuilder> _routes = {
   //FN专注力样式图
   FocusChartLinePage.routeName: (_) => FocusChartLinePage(),
+  //FN大师竞赛双专注力样式图
+  FNDoubleLinePage.routeName: (_) => FNDoubleLinePage(),
   //柱状顶部半圆型
   ChartBarCirclePage.routeName: (_) => ChartBarCirclePage(),
   //柱状图顶部自定义弧角
@@ -65,6 +68,7 @@ class _MyAppPageState extends State<MyAppPage> {
     super.initState();
     _demoTitleArr = [
       CellModel(title: FocusChartLinePage.title, routeName: FocusChartLinePage.routeName),
+      CellModel(title: FNDoubleLinePage.title, routeName: FNDoubleLinePage.routeName),
       CellModel(title: ChartBarCirclePage.title, routeName: ChartBarCirclePage.routeName),
       CellModel(title: ChartBarRoundPage.title, routeName: ChartBarRoundPage.routeName),
       CellModel(title: ChartCurvePage.title, routeName: ChartCurvePage.routeName),

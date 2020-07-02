@@ -5,72 +5,57 @@ import 'package:path_drawing/path_drawing.dart';
 import 'base_painter.dart';
 
 class ChartLineFocusPainter extends BasePainter {
-  List<ChartBeanFocus> chartBeans;
-  //双曲线，比对的beans
-  List<ChartBeanFocus> contrastChartBeans;
-  //双曲线，对比线条的颜色
-  Color contrastLineColor;
-  //双曲线，对比的数据在用户当前位置的头像显示
-  Widget centerContrastPoint;
-  //用户进行位置的头像显示
-  Widget centerPoint;
-  bool isLinkBreak; //beans的时间轴如果断开，true： 是继续上一个有数值的值绘制，还是 false：断开。按照多条绘制
-  Color xyColor; //xy轴的颜色
-  double basePadding; //默认的边距16
-  static const double overPadding = 0; //多出最大的极值额外的线长
-  bool isShowHintX, isShowHintY; //x、y轴的辅助线
-  Color hintLineColor;
-  bool isHintLineImaginary; //辅助线是否为虚线
-  Color lineColor; //曲线或折线的颜色
-  double lineWidth; //绘制的线宽
+  List<FocusChartBeanMain> focusChartBeans;
+  Color xyColor = defaultColor; //xy轴的颜色
   List<DialStyle> xDialValues; //x轴刻度显示，不传则没有
-  CenterSubTitlePosition centerSubTitlePosition; //解释文案的显示与否及位置
   List<DialStyle> yDialValues; //y轴左侧刻度显示，不传则没有
-  int xMax; //x轴最大值（以秒为单位）
-  double yMax; //y轴最大值
-  List<Color> gradualColors; //渐变颜色。不设置的话默认按照解释文案的分层显示，如果设置，即为整体颜色渐变显示
-  VoidCallback canvasEnd; //结束回调
+  bool isLeftYDialSub = true; //y轴显示副刻度是在左侧还是在右侧，默认左侧
+  int xMax = 60; //x轴最大值（以秒为单位）
+  double yMax = 100; //y轴最大值
+  double basePadding = 16; //默认的边距16
+
+  bool isShowHintX = false, isShowHintY = false; //x、y轴的辅助线
+  Color hintLineColor = defaultColor; //辅助线颜色
+  bool isHintLineImaginary = false; //辅助线是否为虚线
 
   double _startX, _endX, _startY, _endY;
   double _fixedHeight, _fixedWidth; //坐标可容纳的宽高
-  List<ShadowSub> _shadowPaths = []; //小区域渐变色显示操作
-  List<Path> _pathArr = []; //线条数组
-  //y轴显示数据，如果index值为null表示这里断开
-  List<double> _valueArr = [];
 
-  static const Color defaultColor = Colors.deepPurple;
+  static const double overPadding = 0; //多出最大的极值额外的线长
+  static const Color defaultColor = Colors.deepPurple; //默认颜色
 
   ChartLineFocusPainter(
-    this.chartBeans,
-    this.isLinkBreak,
-    this.lineColor, {
-    this.contrastChartBeans,
-    this.contrastLineColor,
-    this.centerPoint,
-    this.centerContrastPoint,
-    this.isShowHintX = false,
-    this.isShowHintY = false,
-    this.xyColor = defaultColor,
-    this.lineWidth = 4,
-    this.canvasEnd,
+    this.focusChartBeans, {
+    this.xyColor,
     this.xDialValues,
-    this.centerSubTitlePosition = CenterSubTitlePosition.None,
     this.yDialValues,
+    this.isLeftYDialSub,
     this.yMax,
     this.xMax,
-    this.gradualColors,
-    this.isHintLineImaginary,
-    this.hintLineColor,
     this.basePadding,
+    this.isShowHintX,
+    this.isShowHintY,
+    this.hintLineColor,
+    this.isHintLineImaginary,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     _init(size);
     _drawXy(canvas, size); //坐标轴
-    _dealValue(); //处理数据
-    _calculatePath(size);
-    _drawLine(canvas, size); //曲线或折线
+
+    for (FocusChartBeanMain bean in focusChartBeans) {
+      //小区域渐变色显示操作
+      List<ShadowSub> shadowPaths = [];
+      //线条数组
+      List<Path> pathArr = [];
+      //y轴显示数据，如果index值为null表示这里断开
+      List<double> valueArr = [];
+      //处理数据
+      _dealValue(valueArr, bean.chartBeans, bean.isLinkBreak);
+      _calculatePath(size, valueArr, shadowPaths, pathArr, bean);
+      _drawLine(canvas, size, valueArr, shadowPaths, pathArr, bean); //曲线或折线
+    }
   }
 
   @override
@@ -80,11 +65,6 @@ class ChartLineFocusPainter extends BasePainter {
 
   ///初始化
   void _init(Size size) {
-    initValue();
-    initBorder(size);
-  }
-
-  void initValue() {
     if (xyColor == null) {
       xyColor = defaultColor;
     }
@@ -94,10 +74,11 @@ class ChartLineFocusPainter extends BasePainter {
     if (basePadding == null) {
       basePadding = 16;
     }
+    _initBorder(size);
   }
 
   ///计算边界
-  void initBorder(Size size) {
+  void _initBorder(Size size) {
     _startX = basePadding * 2.5;
     // yNum > 0 ? basePadding * 2.5 : basePadding * 2; //预留出y轴刻度值所占的空间
     _endX = size.width - basePadding * 2;
@@ -116,16 +97,16 @@ class ChartLineFocusPainter extends BasePainter {
       ..color = xyColor
       ..style = PaintingStyle.stroke;
 
-    canvas.drawLine(
-        Offset(_startX, _startY), Offset(_endX + overPadding, _startY), paint); //x轴
-    canvas.drawLine(
-        Offset(_startX, _startY), Offset(_startX, _endY - overPadding), paint); //y轴
+    canvas.drawLine(Offset(_startX, _startY),
+        Offset(_endX + overPadding, _startY), paint); //x轴
+    canvas.drawLine(Offset(_startX, _startY),
+        Offset(_startX, _endY - overPadding), paint); //y轴
 
-    drawRuler(canvas, paint); //刻度
+    _drawRuler(canvas, paint); //刻度
   }
 
   ///x,y轴刻度 & 辅助线
-  void drawRuler(Canvas canvas, Paint paint) {
+  void _drawRuler(Canvas canvas, Paint paint) {
     for (int i = 0; i < xDialValues.length; i++) {
       var tempXDigalModel = xDialValues[i];
       double dw = 0;
@@ -165,22 +146,15 @@ class ChartLineFocusPainter extends BasePainter {
       // canvas.drawLine(Offset(startX + dw, startY),
       //     Offset(startX + dw, startY - rulerWidth), paint..color = xyColor);
     }
-    bool isShowSub = true;
     double xSub = _startX - 40;
     double subWidth = 40;
     int maxLength = 1;
     TextDirection textDirection = TextDirection.rtl;
-    switch (centerSubTitlePosition) {
-      case CenterSubTitlePosition.None:
-        isShowSub = false;
-        break;
-      case CenterSubTitlePosition.Right:
-        xSub = _endX + 8;
-        subWidth = 11;
-        maxLength = 2;
-        textDirection = TextDirection.ltr;
-        break;
-      default:
+    if (!isLeftYDialSub) {
+      xSub = _endX + 8;
+      subWidth = 11;
+      maxLength = 2;
+      textDirection = TextDirection.ltr;
     }
     for (int i = 0; i < yDialValues.length; i++) {
       var tempYModel = yDialValues[i];
@@ -199,26 +173,24 @@ class ChartLineFocusPainter extends BasePainter {
             canvas,
             Offset(_startX - 40,
                 _startY - yLength - tempYModel.titleStyle.fontSize / 2));
-      if (isShowSub) {
-        var subLength = (yDialValues[i].titleValue -
-                (i == yDialValues.length - 1
-                    ? 0
-                    : yDialValues[i + 1].titleValue)) /
-            2 /
-            yMax *
-            _fixedHeight;
-        TextPainter tp = TextPainter(
-            textAlign: TextAlign.center,
-            ellipsis: '.',
-            maxLines: maxLength,
-            text: TextSpan(
-                text: tempYModel.centerSubTitle,
-                style: tempYModel.centerSubTextStyle),
-            textDirection: textDirection)
-          ..layout(minWidth: subWidth, maxWidth: subWidth);
-        tp.paint(canvas,
-            Offset(xSub, _startY - yLength + subLength.abs() - tp.height / 2));
-      }
+      var subLength = (yDialValues[i].titleValue -
+              (i == yDialValues.length - 1
+                  ? 0
+                  : yDialValues[i + 1].titleValue)) /
+          2 /
+          yMax *
+          _fixedHeight;
+      TextPainter tp = TextPainter(
+          textAlign: TextAlign.center,
+          ellipsis: '.',
+          maxLines: maxLength,
+          text: TextSpan(
+              text: tempYModel.centerSubTitle,
+              style: tempYModel.centerSubTextStyle),
+          textDirection: textDirection)
+        ..layout(minWidth: subWidth, maxWidth: subWidth);
+      tp.paint(canvas,
+          Offset(xSub, _startY - yLength + subLength.abs() - tp.height / 2));
 
       if (isShowHintX && yLength != 0) {
         //x轴辅助线
@@ -244,71 +216,89 @@ class ChartLineFocusPainter extends BasePainter {
     }
   }
 
-  void _dealValue() {
-    _valueArr.clear();
-    if (chartBeans == null || chartBeans.length == 0) {
-      return;
-    }
+  void _dealValue(List<double> tempValueArr, List<ChartBeanFocus> chartBeans,
+      bool isLinkBreak) {
+    if (chartBeans == null || chartBeans.length == 0) return;
     int indexValue = chartBeans.first.second;
     int index = 0;
-    for (var i = 0; i < chartBeans.last.second; i++) {
+    int endSecond = chartBeans.last.second;
+    for (var i = 0; i < endSecond; i++) {
       if (i == indexValue) {
-        _valueArr.add(chartBeans[index].focus);
+        tempValueArr.add(chartBeans[index].focus);
         indexValue = chartBeans[index + 1].second;
         index++;
       } else {
         if (!isLinkBreak) {
-          _valueArr.add(chartBeans[index].focus);
+          tempValueArr.add(chartBeans[index].focus);
         } else {
-          _valueArr.add(null);
+          tempValueArr.add(null);
         }
       }
     }
   }
 
   ///计算Path
-  void _calculatePath(Size size) {
-    if (_valueArr.length > 0) {
-      _shadowPaths.clear();
-      _pathArr.clear();
-      double preX, preY, currentX = _startX, currentY, oldX = _startX;
-      Path oldShadowPath = Path();
-      Path path = Path();
+  void _calculatePath(
+      Size size,
+      List<double> tempValueArr,
+      List<ShadowSub> shadowPaths,
+      List<Path> pathArr,
+      FocusChartBeanMain bean) {
+    if (tempValueArr.length <= 0) return;
+    shadowPaths.clear();
+    pathArr.clear();
+    double preX, preY, currentX = _startX, currentY, oldX = _startX;
+    Path oldShadowPath = Path();
+    Path path = Path();
 
-      //折线轨迹,每个元素都是1秒的存在期
-      double W = (1 / xMax) * _fixedWidth; //x轴距离
-      //用来控制中间过度线条的大小。
-      double gradualStep = W / 4;
-      double stepBegainX = _startX;
-      for (int i = 0; i < _valueArr.length; i++) {
-        if (_valueArr[i] != null) {
-          if (i == 0 || (i > 0 && (_valueArr[i - 1] == null))) {
-            //初始化新起点
-            Path newPath = Path();
-            path = newPath;
-            var value = (_startY - _valueArr[i] / yMax * _fixedHeight);
-            path.moveTo(currentX, value);
+    //折线轨迹,每个元素都是1秒的存在期
+    double W = (1 / xMax) * _fixedWidth; //x轴距离
+    //用来控制中间过度线条的大小。
+    double gradualStep = W / 4;
+    double stepBegainX = _startX;
+    for (int i = 0; i < tempValueArr.length; i++) {
+      if (tempValueArr[i] != null) {
+        if (i == 0 || (i > 0 && (tempValueArr[i - 1] == null))) {
+          //初始化新起点
+          Path newPath = Path();
+          path = newPath;
+          var value = (_startY - tempValueArr[i] / yMax * _fixedHeight);
+          path.moveTo(currentX, value);
+          Path shadowPath = new Path();
+          shadowPath.moveTo(currentX, _startY);
+          shadowPath.lineTo(currentX, value);
+          oldShadowPath = shadowPath;
+          stepBegainX = currentX;
+        }
+
+        if (i > 0 && (tempValueArr[i] != null && tempValueArr[i - 1] != null)) {
+          preX = oldX;
+          preY = (_startY - tempValueArr[i - 1] / yMax * _fixedHeight);
+          currentY = (_startY - tempValueArr[i] / yMax * _fixedHeight);
+
+          //曲线连接轨迹
+          path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
+              currentY, currentX, currentY);
+          //直线连接轨迹
+          // path.lineTo(currentX, currentY);
+
+          //阴影轨迹(如果渐变色已经设定的话也走一次性绘制)
+          if (isSamePhase(tempValueArr[i - 1], tempValueArr[i]) ||
+              bean.gradualColors != null) {
+            oldShadowPath.cubicTo(
+                (preX + currentX) / 2,
+                preY,
+                (preX + currentX) / 2,
+                currentY,
+                currentX - gradualStep,
+                currentY);
+            double tempX = (currentX + gradualStep) < _endX
+                ? (currentX + gradualStep)
+                : _endX;
+            oldShadowPath.lineTo(tempX, currentY);
+          } else {
             Path shadowPath = new Path();
-            shadowPath.moveTo(currentX, _startY);
-            shadowPath.lineTo(currentX, value);
-            oldShadowPath = shadowPath;
-            stepBegainX = currentX;
-          }
-
-          if (i > 0 && (_valueArr[i] != null && _valueArr[i - 1] != null)) {
-            preX = oldX;
-            preY = (_startY - _valueArr[i - 1] / yMax * _fixedHeight);
-            currentY = (_startY - _valueArr[i] / yMax * _fixedHeight);
-
-            //曲线连接轨迹
-            path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
-                currentY, currentX, currentY);
-            //直线连接轨迹
-            // path.lineTo(currentX, currentY);
-
-            //阴影轨迹(如果渐变色已经设定的话也走一次性绘制)
-            if (isSamePhase(_valueArr[i - 1], _valueArr[i]) ||
-                gradualColors != null) {
+            if (tempValueArr[i - 1] > tempValueArr[i]) {
               oldShadowPath.cubicTo(
                   (preX + currentX) / 2,
                   preY,
@@ -316,95 +306,83 @@ class ChartLineFocusPainter extends BasePainter {
                   currentY,
                   currentX - gradualStep,
                   currentY);
-              double tempX = (currentX + gradualStep) < _endX
-                  ? (currentX + gradualStep)
-                  : _endX;
-              oldShadowPath.lineTo(tempX, currentY);
+              oldShadowPath
+                ..lineTo(currentX - gradualStep, _startY)
+                ..lineTo(stepBegainX, _startY)
+                ..close();
+
+              shadowPath.moveTo(currentX, _startY);
+              shadowPath.lineTo(currentX - gradualStep, _startY);
+              shadowPath.lineTo(currentX - gradualStep, currentY);
             } else {
-              Path shadowPath = new Path();
-              if (_valueArr[i - 1] > _valueArr[i]) {
-                oldShadowPath.cubicTo(
-                    (preX + currentX) / 2,
-                    preY,
-                    (preX + currentX) / 2,
-                    currentY,
-                    currentX - gradualStep,
-                    currentY);
-                oldShadowPath
-                  ..lineTo(currentX - gradualStep, _startY)
-                  ..lineTo(stepBegainX, _startY)
-                  ..close();
+              oldShadowPath
+                ..lineTo(preX + gradualStep, _startY)
+                ..lineTo(stepBegainX, _startY)
+                ..close();
 
-                shadowPath.moveTo(currentX, _startY);
-                shadowPath.lineTo(currentX - gradualStep, _startY);
-                shadowPath.lineTo(currentX - gradualStep, currentY);
-              } else {
-                oldShadowPath
-                  ..lineTo(preX + gradualStep, _startY)
-                  ..lineTo(stepBegainX, _startY)
-                  ..close();
-
-                shadowPath.moveTo(currentX, _startY);
-                shadowPath.lineTo(preX + gradualStep, _startY);
-                shadowPath.lineTo(preX + gradualStep, preY);
-                shadowPath.cubicTo(
-                    (preX + currentX) / 2,
-                    preY,
-                    (preX + currentX) / 2,
-                    currentY,
-                    currentX - gradualStep,
-                    currentY);
-              }
-              double tempX = (currentX + gradualStep) < _endX
-                  ? (currentX + gradualStep)
-                  : _endX;
-              shadowPath.lineTo(tempX, currentY);
-              _shadowPaths.add(new ShadowSub(
-                  focusPath: oldShadowPath,
-                  rectGradient: _shader(i - 1, stepBegainX, currentX)));
-              oldShadowPath = shadowPath;
-              stepBegainX = currentX;
+              shadowPath.moveTo(currentX, _startY);
+              shadowPath.lineTo(preX + gradualStep, _startY);
+              shadowPath.lineTo(preX + gradualStep, preY);
+              shadowPath.cubicTo(
+                  (preX + currentX) / 2,
+                  preY,
+                  (preX + currentX) / 2,
+                  currentY,
+                  currentX - gradualStep,
+                  currentY);
             }
-          }
-
-          if ((i < (_valueArr.length - 1) && _valueArr[i + 1] == null) ||
-              (i == _valueArr.length - 1)) {
-            //结束点
-            _pathArr.add(path);
-            oldShadowPath
-              ..lineTo(currentX + gradualStep, _startY)
-              ..lineTo(stepBegainX, _startY)
-              ..close();
-            _shadowPaths.add(new ShadowSub(
+            double tempX = (currentX + gradualStep) < _endX
+                ? (currentX + gradualStep)
+                : _endX;
+            shadowPath.lineTo(tempX, currentY);
+            shadowPaths.add(new ShadowSub(
                 focusPath: oldShadowPath,
-                rectGradient: _shader(i, stepBegainX, currentX)));
-            path = null;
-            oldShadowPath = null;
+                rectGradient: _shader(i - 1, stepBegainX, currentX,
+                    tempValueArr, bean.gradualColors)));
+            oldShadowPath = shadowPath;
+            stepBegainX = currentX;
           }
         }
 
-        if (currentX + gradualStep > (_fixedWidth + _startX)) {
-          // 绘制结束
-          if (path != null && oldShadowPath != null) {
-            _pathArr.add(path);
-            oldShadowPath
-              ..lineTo(_fixedWidth + _startX, _startY)
-              ..lineTo(stepBegainX, _startY)
-              ..close();
-            _shadowPaths.add(new ShadowSub(
-                focusPath: oldShadowPath,
-                rectGradient: _shader(i, stepBegainX, currentX)));
-            path = null;
-            oldShadowPath = null;
-          }
-          if (this.canvasEnd != null) {
-            this.canvasEnd();
-          }
-          return;
+        if ((i < (tempValueArr.length - 1) && tempValueArr[i + 1] == null) ||
+            (i == tempValueArr.length - 1)) {
+          //结束点
+          pathArr.add(path);
+          oldShadowPath
+            ..lineTo(currentX + gradualStep, _startY)
+            ..lineTo(stepBegainX, _startY)
+            ..close();
+          shadowPaths.add(new ShadowSub(
+              focusPath: oldShadowPath,
+              rectGradient: _shader(
+                  i, stepBegainX, currentX, tempValueArr, bean.gradualColors)));
+          path = null;
+          oldShadowPath = null;
         }
-        oldX = currentX;
-        currentX += W;
       }
+
+      if (currentX + gradualStep > (_fixedWidth + _startX)) {
+        // 绘制结束
+        if (path != null && oldShadowPath != null) {
+          pathArr.add(path);
+          oldShadowPath
+            ..lineTo(_fixedWidth + _startX, _startY)
+            ..lineTo(stepBegainX, _startY)
+            ..close();
+          shadowPaths.add(new ShadowSub(
+              focusPath: oldShadowPath,
+              rectGradient: _shader(
+                  i, stepBegainX, currentX, tempValueArr, bean.gradualColors)));
+          path = null;
+          oldShadowPath = null;
+        }
+        if (bean.canvasEnd != null) {
+          bean.canvasEnd();
+        }
+        return;
+      }
+      oldX = currentX;
+      currentX += W;
     }
   }
 
@@ -420,7 +398,7 @@ class ChartLineFocusPainter extends BasePainter {
     return same;
   }
 
-  double getExtremum(double value) {
+  double getExtremum(double value, List<Color> gradualColors) {
     if (gradualColors != null) {
       return _fixedHeight;
     }
@@ -434,7 +412,7 @@ class ChartLineFocusPainter extends BasePainter {
     return extremum;
   }
 
-  List<Color> getGradualColor(double value) {
+  List<Color> getGradualColor(double value, List<Color> gradualColors) {
     if (gradualColors != null) {
       return gradualColors;
     }
@@ -448,22 +426,29 @@ class ChartLineFocusPainter extends BasePainter {
     return [mainColor, mainColor.withOpacity(0.3)];
   }
 
-  Shader _shader(int index, double preX, double currentX) {
-    double height = _startY - getExtremum(_valueArr[index]);
+  Shader _shader(int index, double preX, double currentX,
+      List<double> tempValueArr, List<Color> gradualColors) {
+    double height = _startY - getExtremum(tempValueArr[index], gradualColors);
     //属于该专注力的固定小方块
     Rect rectFocus = Rect.fromLTRB(preX, height, currentX, _startY);
     return LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             tileMode: TileMode.mirror,
-            colors: getGradualColor(_valueArr[index]))
+            colors: getGradualColor(tempValueArr[index], gradualColors))
         .createShader(rectFocus);
   }
 
   ///曲线或折线
-  void _drawLine(Canvas canvas, Size size) {
-    if (_valueArr.length == 0 || yMax <= 0) return;
-    _shadowPaths.forEach((sub) {
+  void _drawLine(
+      Canvas canvas,
+      Size size,
+      List<double> tempValueArr,
+      List<ShadowSub> shadowPaths,
+      List<Path> pathArr,
+      FocusChartBeanMain bean) {
+    if (tempValueArr.length <= 0 || yMax <= 0) return;
+    shadowPaths.forEach((sub) {
       canvas
         ..drawPath(
             sub.focusPath,
@@ -476,11 +461,11 @@ class ChartLineFocusPainter extends BasePainter {
     ///先画阴影再画曲线，目的是防止阴影覆盖曲线
     var paint = Paint()
       ..isAntiAlias = true
-      ..strokeWidth = lineWidth
+      ..strokeWidth = bean.lineWidth
       ..strokeCap = StrokeCap.round
-      ..color = lineColor
+      ..color = bean.lineColor
       ..style = PaintingStyle.stroke;
-    _pathArr.forEach((path) {
+    pathArr.forEach((path) {
       canvas.drawPath(path, paint);
     });
   }

@@ -1,12 +1,12 @@
 /*
  * @Author: Cao Shixin
- * @Date: 2020-05-27 11:08:14
+ * @Date: 2020-07-02 17:04:10
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-02 17:03:36
- * @Description: 
+ * @LastEditTime: 2020-07-02 17:08:00
+ * @Description: 双专注力曲线显示
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
- */
+ */ 
 
 import 'dart:async';
 import 'dart:math';
@@ -14,14 +14,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/flutter_chart.dart';
 
-class FocusChartLinePage extends StatefulWidget {
-  static const String routeName = 'focus_chart_line';
-  static const String title = 'FN单专注力样式图';
+class FNDoubleLinePage extends StatefulWidget {
+  static const String routeName = 'focus_chart_double_line';
+  static const String title = 'FN大师竞赛双专注力样式图';
+  FNDoubleLinePage({Key key}) : super(key: key);
+
   @override
-  _FocusChartLineState createState() => _FocusChartLineState();
+  _FNDoubleLinePageState createState() => _FNDoubleLinePageState();
 }
 
-class _FocusChartLineState extends State<FocusChartLinePage> {
+class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
   GlobalKey<ChartLineFocusState> _childViewKey =
       new GlobalKey<ChartLineFocusState>();
   List<ChartBeanFocus> _beanList = [];
@@ -94,7 +96,7 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(FocusChartLinePage.title),
+        title: Text(FNDoubleLinePage.title),
       ),
       body: _buildFocusChartLine(context),
     );
