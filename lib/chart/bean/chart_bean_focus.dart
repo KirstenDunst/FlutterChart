@@ -2,12 +2,13 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-02 16:57:40
+ * @LastEditTime: 2020-07-02 18:09:17
  * @Description: 头环绘制曲线属性设置区
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 class FocusChartBeanMain {
   //数据显示点集合
@@ -22,7 +23,7 @@ class FocusChartBeanMain {
   bool isLinkBreak = true; 
 
   //用户当前进行位置的widget（比如一个小头像），默认没有，什么也不显示
-  Widget centerPoint;
+  ui.Image centerPoint;
   //结束回调
   VoidCallback canvasEnd;
 

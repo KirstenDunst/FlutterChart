@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-02 16:42:37
+ * @LastEditTime: 2020-07-03 10:27:45
  * @Description: 绘制承载区, 支持多个不同曲线的绘制
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -54,24 +54,24 @@ class ChartLineFocus extends StatefulWidget {
 
 class ChartLineFocusState extends State<ChartLineFocus>
     with SingleTickerProviderStateMixin {
-  List<FocusChartBeanMain> chartBeanList;
+  List<FocusChartBeanMain> _chartBeanList;
 
   void changeBeanList(List<FocusChartBeanMain> beans) {
     setState(() {
-      chartBeanList = beans;
+      _chartBeanList = beans;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    chartBeanList = widget.focusChartBeans;
+    _chartBeanList = widget.focusChartBeans;
   }
 
   @override
   Widget build(BuildContext context) {
     var painter = ChartLineFocusPainter(
-      chartBeanList,
+      _chartBeanList,
       xyColor: widget.xyColor,
       xDialValues: widget.xDialValues,
       yDialValues: widget.yDialValues,

@@ -1,4 +1,5 @@
-import 'dart:ui';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/chart/bean/chart_bean_focus.dart';
 import 'package:path_drawing/path_drawing.dart';
@@ -45,16 +46,11 @@ class ChartLineFocusPainter extends BasePainter {
     _drawXy(canvas, size); //坐标轴
 
     for (FocusChartBeanMain bean in focusChartBeans) {
-      //小区域渐变色显示操作
-      List<ShadowSub> shadowPaths = [];
-      //线条数组
-      List<Path> pathArr = [];
       //y轴显示数据，如果index值为null表示这里断开
       List<double> valueArr = [];
       //处理数据
       _dealValue(valueArr, bean.chartBeans, bean.isLinkBreak);
-      _calculatePath(size, valueArr, shadowPaths, pathArr, bean);
-      _drawLine(canvas, size, valueArr, shadowPaths, pathArr, bean); //曲线或折线
+      _calculatePath(size, valueArr, bean, canvas);
     }
   }
 
@@ -238,18 +234,18 @@ class ChartLineFocusPainter extends BasePainter {
   }
 
   ///计算Path
-  void _calculatePath(
-      Size size,
-      List<double> tempValueArr,
-      List<ShadowSub> shadowPaths,
-      List<Path> pathArr,
-      FocusChartBeanMain bean) {
+  void _calculatePath(Size size, List<double> tempValueArr,
+      FocusChartBeanMain bean, Canvas canvas) {
     if (tempValueArr.length <= 0) return;
-    shadowPaths.clear();
-    pathArr.clear();
     double preX, preY, currentX = _startX, currentY, oldX = _startX;
     Path oldShadowPath = Path();
     Path path = Path();
+    //最后一个点的位置，用来记录绘制头像的显示
+    Point lastPoint = Point(0, 0);
+    //小区域渐变色显示操作
+    List<ShadowSub> shadowPaths = [];
+    //线条数组
+    List<Path> pathArr = [];
 
     //折线轨迹,每个元素都是1秒的存在期
     double W = (1 / xMax) * _fixedWidth; //x轴距离
@@ -264,6 +260,7 @@ class ChartLineFocusPainter extends BasePainter {
           path = newPath;
           var value = (_startY - tempValueArr[i] / yMax * _fixedHeight);
           path.moveTo(currentX, value);
+          lastPoint = Point(currentX, value);
           Path shadowPath = new Path();
           shadowPath.moveTo(currentX, _startY);
           shadowPath.lineTo(currentX, value);
@@ -279,6 +276,7 @@ class ChartLineFocusPainter extends BasePainter {
           //曲线连接轨迹
           path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
               currentY, currentX, currentY);
+          lastPoint = Point(currentX, currentY);
           //直线连接轨迹
           // path.lineTo(currentX, currentY);
 
@@ -379,11 +377,13 @@ class ChartLineFocusPainter extends BasePainter {
         if (bean.canvasEnd != null) {
           bean.canvasEnd();
         }
-        return;
+        break;
       }
       oldX = currentX;
       currentX += W;
     }
+    _drawLine(canvas, size, tempValueArr, shadowPaths, pathArr, bean,
+        lastPoint); //曲线或折线
   }
 
   bool isSamePhase(double one, double other) {
@@ -446,7 +446,8 @@ class ChartLineFocusPainter extends BasePainter {
       List<double> tempValueArr,
       List<ShadowSub> shadowPaths,
       List<Path> pathArr,
-      FocusChartBeanMain bean) {
+      FocusChartBeanMain bean,
+      Point lastPoint) {
     if (tempValueArr.length <= 0 || yMax <= 0) return;
     shadowPaths.forEach((sub) {
       canvas
@@ -468,6 +469,12 @@ class ChartLineFocusPainter extends BasePainter {
     pathArr.forEach((path) {
       canvas.drawPath(path, paint);
     });
+
+    if (bean.centerPoint != null) {
+      // canvas.drawImageRect(bean.centerPoint, src, dst, paint)
+      canvas.drawImage(bean.centerPoint,
+          Offset(lastPoint.x - 10.0, lastPoint.y - 10.0), paint);
+    }
   }
 }
 
