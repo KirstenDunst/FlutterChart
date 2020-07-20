@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-02 17:03:36
+ * @LastEditTime: 2020-07-20 16:08:24
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -62,10 +62,11 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
 
     _focusChartBeanMain = FocusChartBeanMain();
     for (var i = 0; i < 60; i++) {
-      _beanList.add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
+      _beanList
+          .add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
     }
     _focusChartBeanMain.chartBeans = _beanList;
-    _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
+    // _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
     _focusChartBeanMain.lineWidth = 1;
     _focusChartBeanMain.isLinkBreak = false;
     _focusChartBeanMain.lineColor = Colors.transparent;

@@ -407,6 +407,9 @@ class ChartLineFocusPainter extends BasePainter {
       if (value > yDialValues[i].titleValue &&
           value < yDialValues[i + 1].titleValue) {
         extremum = yDialValues[i + 1].titleValue / yMax * _fixedHeight;
+      } else if (value < yDialValues[i].titleValue &&
+          value > yDialValues[i + 1].titleValue) {
+        extremum = yDialValues[i].titleValue / yMax * _fixedHeight;
       }
     }
     return extremum;
@@ -418,7 +421,10 @@ class ChartLineFocusPainter extends BasePainter {
     }
     Color mainColor = defaultColor;
     for (var i = 0; i < yDialValues.length - 1; i++) {
-      if (value > yDialValues[i].titleValue &&
+      if (value < yDialValues[i].titleValue &&
+          value > yDialValues[i + 1].titleValue) {
+        mainColor = yDialValues[i].centerSubTextStyle.color;
+      } else if (value > yDialValues[i].titleValue &&
           value < yDialValues[i + 1].titleValue) {
         mainColor = yDialValues[i + 1].centerSubTextStyle.color;
       }
