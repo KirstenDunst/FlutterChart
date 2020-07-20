@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-02 17:14:42
+ * @LastEditTime: 2020-07-17 19:34:34
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -10,6 +10,7 @@
 import 'package:example/chart_bar_circle.dart';
 import 'package:example/chart_bar_round.dart';
 import 'package:example/chart_curve.dart';
+import 'package:example/chart_dimensionality_view.dart';
 import 'package:example/chart_line.dart';
 import 'package:example/chart_pie.dart';
 import 'package:example/double_chart_line.dart';
@@ -36,6 +37,8 @@ final Map<String, WidgetBuilder> _routes = {
   DoubleChartlinePage.routeName: (_) => DoubleChartlinePage(),
   //饼状图
   ChartPiePage.routeName: (_) => ChartPiePage(),
+  //维度图
+  ChartDimensionalityView.routeName: (_) => ChartDimensionalityView(),
 };
 
 class MyApp extends StatelessWidget {
@@ -67,14 +70,27 @@ class _MyAppPageState extends State<MyAppPage> {
   void initState() {
     super.initState();
     _demoTitleArr = [
-      CellModel(title: FocusChartLinePage.title, routeName: FocusChartLinePage.routeName),
-      CellModel(title: FNDoubleLinePage.title, routeName: FNDoubleLinePage.routeName),
-      CellModel(title: ChartBarCirclePage.title, routeName: ChartBarCirclePage.routeName),
-      CellModel(title: ChartBarRoundPage.title, routeName: ChartBarRoundPage.routeName),
-      CellModel(title: ChartCurvePage.title, routeName: ChartCurvePage.routeName),
+      CellModel(
+          title: FocusChartLinePage.title,
+          routeName: FocusChartLinePage.routeName),
+      CellModel(
+          title: FNDoubleLinePage.title, routeName: FNDoubleLinePage.routeName),
+      CellModel(
+          title: ChartBarCirclePage.title,
+          routeName: ChartBarCirclePage.routeName),
+      CellModel(
+          title: ChartBarRoundPage.title,
+          routeName: ChartBarRoundPage.routeName),
+      CellModel(
+          title: ChartCurvePage.title, routeName: ChartCurvePage.routeName),
       CellModel(title: ChartLinePage.title, routeName: ChartLinePage.routeName),
-      CellModel(title: DoubleChartlinePage.title, routeName: DoubleChartlinePage.routeName),
-      CellModel(title: ChartPiePage.title, routeName: ChartPiePage.routeName)
+      CellModel(
+          title: DoubleChartlinePage.title,
+          routeName: DoubleChartlinePage.routeName),
+      CellModel(title: ChartPiePage.title, routeName: ChartPiePage.routeName),
+      CellModel(
+          title: ChartDimensionalityView.title,
+          routeName: ChartDimensionalityView.routeName)
     ];
   }
 

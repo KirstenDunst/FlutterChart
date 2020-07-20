@@ -142,7 +142,8 @@ class ChartLinePainter extends BasePainter {
             var key = startX;
             var value = (startY - chartBeans[i].y / maxMin[0] * _fixedHeight);
             path.moveTo(key, value);
-            subPath.moveTo(key, (startY - chartBeans[i].subY / maxMin[0] * _fixedHeight));
+            subPath.moveTo(
+                key, (startY - chartBeans[i].subY / maxMin[0] * _fixedHeight));
             _points[key] = Offset(key, value);
             continue;
           }
@@ -150,16 +151,18 @@ class ChartLinePainter extends BasePainter {
           preX = startX + W * (i - 1);
 
           preY = (startY - chartBeans[i - 1].y / maxMin[0] * _fixedHeight);
-          subPreY = (startY - chartBeans[i - 1].subY / maxMin[0] * _fixedHeight);
+          subPreY =
+              (startY - chartBeans[i - 1].subY / maxMin[0] * _fixedHeight);
           currentY = (startY - chartBeans[i].y / maxMin[0] * _fixedHeight);
-          subCurrentY = (startY - chartBeans[i].subY / maxMin[0] * _fixedHeight);
+          subCurrentY =
+              (startY - chartBeans[i].subY / maxMin[0] * _fixedHeight);
           _points[currentX] = Offset(currentX, currentY);
 
           if (isCurve) {
             path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
                 currentY, currentX, currentY);
-            subPath.cubicTo((preX + currentX) / 2, subPreY, (preX + currentX) / 2,
-                subCurrentY, currentX, subCurrentY);
+            subPath.cubicTo((preX + currentX) / 2, subPreY,
+                (preX + currentX) / 2, subCurrentY, currentX, subCurrentY);
           } else {
             path.lineTo(currentX, currentY);
             subPath.lineTo(currentX, subCurrentY);
@@ -298,8 +301,8 @@ class ChartLinePainter extends BasePainter {
     Path subLinePath = new Path();
     Path subShadowPath = new Path();
     for (int i = 0; i < subLength; i++) {
-      var extractPath =
-          subList[i].extractPath(0, subList[i].length * value, startWithMoveTo: true);
+      var extractPath = subList[i]
+          .extractPath(0, subList[i].length * value, startWithMoveTo: true);
       subLinePath.addPath(extractPath, Offset(0, 0));
       subShadowPath = extractPath;
     }
@@ -341,7 +344,7 @@ class ChartLinePainter extends BasePainter {
 
     ///先画阴影再画曲线，目的是防止阴影覆盖曲线
     canvas.drawPath(linePath, paint);
-    canvas. drawPath(subLinePath, subPaint);
+    canvas.drawPath(subLinePath, subPaint);
   }
 
   ///绘制触摸
