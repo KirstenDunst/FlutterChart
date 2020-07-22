@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-06-30 10:38:47
+ * @LastEditTime: 2020-07-22 11:01:39
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -63,7 +63,8 @@ class _ChartPieState extends State<ChartPiePage> {
             color: Colors.orange,
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.red)),
       ],
-      assistTextShowType: AssistTextShowType.NamePercentage,
+      assistTextShowType: AssistTextShowType.OnlyName,
+      arrowBegainLocation: ArrowBegainLocation.Right,
       assistBGColor: Color(0xFFF6F6F6),
       decimalDigits: 1,
       divisionWidth: 2,
@@ -73,6 +74,10 @@ class _ChartPieState extends State<ChartPiePage> {
       centerR: 6,
       duration: Duration(milliseconds: 2000),
       centerColor: Colors.white,
+      centerWidget: Text(
+        '测试中心widget',
+        style: TextStyle(color: Colors.black, fontSize: 20),
+      ),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

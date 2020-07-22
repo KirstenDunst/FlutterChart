@@ -24,7 +24,8 @@ class ChartPiePainter extends BasePainter {
   Color centerColor; //中心圆颜色
   double divisionWidth; //各个占比之间的分割线宽度，默认为0即不显示分割
   AssistTextShowType assistTextShowType; //辅助性文案显示的样式
-  static const double basePadding = 16; //默认的边距
+  ArrowBegainLocation arrowBegainLocation; //开始画圆的位置
+  double basePadding = 16; //默认的边距
   static const Color defaultColor = Colors.deepPurple;
   double startX, endX, startY, endY;
   double centerX, centerY; //圆心
@@ -40,7 +41,9 @@ class ChartPiePainter extends BasePainter {
     this.centerR = 0,
     this.divisionWidth = 0,
     this.centerColor = defaultColor,
-    this.assistTextShowType = AssistTextShowType.OnlyName,
+    this.assistTextShowType = AssistTextShowType.None,
+    this.arrowBegainLocation = ArrowBegainLocation.Top,
+    this.basePadding = 16,
     this.assistBGColor = defaultColor,
     this.decimalDigits = 0,
   });
@@ -151,6 +154,22 @@ class ChartPiePainter extends BasePainter {
     double total = _getTotal(chartBeans);
     double rate = 0;
     double startAngle = 0; // 扇形开始的角度 正上方
+    switch (arrowBegainLocation) {
+      case ArrowBegainLocation.Top:
+        startAngle = -pi / 2;
+        break;
+      case ArrowBegainLocation.Right:
+        startAngle = 0;
+        break;
+      case ArrowBegainLocation.Top:
+        startAngle = pi / 2;
+        break;
+      case ArrowBegainLocation.Top:
+        startAngle = pi;
+        break;
+      default:
+        startAngle = pi;
+    }
     for (var bean in chartBeans) {
       PieBean pieBean = PieBean(
           value: bean.value,
@@ -160,6 +179,10 @@ class ChartPiePainter extends BasePainter {
       rate = bean.value / total; //当前对象值所占比例
       pieBean.rate = rate;
       switch (assistTextShowType) {
+        case AssistTextShowType.OnlyName:
+          _needCenterAssist = true;
+          pieBean.assistText = bean.type;
+          break;
         case AssistTextShowType.OnlyPercentage:
           _needCenterAssist = true;
           pieBean.assistText = (rate * 100).toStringAsFixed(decimalDigits);
@@ -188,7 +211,7 @@ class ChartPiePainter extends BasePainter {
   }
 
   /// 绘制饼状图途中周围显示的尖角标签 开始
-  
+
   //角朝向，内部使用
   RowDirection _lastRowDirection;
   //上一次绘制文案的最大距离,(角朝上的话为x的min，角朝下的话为x的max。以此角朝左右的为y的min，max，绘制是顺时针方向的)
@@ -216,6 +239,7 @@ class ChartPiePainter extends BasePainter {
     _yRedrawArrRowBottom.clear();
     _lastRowDirection = RowDirection.Null;
   }
+
   void _drawPerRatio(Canvas canvas, String title, TextStyle titleStyle,
       double centerSin, double centerCos, int index) {
     TextPainter tp = new TextPainter(
