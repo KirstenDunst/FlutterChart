@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-22 10:57:39
+ * @LastEditTime: 2020-07-22 11:23:33
  * @Description: 饼状图绘制区域
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -96,17 +96,22 @@ class ChartPieState extends State<ChartPie>
       assistBGColor: widget.assistBGColor,
       decimalDigits: widget.decimalDigits,
     );
-    return CustomPaint(
-        size: widget.size,
-        child: Container(
-          width: widget.size.width,
-          height: widget.size.height,
-          color: widget.backgroundColor,
-          child: Center(
-            child:
-                widget.centerWidget != null ? widget.centerWidget : Container(),
-          ),
-        ),
-        painter: painter);
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        CustomPaint(
+            size: widget.size,
+            foregroundPainter: widget.backgroundColor != null ? painter : null,
+            child: widget.backgroundColor != null
+                ? Container(
+                    width: widget.size.width,
+                    height: widget.size.height,
+                    color: widget.backgroundColor,
+                  )
+                : null,
+            painter: widget.backgroundColor == null ? painter : null),
+        widget.centerWidget != null ? widget.centerWidget : Container(),
+      ],
+    );
   }
 }

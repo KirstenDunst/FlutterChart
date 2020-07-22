@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-22 11:01:39
+ * @LastEditTime: 2020-07-22 11:19:22
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -65,6 +65,7 @@ class _ChartPieState extends State<ChartPiePage> {
       ],
       assistTextShowType: AssistTextShowType.OnlyName,
       arrowBegainLocation: ArrowBegainLocation.Right,
+      backgroundColor: Colors.white,
       assistBGColor: Color(0xFFF6F6F6),
       decimalDigits: 1,
       divisionWidth: 2,
