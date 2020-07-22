@@ -38,14 +38,14 @@ class ChartPiePainter extends BasePainter {
     this.chartBeans, {
     this.value = 1,
     this.R,
-    this.centerR = 0,
-    this.divisionWidth = 0,
-    this.centerColor = defaultColor,
-    this.assistTextShowType = AssistTextShowType.None,
-    this.arrowBegainLocation = ArrowBegainLocation.Top,
-    this.basePadding = 16,
-    this.assistBGColor = defaultColor,
-    this.decimalDigits = 0,
+    this.centerR,
+    this.divisionWidth,
+    this.centerColor,
+    this.assistTextShowType,
+    this.arrowBegainLocation,
+    this.basePadding,
+    this.assistBGColor,
+    this.decimalDigits,
   });
 
   @override
@@ -65,6 +65,8 @@ class ChartPiePainter extends BasePainter {
 
   //初始化
   _init(Size size) {
+    _initLizeData();
+
     startX = basePadding;
     endX = size.width - basePadding;
     startY = size.height - basePadding;
@@ -88,6 +90,33 @@ class ChartPiePainter extends BasePainter {
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = true;
     _setPieAngle(); //计算角度
+  }
+
+  void _initLizeData() {
+    if (assistBGColor == null) {
+      assistBGColor = defaultColor;
+    }
+    if (centerR == null) {
+      centerR = 0;
+    }
+    if (divisionWidth == null) {
+      divisionWidth = 0;
+    }
+    if (centerColor == null) {
+      centerColor = defaultColor;
+    }
+    if (assistTextShowType == null) {
+      assistTextShowType = AssistTextShowType.None;
+    }
+    if (arrowBegainLocation == null) {
+      arrowBegainLocation = ArrowBegainLocation.Top;
+    }
+    if (basePadding == null) {
+      basePadding = 16;
+    }
+    if (decimalDigits == null) {
+      decimalDigits = 0;
+    }
   }
 
   //辅助性文案的绘制区域
