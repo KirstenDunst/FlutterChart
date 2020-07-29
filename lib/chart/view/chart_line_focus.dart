@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-03 10:27:45
+ * @LastEditTime: 2020-07-29 14:23:53
  * @Description: 绘制承载区, 支持多个不同曲线的绘制
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -21,6 +21,7 @@ class ChartLineFocus extends StatefulWidget {
   final List<DialStyle> xDialValues; //x轴刻度显示，不传则没有
   final List<DialStyle> yDialValues; //y轴左侧刻度显示，不传则没有
   final bool isLeftYDialSub; //y轴显示副刻度是在左侧还是在右侧，默认左侧
+  final List<SectionBean> xSectionBeans; //x轴的区间带（不用的话不用设置）
   final int xMax; //x轴最大值（以秒为单位）
   final double yMax; //y轴最大值
   final double basePadding; //默认的边距16
@@ -38,6 +39,7 @@ class ChartLineFocus extends StatefulWidget {
     this.xDialValues,
     this.yDialValues,
     this.isLeftYDialSub,
+    this.xSectionBeans,
     this.yMax,
     this.xMax,
     this.basePadding = 16,
@@ -76,6 +78,7 @@ class ChartLineFocusState extends State<ChartLineFocus>
       xDialValues: widget.xDialValues,
       yDialValues: widget.yDialValues,
       isLeftYDialSub: widget.isLeftYDialSub,
+      xSectionBeans: widget.xSectionBeans,
       yMax: widget.yMax,
       xMax: widget.xMax,
       basePadding: widget.basePadding,

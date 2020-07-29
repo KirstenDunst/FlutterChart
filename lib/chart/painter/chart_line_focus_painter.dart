@@ -11,6 +11,7 @@ class ChartLineFocusPainter extends BasePainter {
   List<DialStyle> xDialValues; //x轴刻度显示，不传则没有
   List<DialStyle> yDialValues; //y轴左侧刻度显示，不传则没有
   bool isLeftYDialSub = true; //y轴显示副刻度是在左侧还是在右侧，默认左侧
+  List<SectionBean> xSectionBeans; //x轴的区间带（不用的话不用设置）
   int xMax = 60; //x轴最大值（以秒为单位）
   double yMax = 100; //y轴最大值
   double basePadding = 16; //默认的边距16
@@ -31,6 +32,7 @@ class ChartLineFocusPainter extends BasePainter {
     this.xDialValues,
     this.yDialValues,
     this.isLeftYDialSub,
+    this.xSectionBeans,
     this.yMax,
     this.xMax,
     this.basePadding,
@@ -51,6 +53,11 @@ class ChartLineFocusPainter extends BasePainter {
       //处理数据
       _dealValue(valueArr, bean.chartBeans, bean.isLinkBreak);
       _calculatePath(size, valueArr, bean, canvas);
+    }
+
+    //绘制区间带
+    if (xSectionBeans != null && xSectionBeans.length > 0) {
+      _drawIntervalSegmentation(canvas);
     }
   }
 
@@ -480,6 +487,40 @@ class ChartLineFocusPainter extends BasePainter {
       // canvas.drawImageRect(bean.centerPoint, src, dst, paint)
       canvas.drawImage(bean.centerPoint,
           Offset(lastPoint.x - 10.0, lastPoint.y - 10.0), paint);
+    }
+  }
+
+//绘制隔离带，暂时只有x轴，后面需要再扩展y轴
+  void _drawIntervalSegmentation(Canvas canvas) {
+    for (var item in xSectionBeans) {
+      double tempStartX = _fixedWidth * item.startRatio + _startX;
+      double tempWidth = _fixedWidth * item.widthRatio;
+      Path tempPath = Path()
+        ..moveTo(tempStartX, _endY)
+        ..lineTo(tempStartX + tempWidth, _endY)
+        ..lineTo(tempStartX + tempWidth, _startY)
+        ..lineTo(tempStartX, _startY)
+        ..lineTo(tempStartX, _endY)
+        ..close();
+      var tempPaint = Paint()
+        ..isAntiAlias = true
+        ..strokeWidth = 1
+        // ..strokeCap = StrokeCap.round
+        ..color = item.fillColor
+        ..style = PaintingStyle.fill;
+      canvas.drawPath(tempPath, tempPaint);
+      TextPainter tempText = TextPainter(
+          textAlign: TextAlign.center,
+          ellipsis: '.',
+          maxLines: 1,
+          text: TextSpan(text: item.title, style: item.titleStyle),
+          textDirection: TextDirection.ltr)
+        ..layout();
+      //定义在图表上层显示
+      tempText.paint(
+          canvas,
+          Offset(tempStartX + tempWidth / 2 - tempText.width / 2,
+              _endY - tempText.height));
     }
   }
 }

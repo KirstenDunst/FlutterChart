@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-20 16:08:24
+ * @LastEditTime: 2020-07-29 14:28:40
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -113,6 +113,26 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
       hintLineColor: Colors.blue,
       isHintLineImaginary: false,
       isLeftYDialSub: false,
+      xSectionBeans: [
+        SectionBean(
+            title: '训练1',
+            titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+            startRatio: 0.1,
+            widthRatio: 0.2,
+            fillColor: Colors.orange.withOpacity(0.2)),
+        SectionBean(
+            title: '训练2',
+            titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+            startRatio: 0.4,
+            widthRatio: 0.05,
+            fillColor: Colors.orange.withOpacity(0.2)),
+        SectionBean(
+            title: '训练3',
+            titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+            startRatio: 0.7,
+            widthRatio: 0.2,
+            fillColor: Colors.orange.withOpacity(0.2))
+      ],
       xMax: 60,
       yMax: 100.0,
       xDialValues: _xArr,
