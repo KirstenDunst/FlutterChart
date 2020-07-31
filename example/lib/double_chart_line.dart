@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-06-29 10:19:09
+ * @LastEditTime: 2020-07-31 13:51:41
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -18,6 +18,27 @@ class DoubleChartlinePage extends StatefulWidget {
 }
 
 class _DoubleChartlineState extends State<DoubleChartlinePage> {
+  List<ChartBean> _chartBeans;
+
+  @override
+  void initState() {
+    _chartBeans = [];
+    UIImageUtil.loadImage('assets/head1.jpg').then((value) {
+      _chartBeans = [
+        ChartBean(x: '3-01', y: 30, subY: 70),
+        ChartBean(x: '3-02', y: 88, subY: 20),
+        ChartBean(x: '3-03', y: 20, subY: 30),
+        ChartBean(x: '3-04', y: 67, subY: 50),
+        ChartBean(x: '3-05', y: 10, subY: 100),
+        ChartBean(x: '3-06', y: 40, subY: 30),
+        ChartBean(x: '3-07', y: 10, subY: 0),
+        ChartBean(x: '3-08', y: 0, placehoderImage: value),
+      ];
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,15 +51,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
 
   Widget _buildDoubleChartLine(context) {
     var chartLine = ChartLine(
-      chartBeans: [
-        ChartBean(x: '3-01', y: 30, subY: 70),
-        ChartBean(x: '3-02', y: 88, subY: 20),
-        ChartBean(x: '3-03', y: 20, subY: 30),
-        ChartBean(x: '3-04', y: 67, subY: 50),
-        ChartBean(x: '3-05', y: 10, subY: 100),
-        ChartBean(x: '3-06', y: 40, subY: 30),
-        ChartBean(x: '3-07', y: 10, subY: 0),
-      ],
+      chartBeans: _chartBeans,
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
       isCurve: false,
@@ -49,11 +62,15 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       xyColor: Colors.white,
       fontSize: 12,
       yNum: 5,
+      pointRadius: 4,
       isAnimation: true,
       isReverse: false,
       isCanTouch: true,
+      rulerWidth: 3,
+      xyLineWidth: 0.5,
       isShowPressedHintLine: true,
       isShowHintX: true,
+      hintLineSolid: false,
       pressedPointRadius: 4,
       pressedHintLineWidth: 0.5,
       pressedHintLineColor: Colors.white,

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-02 17:04:10
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-03 10:43:58
+ * @LastEditTime: 2020-07-31 13:45:49
  * @Description: 双专注力曲线显示
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -10,10 +10,8 @@
 
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chart/flutter_chart.dart';
 
 class FNDoubleLinePage extends StatefulWidget {
@@ -67,14 +65,16 @@ class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
     _focusChartBeanMain1 = FocusChartBeanMain();
     _focusChartBeanMain2 = FocusChartBeanMain();
     for (var i = 0; i <= 60; i++) {
-      _beanList1.add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
-      _beanList2.add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
+      _beanList1
+          .add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
+      _beanList2
+          .add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
     }
     _focusChartBeanMain1.chartBeans = _beanList1;
     _focusChartBeanMain1.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
     _focusChartBeanMain1.lineWidth = 1;
     _focusChartBeanMain1.isLinkBreak = false;
-    _loadImage('assets/head1.jpg').then((value) {
+    UIImageUtil.loadImage('assets/head1.jpg').then((value) {
       _focusChartBeanMain1.centerPoint = value;
       setState(() {});
     });
@@ -88,7 +88,7 @@ class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
     _focusChartBeanMain2.gradualColors = [Color(0xFFFF605C), Color(0x00FF9A97)];
     _focusChartBeanMain2.lineWidth = 1;
     _focusChartBeanMain2.isLinkBreak = false;
-    _loadImage('assets/head2.jpeg').then((value) {
+    UIImageUtil.loadImage('assets/head2.jpeg').then((value) {
       _focusChartBeanMain2.centerPoint = value;
       setState(() {});
     });
@@ -99,15 +99,6 @@ class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
       print("毁灭定时器");
     };
     //制造假数据结束
-  }
-
-  /// 加载图片
-  Future<ui.Image> _loadImage(String path) async {
-    var data = await rootBundle.load(path);
-    var codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    var info = await codec.getNextFrame();
-    
-    return info.image;
   }
 
   @override

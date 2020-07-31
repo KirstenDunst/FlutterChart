@@ -7,6 +7,8 @@ import 'package:flutter_chart/chart/painter/chart_line_painter.dart';
 class ChartLine extends StatefulWidget {
   final Size size; //宽高
   final double lineWidth; //线宽
+  final double xyLineWidth; //xy轴线条的宽度
+  final double pointRadius; //线条点的特殊处理，如果内容不为空，则在点上面会绘制一个圆点，这个是圆点半径参数
   final bool isCurve; //标记是否为曲线
   final List<ChartBean> chartBeans;
   final List<Color> shaderColors; //Line渐变色
@@ -18,6 +20,7 @@ class ChartLine extends StatefulWidget {
   final bool isShowXy; //是否显示坐标轴
   final bool isShowXyRuler; //是否显示xy刻度
   final bool isShowHintX, isShowHintY; //x、y轴的辅助线
+  final bool hintLineSolid; //辅助线是否为实线，在显示辅助线的时候才有效，false的话为虚线，默认实线
   final bool isShowBorderTop, isShowBorderRight; //顶部和右侧的辅助线
   final int yNum; //y刻度文本的数量
   final bool isShowFloat; //y刻度值是否显示小数
@@ -38,6 +41,8 @@ class ChartLine extends StatefulWidget {
     @required this.size,
     @required this.chartBeans,
     this.lineWidth = 4,
+    this.xyLineWidth = 2,
+    this.pointRadius = 0,
     this.isCurve = true,
     this.shaderColors,
     this.lineColor,
@@ -49,6 +54,7 @@ class ChartLine extends StatefulWidget {
     this.isShowXyRuler = true,
     this.isShowHintX = false,
     this.isShowHintY = false,
+    this.hintLineSolid = true,
     this.isShowBorderTop = false,
     this.isShowBorderRight = false,
     this.yNum,
@@ -108,10 +114,13 @@ class ChartLineState extends State<ChartLine>
 
   @override
   Widget build(BuildContext context) {
-    var painter = ChartLinePainter(widget.chartBeans, widget.lineColor,widget.subLineColor,
+    var painter = ChartLinePainter(
+        widget.chartBeans, widget.lineColor, widget.subLineColor,
         shaderColors: widget.shaderColors,
         isCurve: widget.isCurve,
         lineWidth: widget.lineWidth,
+        xyLineWidth: widget.xyLineWidth,
+        pointRadius: widget.pointRadius,
         fontSize: widget.fontSize,
         fontColor: widget.fontColor,
         xyColor: widget.xyColor,
@@ -122,6 +131,7 @@ class ChartLineState extends State<ChartLine>
         isShowXyRuler: widget.isShowXyRuler,
         isShowHintX: widget.isShowHintX,
         isShowHintY: widget.isShowHintY,
+        hintLineSolid: widget.hintLineSolid,
         isShowBorderTop: widget.isShowBorderTop,
         isShowBorderRight: widget.isShowBorderRight,
         rulerWidth: widget.rulerWidth,

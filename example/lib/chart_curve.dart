@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:33:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-06-29 10:18:10
+ * @LastEditTime: 2020-07-31 12:07:54
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -43,7 +43,7 @@ class _ChartCurveState extends State<ChartCurvePage> {
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
       isCurve: true,
-      lineWidth: 4,
+      lineWidth: 2,
       lineColor: Colors.blueAccent,
       fontColor: Colors.white,
       xyColor: Colors.white,
@@ -53,9 +53,12 @@ class _ChartCurveState extends State<ChartCurvePage> {
       ],
       fontSize: 12,
       yNum: 8,
+      pointRadius: 4,
       isAnimation: true,
       isReverse: false,
       isCanTouch: true,
+      isShowHintY: true,
+      hintLineSolid: false,
       isShowPressedHintLine: true,
       pressedPointRadius: 4,
       pressedHintLineWidth: 0.5,

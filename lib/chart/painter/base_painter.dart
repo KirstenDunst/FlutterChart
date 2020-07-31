@@ -24,7 +24,7 @@ class BasePainter extends CustomPainter {
         minY = min(bean.y, bean.subY);
       }
     }
-    return [maxY, minY];
+    return [max(maxY, 1), minY];
   }
 
   ///计算极值 最大值,最小值
