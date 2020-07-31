@@ -55,7 +55,7 @@ class ChartLinePainter extends BasePainter {
 
   @override
   bool shouldRepaint(ChartLinePainter oldDelegate) {
-    return false;
+    return true;
   }
 
   ///初始化
