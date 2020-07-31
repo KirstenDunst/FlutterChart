@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:05
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-31 12:06:56
+ * @LastEditTime: 2020-07-31 19:35:50
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -18,6 +18,34 @@ class ChartLinePage extends StatefulWidget {
 }
 
 class _ChartLineState extends State<ChartLinePage> {
+  ChartBeanSystem _chartBeanSystem;
+
+  @override
+  void initState() {
+    _chartBeanSystem = ChartBeanSystem(
+      xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+      isDrawX: true,
+      lineWidth: 2,
+      pointRadius: 0,
+      isCurve: false,
+      chartBeans: [
+        ChartBean(x: '12-01', y: 30),
+        ChartBean(x: '12-02', y: 88),
+        ChartBean(x: '12-03', y: 20),
+        ChartBean(x: '12-04', y: 67),
+        ChartBean(x: '12-05', y: 10),
+        ChartBean(x: '12-06', y: 40),
+        ChartBean(x: '12-07', y: 10),
+      ],
+      shaderColors: [
+        Colors.blue.withOpacity(0.3),
+        Colors.blue.withOpacity(0.1)
+      ],
+      lineColor: Colors.red,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,36 +59,33 @@ class _ChartLineState extends State<ChartLinePage> {
   ///line
   Widget _buildChartLine(context) {
     var chartLine = ChartLine(
-      chartBeans: [
-        ChartBean(x: '12-01', y: 30),
-        ChartBean(x: '12-02', y: 88),
-        ChartBean(x: '12-03', y: 20),
-        ChartBean(x: '12-04', y: 67),
-        ChartBean(x: '12-05', y: 10),
-        ChartBean(x: '12-06', y: 40),
-        ChartBean(x: '12-07', y: 10),
-      ],
+      chartBeanSystems: [_chartBeanSystem],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
-      isCurve: false,
-      lineWidth: 2,
-      lineColor: Colors.yellow,
-      fontColor: Colors.white,
-      xyColor: Colors.white,
-      shaderColors: [
-        Colors.yellow.withOpacity(0.3),
-        Colors.yellow.withOpacity(0.1)
+      xyColor: Colors.black,
+      yDialValues: [
+        DialStyle(
+          title: '0',
+          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+          positionRetioy: 0 / 100.0,
+        ),
+        DialStyle(
+          title: '35',
+          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+          positionRetioy: 35 / 100.0,
+        ),
+        DialStyle(
+          title: '65',
+          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+          positionRetioy: 65 / 100.0,
+        ),
+        DialStyle(
+          title: '100',
+          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+          positionRetioy: 100 / 100.0,
+        )
       ],
-      fontSize: 12,
-      yNum: 8,
-      isAnimation: true,
-      isReverse: false,
-      isCanTouch: true,
-      isShowPressedHintLine: true,
-      pressedPointRadius: 4,
-      pressedHintLineWidth: 0.5,
-      pressedHintLineColor: Colors.white,
-      duration: Duration(milliseconds: 2000),
+      yMax: 100,
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

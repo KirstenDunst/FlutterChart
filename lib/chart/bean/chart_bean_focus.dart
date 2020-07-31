@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-29 14:25:36
+ * @LastEditTime: 2020-07-31 18:04:07
  * @Description: 头环绘制曲线属性设置区
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -76,7 +76,8 @@ class DialStyle {
       this.titleStyle,
       this.centerSubTitle,
       this.centerSubTextStyle,
-      this.positionRetioy});
+      this.positionRetioy,
+      this.isLeft = true});
 }
 
 //颜色区间

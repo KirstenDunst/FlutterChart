@@ -17,11 +17,11 @@ class BasePainter extends CustomPainter {
     if (chartBeans == null || chartBeans.length == 0) return [0, 0];
     double maxY = 0.0, minY = 0.0;
     for (ChartBean bean in chartBeans) {
-      if (maxY < max(bean.y, bean.subY)) {
-        maxY = max(bean.y, bean.subY);
+      if (maxY < bean.y) {
+        maxY = bean.y;
       }
-      if (minY > min(bean.y, bean.subY)) {
-        minY = min(bean.y, bean.subY);
+      if (minY > bean.y) {
+        minY = bean.y;
       }
     }
     return [max(maxY, 1), minY];
