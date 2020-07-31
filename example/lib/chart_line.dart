@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:05
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-31 19:35:50
+ * @LastEditTime: 2020-07-31 20:48:08
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -62,7 +62,8 @@ class _ChartLineState extends State<ChartLinePage> {
       chartBeanSystems: [_chartBeanSystem],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
-      xyColor: Colors.black,
+      xColor: Colors.black,
+      yColor: Colors.white,
       yDialValues: [
         DialStyle(
           title: '0',
@@ -86,6 +87,8 @@ class _ChartLineState extends State<ChartLinePage> {
         )
       ],
       yMax: 100,
+      isShowHintX: true,
+      hintLineSolid: false,
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

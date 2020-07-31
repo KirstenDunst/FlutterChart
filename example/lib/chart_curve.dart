@@ -62,7 +62,8 @@ class _ChartCurveState extends State<ChartCurvePage> {
       chartBeanSystems: [_chartBeanSystem],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
-      xyColor: Colors.white,
+      xColor: Colors.white,
+      yColor: Colors.white,
       yDialValues: [
         DialStyle(
           title: '0',

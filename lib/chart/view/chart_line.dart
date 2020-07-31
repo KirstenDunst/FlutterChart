@@ -9,8 +9,7 @@ class ChartLine extends StatefulWidget {
   final Size size; //宽高
   final Color backgroundColor; //绘制的背景色
   final double xyLineWidth; //xy轴线条的宽度
-  final Color xyColor; //xy轴的颜色
-  final bool isShowXyRuler; //是否显示xy刻度
+  final Color xColor, yColor; //xy轴的颜色
   final double yMax; //y轴最大值，用来计算内部绘制点的y轴位置
   final double rulerWidth; //刻度的宽度或者高度
   final List<DialStyle> yDialValues; //y轴左侧刻度显示，不传则没有
@@ -26,8 +25,8 @@ class ChartLine extends StatefulWidget {
     @required this.chartBeanSystems,
     this.backgroundColor,
     this.xyLineWidth = 2,
-    this.xyColor,
-    this.isShowXyRuler = true,
+    this.xColor,
+    this.yColor,
     this.rulerWidth = 8,
     this.yMax,
     this.yDialValues,
@@ -46,24 +45,13 @@ class ChartLine extends StatefulWidget {
 
 class ChartLineState extends State<ChartLine>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  double _value = 0;
-  double begin = 0.0, end = 1.0;
-  Offset globalPosition;
-
-  @override
-  void dispose() {
-    if (_controller != null) _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     var painter = ChartLinePainter(
       widget.chartBeanSystems,
       xyLineWidth: widget.xyLineWidth,
-      xyColor: widget.xyColor,
-      isShowXyRuler: widget.isShowXyRuler,
+      xColor: widget.xColor,
+      yColor: widget.yColor,
       rulerWidth: widget.rulerWidth,
       yMax: widget.yMax,
       yDialValues: widget.yDialValues,

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-31 19:58:36
+ * @LastEditTime: 2020-07-31 20:54:06
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -19,58 +19,58 @@ class DoubleChartlinePage extends StatefulWidget {
 
 class _DoubleChartlineState extends State<DoubleChartlinePage> {
   ChartBeanSystem _chartBeanSystem1, _chartBeanSystem2;
+  List<ChartBean> _chartBeans1, _chartBeans2;
 
   @override
   void initState() {
+    _chartBeans1 = [];
+    _chartBeans2 = [];
+    _chartBeanSystem1 = ChartBeanSystem(
+      xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+      isDrawX: true,
+      lineWidth: 2,
+      pointRadius: 4,
+      isCurve: false,
+      chartBeans: [
+        ChartBean(x: '3-01', y: 30),
+        ChartBean(x: '3-02', y: 88),
+        ChartBean(x: '3-03', y: 20, isShowPlaceImage: true),
+        ChartBean(x: '3-04', y: 67),
+        ChartBean(x: '3-05', y: 10),
+        ChartBean(x: '3-06', y: 40),
+        ChartBean(x: '3-07', y: 10),
+        ChartBean(x: '3-08', y: 0),
+      ],
+      shaderColors: [
+        Colors.cyan.withOpacity(0.3),
+        Colors.cyan.withOpacity(0.1)
+      ],
+      lineColor: Colors.cyan,
+      placehoderImageBreak: true,
+    );
+    _chartBeanSystem2 = ChartBeanSystem(
+      xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+      isDrawX: false,
+      lineWidth: 2,
+      pointRadius: 4,
+      isCurve: false,
+      chartBeans: [
+        ChartBean(x: '3-01', y: 70),
+        ChartBean(x: '3-02', y: 20),
+        ChartBean(x: '3-03', y: 30),
+        ChartBean(x: '3-04', y: 50, isShowPlaceImage: true),
+        ChartBean(x: '3-05', y: 100),
+        ChartBean(x: '3-06', y: 30),
+        ChartBean(x: '3-07', y: 0),
+        ChartBean(x: '3-08', y: 0, isShowPlaceImage: false),
+      ],
+      shaderColors: [Colors.red.withOpacity(0.3), Colors.red.withOpacity(0.1)],
+      lineColor: Colors.red,
+      placehoderImageBreak: false,
+    );
     UIImageUtil.loadImage('assets/lock.jpg').then((value) {
-      _chartBeanSystem1 = ChartBeanSystem(
-        xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
-        isDrawX: true,
-        lineWidth: 2,
-        pointRadius: 4,
-        isCurve: false,
-        chartBeans: [
-          ChartBean(x: '3-01', y: 30),
-          ChartBean(x: '3-02', y: 88),
-          ChartBean(x: '3-03', y: 20, isShowPlaceImage: true),
-          ChartBean(x: '3-04', y: 67),
-          ChartBean(x: '3-05', y: 10),
-          ChartBean(x: '3-06', y: 40),
-          ChartBean(x: '3-07', y: 10),
-          ChartBean(x: '3-08', y: 0),
-        ],
-        shaderColors: [
-          Colors.cyan.withOpacity(0.3),
-          Colors.cyan.withOpacity(0.1)
-        ],
-        lineColor: Colors.cyan,
-        placehoderImage: value,
-        placehoderImageBreak: true,
-      );
-      _chartBeanSystem2 = ChartBeanSystem(
-        xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
-        isDrawX: false,
-        lineWidth: 2,
-        pointRadius: 4,
-        isCurve: false,
-        chartBeans: [
-          ChartBean(x: '3-01', y: 70),
-          ChartBean(x: '3-02', y: 20),
-          ChartBean(x: '3-03', y: 30),
-          ChartBean(x: '3-04', y: 50, isShowPlaceImage: true),
-          ChartBean(x: '3-05', y: 100),
-          ChartBean(x: '3-06', y: 30),
-          ChartBean(x: '3-07', y: 0),
-          ChartBean(x: '3-08', y: 0, isShowPlaceImage: false),
-        ],
-        shaderColors: [
-          Colors.red.withOpacity(0.3),
-          Colors.red.withOpacity(0.1)
-        ],
-        lineColor: Colors.red,
-        placehoderImage: value,
-        placehoderImageBreak: false,
-      );
+      _chartBeanSystem1.placehoderImage = value;
+      _chartBeanSystem2.placehoderImage = value;
       setState(() {});
     });
     super.initState();
@@ -91,7 +91,8 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       chartBeanSystems: [_chartBeanSystem1, _chartBeanSystem2],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
-      xyColor: Colors.white,
+      xColor: Colors.white,
+      yColor: Colors.white,
       rulerWidth: 3,
       yDialValues: [
         DialStyle(
