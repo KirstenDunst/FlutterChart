@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-31 20:54:06
+ * @LastEditTime: 2020-08-01 12:53:54
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -33,17 +33,17 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       isCurve: false,
       chartBeans: [
         ChartBean(x: '3-01', y: 30),
-        ChartBean(x: '3-02', y: 88),
-        ChartBean(x: '3-03', y: 20, isShowPlaceImage: true),
+        ChartBean(x: '3-02', y: 88, isShowPlaceImage: true),
+        ChartBean(x: '3-03', y: 20),
         ChartBean(x: '3-04', y: 67),
         ChartBean(x: '3-05', y: 10),
-        ChartBean(x: '3-06', y: 40),
+        ChartBean(x: '3-06', y: 40, isShowPlaceImage: true),
         ChartBean(x: '3-07', y: 10),
-        ChartBean(x: '3-08', y: 0),
+        ChartBean(x: '3-08', y: 100, isShowPlaceImage: false),
       ],
       shaderColors: [
-        Colors.cyan.withOpacity(0.3),
-        Colors.cyan.withOpacity(0.1)
+        Colors.blue.withOpacity(0.3),
+        Colors.blue.withOpacity(0.1)
       ],
       lineColor: Colors.cyan,
       placehoderImageBreak: true,
@@ -55,12 +55,12 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       pointRadius: 4,
       isCurve: false,
       chartBeans: [
-        ChartBean(x: '3-01', y: 70),
+        ChartBean(x: '3-01', y: 70, isShowPlaceImage: false),
         ChartBean(x: '3-02', y: 20),
         ChartBean(x: '3-03', y: 30),
         ChartBean(x: '3-04', y: 50, isShowPlaceImage: true),
-        ChartBean(x: '3-05', y: 100),
-        ChartBean(x: '3-06', y: 30),
+        ChartBean(x: '3-05', y: 100, isShowPlaceImage: true),
+        ChartBean(x: '3-06', y: 30, isShowPlaceImage: false),
         ChartBean(x: '3-07', y: 0),
         ChartBean(x: '3-08', y: 0, isShowPlaceImage: false),
       ],
@@ -125,7 +125,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.blue.withOpacity(0.4),
+      color: Colors.white.withOpacity(0.4),
       child: chartLine,
       clipBehavior: Clip.antiAlias,
     );

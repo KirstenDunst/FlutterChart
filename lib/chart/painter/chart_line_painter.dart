@@ -80,6 +80,9 @@ class ChartLinePainter extends BasePainter {
     if (hintLineColor == null) {
       hintLineColor = defaultColor;
     }
+    if (yMax == null) {
+      yMax = 1;
+    }
   }
 
   ///计算边界
@@ -113,30 +116,33 @@ class ChartLinePainter extends BasePainter {
           Point _shadowStartPoint = Point(_startX, _startY);
           for (int i = 0; i < length; i++) {
             currentX = _startX + W * i;
-            currentY = (_startY - item.chartBeans[i].y / yMax * _fixedHeight);
+            currentY = (_startY - (item.chartBeans[i].y / yMax) * _fixedHeight);
+            if (i == 0) {
+              preX = currentX;
+              preY = currentY;
+            }
+
             if (i == 0 ||
                 (i > 0 &&
                     item.chartBeans[i - 1].isShowPlaceImage &&
                     item.placehoderImageBreak)) {
-              var value =
-                  (_startY - (item.chartBeans[i].y / yMax) * _fixedHeight);
-              _path.moveTo(currentX, value);
+              _path.moveTo(currentX, currentY);
               _shadowStartPoint = Point(currentX, _startY);
               _shadowPath
                 ..moveTo(currentX, _startY)
-                ..lineTo(currentX, value);
-              pointArr.add(Point(currentX, value));
-              continue;
+                ..lineTo(currentX, currentY);
             }
-
-            preX = _startX + W * (i - 1);
-            preY = (_startY - item.chartBeans[i - 1].y / yMax * _fixedHeight);
 
             if (item.chartBeans[i].isShowPlaceImage) {
               placeImagepoints.add(Point(currentX, currentY));
+
               if (item.placehoderImageBreak) {
                 _shadowPath
-                  ..lineTo(preX, _startY)
+                  ..lineTo(
+                      (i > 0 && item.chartBeans[i - 1].isShowPlaceImage)
+                          ? currentX
+                          : preX,
+                      _startY)
                   ..lineTo(_shadowStartPoint.x.toDouble(),
                       _shadowStartPoint.y.toDouble())
                   ..close();
@@ -148,6 +154,9 @@ class ChartLinePainter extends BasePainter {
               }
             }
 
+            // preX = _startX + W * (i - 1);
+            // preY = (_startY - item.chartBeans[i - 1].y / yMax * _fixedHeight);
+
             pointArr.add(Point(currentX, currentY));
             if (item.isCurve) {
               _path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
@@ -158,13 +167,18 @@ class ChartLinePainter extends BasePainter {
               _path.lineTo(currentX, currentY);
               _shadowPath.lineTo(currentX, currentY);
             }
+            if (i == length - 1) {
+              _shadowPath
+                ..lineTo(_endX, _startY)
+                ..lineTo(_shadowStartPoint.x.toDouble(),
+                    _shadowStartPoint.y.toDouble())
+                ..close();
+            }
+            preX = currentX;
+            preY = currentY;
           }
           paths.add(_path);
-          _shadowPath
-            ..lineTo(_endX, _startY)
-            ..lineTo(
-                _shadowStartPoint.x.toDouble(), _shadowStartPoint.y.toDouble())
-            ..close();
+
           shadowPaths.add(_shadowPath);
         }
 
