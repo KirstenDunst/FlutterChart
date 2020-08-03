@@ -110,7 +110,8 @@ class ChartLinePainter extends BasePainter {
           }
           double preX, preY, currentX, currentY;
           int length = item.chartBeans.length;
-          double W = _fixedWidth / (length - 1); //两个点之间的x方向距离
+          double W =
+              _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
           Path _path = new Path();
           Path _shadowPath = new Path();
           Point _shadowStartPoint = Point(_startX, _startY);
@@ -169,7 +170,7 @@ class ChartLinePainter extends BasePainter {
             }
             if (i == length - 1) {
               _shadowPath
-                ..lineTo(_endX, _startY)
+                ..lineTo(currentX, _startY)
                 ..lineTo(_shadowStartPoint.x.toDouble(),
                     _shadowStartPoint.y.toDouble())
                 ..close();
@@ -296,7 +297,7 @@ class ChartLinePainter extends BasePainter {
       TextStyle textStyle) {
     if (chartBeans != null && chartBeans.length > 0) {
       int length = chartBeans.length;
-      double dw = _fixedWidth / (length - 1); //两个点之间的x方向距离
+      double dw = _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
       for (int i = 0; i < length; i++) {
         ///绘制x轴文本
         TextPainter tpX = TextPainter(
