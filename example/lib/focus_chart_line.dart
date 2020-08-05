@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-29 14:28:40
+ * @LastEditTime: 2020-08-05 12:32:38
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -10,7 +10,7 @@
 
 import 'dart:async';
 import 'dart:math';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/flutter_chart.dart';
 
@@ -24,15 +24,61 @@ class FocusChartLinePage extends StatefulWidget {
 class _FocusChartLineState extends State<FocusChartLinePage> {
   GlobalKey<ChartLineFocusState> _childViewKey =
       new GlobalKey<ChartLineFocusState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(FocusChartLinePage.title),
+      ),
+      body: ChangeNotifierProvider(
+        create: (_) => ChartFocusLineProvider(),
+        child: Consumer<ChartFocusLineProvider>(
+            builder: (context, provider, child) {
+          return Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            semanticContainer: true,
+            color: Colors.white,
+            child: ChartLineFocus(
+              key: _childViewKey,
+              size: Size(MediaQuery.of(context).size.width,
+                  MediaQuery.of(context).size.height / 5 * 1.6),
+              focusChartBeans: [provider.focusChartBeanMain],
+              isShowHintX: true,
+              isShowHintY: false,
+              hintLineColor: Colors.blue,
+              isHintLineImaginary: false,
+              isLeftYDialSub: false,
+              xSectionBeans: provider.xSectionBeans,
+              xMax: 60,
+              yMax: 100.0,
+              xDialValues: provider.xArr,
+              yDialValues: provider.yArr,
+            ),
+            clipBehavior: Clip.antiAlias,
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class ChartFocusLineProvider extends ChangeNotifier {
+  List<SectionBean> get xSectionBeans => _xSectionBeans;
+  List<DialStyle> get xArr => _xArr;
+  List<DialStyle> get yArr => _yArr;
+  FocusChartBeanMain get focusChartBeanMain => _focusChartBeanMain;
+
   List<ChartBeanFocus> _beanList = [];
   FocusChartBeanMain _focusChartBeanMain;
   Timer _countdownTimer;
   int _index = 0;
   List<DialStyle> _yArr = [], _xArr = [];
+  List<SectionBean> _xSectionBeans;
 
-  @override
-  void initState() {
-    super.initState();
+  ChartFocusLineProvider() {
     //制造假数据
     List yValues = ['100', '65', '35', '0'];
     List xValues = ["0", "20'", "40'", "60'"];
@@ -75,77 +121,42 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
       _countdownTimer = null;
       print("毁灭定时器");
     };
+
+    _xSectionBeans = [
+      SectionBean(
+          title: '训练1',
+          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+          startRatio: 0.1,
+          widthRatio: 0.2,
+          fillColor: Colors.orange.withOpacity(0.2)),
+      SectionBean(
+          title: '训练2',
+          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+          startRatio: 0.4,
+          widthRatio: 0.05,
+          fillColor: Colors.orange.withOpacity(0.2)),
+      SectionBean(
+          title: '训练3',
+          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+          startRatio: 0.7,
+          widthRatio: 0.2,
+          fillColor: Colors.orange.withOpacity(0.2))
+    ];
     //制造假数据结束
+    _loadNewData();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _loadNewData() {
     if (_countdownTimer == null) {
       _countdownTimer = Timer.periodic(new Duration(seconds: 1), (timer) {
         double value = Random().nextDouble() * 100;
         _beanList.add(ChartBeanFocus(
             focus: value, second: _index > 10 ? (10 + _index) : _index));
-        if (_childViewKey.currentState != null) {
-          _focusChartBeanMain.chartBeans = _beanList;
-          _childViewKey.currentState.changeBeanList([_focusChartBeanMain]);
-        }
+        _focusChartBeanMain.chartBeans = _beanList;
         _index++;
+        notifyListeners();
       });
     }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(FocusChartLinePage.title),
-      ),
-      body: _buildFocusChartLine(context),
-    );
-  }
-
-  //FocusLine
-  Widget _buildFocusChartLine(context) {
-    var chartLine = ChartLineFocus(
-      key: _childViewKey,
-      size: Size(MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height / 5 * 1.6),
-      focusChartBeans: [_focusChartBeanMain],
-      isShowHintX: true,
-      isShowHintY: false,
-      hintLineColor: Colors.blue,
-      isHintLineImaginary: false,
-      isLeftYDialSub: false,
-      xSectionBeans: [
-        SectionBean(
-            title: '训练1',
-            titleStyle: TextStyle(color: Colors.red, fontSize: 10),
-            startRatio: 0.1,
-            widthRatio: 0.2,
-            fillColor: Colors.orange.withOpacity(0.2)),
-        SectionBean(
-            title: '训练2',
-            titleStyle: TextStyle(color: Colors.red, fontSize: 10),
-            startRatio: 0.4,
-            widthRatio: 0.05,
-            fillColor: Colors.orange.withOpacity(0.2)),
-        SectionBean(
-            title: '训练3',
-            titleStyle: TextStyle(color: Colors.red, fontSize: 10),
-            startRatio: 0.7,
-            widthRatio: 0.2,
-            fillColor: Colors.orange.withOpacity(0.2))
-      ],
-      xMax: 60,
-      yMax: 100.0,
-      xDialValues: _xArr,
-      yDialValues: _yArr,
-    );
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      semanticContainer: true,
-      color: Colors.white,
-      child: chartLine,
-      clipBehavior: Clip.antiAlias,
-    );
   }
 
   // 不要忘记在这里释放掉Timer
