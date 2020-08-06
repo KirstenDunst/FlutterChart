@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-31 18:04:07
+ * @LastEditTime: 2020-08-06 09:51:26
  * @Description: 头环绘制曲线属性设置区
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -92,11 +92,20 @@ class SectionBean {
   double widthRatio;
   //内部填充颜色
   Color fillColor;
+  //边框颜色,默认没有颜色
+  Color borderColor;
+  //边框线宽度，默认宽度为1
+  double borderWidth;
+  //边框线是否为实线还是虚线，默认实线
+  bool isBorderSolid;
 
   SectionBean(
-      {this.title,
+      {this.title = '',
       this.titleStyle,
-      this.startRatio,
-      this.widthRatio,
-      this.fillColor});
+      this.startRatio = 0,
+      this.widthRatio = 0,
+      this.fillColor,
+      this.borderColor,
+      this.borderWidth = 1,
+      this.isBorderSolid = true});
 }

@@ -504,11 +504,42 @@ class ChartLineFocusPainter extends BasePainter {
         ..close();
       var tempPaint = Paint()
         ..isAntiAlias = true
-        ..strokeWidth = 1
-        // ..strokeCap = StrokeCap.round
+        ..strokeWidth = item.borderWidth ?? 1
         ..color = item.fillColor
         ..style = PaintingStyle.fill;
       canvas.drawPath(tempPath, tempPaint);
+      //边缘线
+      var borderLinePaint = Paint()
+        ..isAntiAlias = true
+        ..strokeWidth = item.borderWidth ?? 1
+        ..color = item.borderColor ?? Colors.transparent
+        ..style = PaintingStyle.stroke;
+      Path borderLinePath1 = Path()
+        ..moveTo(tempStartX, _endY)
+        ..lineTo(tempStartX, _startY);
+      Path borderLinePath2 = Path()
+        ..moveTo(tempStartX + tempWidth, _endY)
+        ..lineTo(tempStartX + tempWidth, _startY);
+      if (item.isBorderSolid) {
+        canvas.drawPath(borderLinePath1, borderLinePaint);
+        canvas.drawPath(borderLinePath2, borderLinePaint);
+      } else {
+        canvas.drawPath(
+          dashPath(
+            borderLinePath1,
+            dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
+          ),
+          borderLinePaint,
+        );
+        canvas.drawPath(
+          dashPath(
+            borderLinePath2,
+            dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
+          ),
+          borderLinePaint,
+        );
+      }
+//文字显示
       TextPainter tempText = TextPainter(
           textAlign: TextAlign.center,
           ellipsis: '.',

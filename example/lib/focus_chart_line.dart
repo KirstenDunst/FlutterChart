@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-05 12:32:38
+ * @LastEditTime: 2020-08-06 09:56:03
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -128,7 +128,10 @@ class ChartFocusLineProvider extends ChangeNotifier {
           titleStyle: TextStyle(color: Colors.red, fontSize: 10),
           startRatio: 0.1,
           widthRatio: 0.2,
-          fillColor: Colors.orange.withOpacity(0.2)),
+          fillColor: Colors.orange.withOpacity(0.2),
+          borderColor: Colors.red,
+          borderWidth: 2,
+          isBorderSolid: false),
       SectionBean(
           title: '训练2',
           titleStyle: TextStyle(color: Colors.red, fontSize: 10),
