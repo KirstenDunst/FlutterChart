@@ -22,6 +22,8 @@ class ChartLineFocusPainter extends BasePainter {
 
   double _startX, _endX, _startY, _endY;
   double _fixedHeight, _fixedWidth; //坐标可容纳的宽高
+  //y轴分布数值是否是正序，即小的在前大的在后
+  bool _isPositiveSequence;
 
   static const double overPadding = 0; //多出最大的极值额外的线长
   static const Color defaultColor = Colors.deepPurple; //默认颜色
@@ -77,6 +79,11 @@ class ChartLineFocusPainter extends BasePainter {
     if (basePadding == null) {
       basePadding = 16;
     }
+    _isPositiveSequence = true;
+    try {
+      _isPositiveSequence =
+          yDialValues.first.titleValue < yDialValues.last.titleValue;
+    } catch (e) {}
     _initBorder(size);
   }
 
@@ -118,14 +125,15 @@ class ChartLineFocusPainter extends BasePainter {
       }
 
       ///绘制x轴文本
-      TextPainter(
+      TextPainter tpx = TextPainter(
           textAlign: TextAlign.center,
           ellipsis: '.',
           text: TextSpan(
               text: tempXDigalModel.title, style: tempXDigalModel.titleStyle),
           textDirection: TextDirection.ltr)
-        ..layout(minWidth: 40, maxWidth: 40)
-        ..paint(canvas, Offset(_startX + dw - 20, _startY + basePadding));
+        ..layout();
+      tpx.paint(
+          canvas, Offset(_startX + dw - tpx.width / 2, _startY + basePadding));
 
       if (isShowHintY && i != 0) {
         //y轴辅助线
@@ -149,33 +157,22 @@ class ChartLineFocusPainter extends BasePainter {
       // canvas.drawLine(Offset(startX + dw, startY),
       //     Offset(startX + dw, startY - rulerWidth), paint..color = xyColor);
     }
-    double xSub = _startX - 40;
-    double subWidth = 40;
-    int maxLength = 1;
-    TextDirection textDirection = TextDirection.rtl;
-    if (!isLeftYDialSub) {
-      xSub = _endX + 8;
-      subWidth = 11;
-      maxLength = 2;
-      textDirection = TextDirection.ltr;
-    }
+
     for (int i = 0; i < yDialValues.length; i++) {
       var tempYModel = yDialValues[i];
 
       ///绘制y轴文本
       var yValue = tempYModel.title;
       var yLength = tempYModel.positionRetioy * _fixedHeight;
-      TextPainter(
+      TextPainter tpY = TextPainter(
           textAlign: TextAlign.right,
           ellipsis: '.',
           maxLines: 1,
           text: TextSpan(text: '$yValue', style: tempYModel.titleStyle),
           textDirection: TextDirection.rtl)
-        ..layout(minWidth: 30, maxWidth: 30)
-        ..paint(
-            canvas,
-            Offset(_startX - 40,
-                _startY - yLength - tempYModel.titleStyle.fontSize / 2));
+        ..layout();
+      tpY.paint(canvas,
+          Offset(_startX - 10 - tpY.width, _startY - yLength - tpY.height / 2));
       var subLength = (yDialValues[i].titleValue -
               (i == yDialValues.length - 1
                   ? 0
@@ -186,14 +183,16 @@ class ChartLineFocusPainter extends BasePainter {
       TextPainter tp = TextPainter(
           textAlign: TextAlign.center,
           ellipsis: '.',
-          maxLines: maxLength,
+          maxLines: 5,
           text: TextSpan(
               text: tempYModel.centerSubTitle,
               style: tempYModel.centerSubTextStyle),
-          textDirection: textDirection)
-        ..layout(minWidth: subWidth, maxWidth: subWidth);
-      tp.paint(canvas,
-          Offset(xSub, _startY - yLength + subLength.abs() - tp.height / 2));
+          textDirection: TextDirection.ltr)
+        ..layout();
+      tp.paint(
+          canvas,
+          Offset(isLeftYDialSub ? (_startX - tp.width - 10) : (_endX + 8),
+              _startY - yLength + subLength.abs() - tp.height / 2));
 
       if (isShowHintX && yLength != 0) {
         //x轴辅助线
@@ -410,13 +409,19 @@ class ChartLineFocusPainter extends BasePainter {
       return _fixedHeight;
     }
     double extremum = 0;
-    for (var i = 0; i < yDialValues.length - 1; i++) {
-      if (value > yDialValues[i].titleValue &&
-          value < yDialValues[i + 1].titleValue) {
-        extremum = yDialValues[i + 1].titleValue / yMax * _fixedHeight;
-      } else if (value < yDialValues[i].titleValue &&
-          value > yDialValues[i + 1].titleValue) {
-        extremum = yDialValues[i].titleValue / yMax * _fixedHeight;
+    if (_isPositiveSequence && value >= yDialValues.last.titleValue) {
+      extremum = yDialValues.last.titleValue / yMax * _fixedHeight;
+    } else if (!_isPositiveSequence && value >= yDialValues.first.titleValue) {
+      extremum = yDialValues.first.titleValue / yMax * _fixedHeight;
+    } else {
+      for (var i = 0; i < yDialValues.length - 1; i++) {
+        if (value > yDialValues[i].titleValue &&
+            value < yDialValues[i + 1].titleValue) {
+          extremum = yDialValues[i + 1].titleValue / yMax * _fixedHeight;
+        } else if (value < yDialValues[i].titleValue &&
+            value > yDialValues[i + 1].titleValue) {
+          extremum = yDialValues[i].titleValue / yMax * _fixedHeight;
+        }
       }
     }
     return extremum;
@@ -427,15 +432,22 @@ class ChartLineFocusPainter extends BasePainter {
       return gradualColors;
     }
     Color mainColor = defaultColor;
-    for (var i = 0; i < yDialValues.length - 1; i++) {
-      if (value < yDialValues[i].titleValue &&
-          value > yDialValues[i + 1].titleValue) {
-        mainColor = yDialValues[i].centerSubTextStyle.color;
-      } else if (value > yDialValues[i].titleValue &&
-          value < yDialValues[i + 1].titleValue) {
-        mainColor = yDialValues[i + 1].centerSubTextStyle.color;
+    if (_isPositiveSequence && value >= yDialValues.last.titleValue) {
+      mainColor = yDialValues.last.centerSubTextStyle.color;
+    } else if (!_isPositiveSequence && value >= yDialValues.first.titleValue) {
+      mainColor = yDialValues.first.centerSubTextStyle.color;
+    } else {
+      for (var i = 0; i < yDialValues.length - 1; i++) {
+        if (value < yDialValues[i].titleValue &&
+            value > yDialValues[i + 1].titleValue) {
+          mainColor = yDialValues[i].centerSubTextStyle.color;
+        } else if (value > yDialValues[i].titleValue &&
+            value < yDialValues[i + 1].titleValue) {
+          mainColor = yDialValues[i + 1].centerSubTextStyle.color;
+        }
       }
     }
+
     return [mainColor, mainColor.withOpacity(0.3)];
   }
 

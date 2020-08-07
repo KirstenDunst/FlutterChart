@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-07 13:51:03
+ * @LastEditTime: 2020-08-07 14:26:44
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -53,7 +53,7 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
               isLeftYDialSub: false,
               xSectionBeans: provider.xSectionBeans,
               xMax: 60,
-              yMax: 100.0,
+              yMax: 70.0,
               xDialValues: provider.xArr,
               yDialValues: provider.yArr,
             ),
@@ -80,15 +80,14 @@ class ChartFocusLineProvider extends ChangeNotifier {
 
   ChartFocusLineProvider() {
     //制造假数据
-    List yValues = ['100', '65', '35', '0'];
-    List xValues = ["0", "20'", "40'", "60'"];
-    List xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
-    List yTexts = ["忘我", "一般", "走神", ''];
+    List yValues = ['70', '25', '0'];
+    List xValues = ["0", "20'", "60'"];
+    List xPositionRetioy = [0.0, 0.33, 1.0];
+    List yTexts = ["忘我", "一般", ''];
     List yTextColors = [
-      Color(0xEEF75E36),
-      Color(0xEEFFC278),
-      Color(0xEE172B88),
-      Color(0xEE172B88),
+      Colors.red,
+      Colors.blue,
+      Colors.blue,
     ];
 
     for (var i = 0; i < yValues.length; i++) {
@@ -101,7 +100,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
           title: yValues[i],
           titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
           centerSubTitle: yTexts[i],
-          positionRetioy: double.parse(yValues[i]) / 100.0,
+          positionRetioy: double.parse(yValues[i]) / 70.0,
           centerSubTextStyle:
               TextStyle(fontSize: 10.0, color: yTextColors[i])));
     }
