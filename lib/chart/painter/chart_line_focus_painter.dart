@@ -227,12 +227,12 @@ class ChartLineFocusPainter extends BasePainter {
     int endSecond = chartBeans.last.second;
     for (var i = 0; i < endSecond; i++) {
       if (i == indexValue) {
-        tempValueArr.add(chartBeans[index].focus);
+        tempValueArr.add(min(chartBeans[index].focus, yMax));
         indexValue = chartBeans[index + 1].second;
         index++;
       } else {
         if (!isLinkBreak) {
-          tempValueArr.add(chartBeans[index].focus);
+          tempValueArr.add(min(chartBeans[index].focus, yMax));
         } else {
           tempValueArr.add(null);
         }
