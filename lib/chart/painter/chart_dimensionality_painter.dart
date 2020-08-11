@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-17 17:38:37
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-20 15:22:29
+ * @LastEditTime: 2020-08-11 14:19:41
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -220,23 +220,27 @@ class ChartDimensionalityPainter extends BasePainter {
       //绘制标记小椭圆
       double rightBegainCenterX = size.width - tp.width - 20 - 10;
       double strghtWidth = 10;
+      double strghtHeight = tp.height - 4;
       Path tipPath = Path()
-        ..moveTo(rightBegainCenterX, begainDy + 5)
+        ..moveTo(
+            rightBegainCenterX, begainDy + tp.height / 2 - strghtHeight / 2)
         ..addArc(
             Rect.fromCircle(
                 center: Offset(rightBegainCenterX, begainDy + tp.height / 2),
-                radius: tp.height / 2 - 5),
+                radius: strghtHeight / 2),
             -pi / 2,
             pi)
-        ..lineTo(rightBegainCenterX - strghtWidth, begainDy + tp.height - 5)
+        ..lineTo(rightBegainCenterX - strghtWidth,
+            begainDy + tp.height / 2 + strghtHeight / 2)
         ..addArc(
             Rect.fromCircle(
                 center: Offset(
                     rightBegainCenterX - strghtWidth, begainDy + tp.height / 2),
-                radius: tp.height / 2 - 5),
+                radius: strghtHeight / 2),
             pi / 2,
             pi)
-        ..lineTo(rightBegainCenterX, begainDy + 5)
+        ..lineTo(
+            rightBegainCenterX, begainDy + tp.height / 2 - strghtHeight / 2)
         ..close();
       canvas.drawPath(tipPath, shadowPaint);
 
