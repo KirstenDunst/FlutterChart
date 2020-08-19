@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-11 15:07:23
+ * @LastEditTime: 2020-08-19 16:23:56
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -111,10 +111,10 @@ class ChartFocusLineProvider extends ChangeNotifier {
           .add(ChartBeanFocus(focus: Random().nextDouble() * 100, second: i));
     }
     _focusChartBeanMain.chartBeans = _beanList;
-    // _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
+    _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
     _focusChartBeanMain.lineWidth = 1;
     _focusChartBeanMain.isLinkBreak = false;
-    _focusChartBeanMain.lineColor = Colors.transparent;
+    _focusChartBeanMain.lineColor = Colors.red;
     _focusChartBeanMain.canvasEnd = () {
       _countdownTimer?.cancel();
       _countdownTimer = null;

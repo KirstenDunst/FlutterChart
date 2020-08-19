@@ -260,16 +260,16 @@ class ChartLineFocusPainter extends BasePainter {
     double stepBegainX = _startX;
     for (int i = 0; i < tempValueArr.length; i++) {
       if (tempValueArr[i] != null) {
+        currentY = (_startY - ((tempValueArr[i] / yMax) * _fixedHeight));
         if (i == 0 || (i > 0 && (tempValueArr[i - 1] == null))) {
           //初始化新起点
           Path newPath = Path();
           path = newPath;
-          var value = (_startY - tempValueArr[i] / yMax * _fixedHeight);
-          path.moveTo(currentX, value);
-          lastPoint = Point(currentX, value);
+          path.moveTo(currentX, currentY);
+          lastPoint = Point(currentX, currentY);
           Path shadowPath = new Path();
           shadowPath.moveTo(currentX, _startY);
-          shadowPath.lineTo(currentX, value);
+          shadowPath.lineTo(currentX, currentY);
           oldShadowPath = shadowPath;
           stepBegainX = currentX;
         }
@@ -277,8 +277,6 @@ class ChartLineFocusPainter extends BasePainter {
         if (i > 0 && (tempValueArr[i] != null && tempValueArr[i - 1] != null)) {
           preX = oldX;
           preY = (_startY - tempValueArr[i - 1] / yMax * _fixedHeight);
-          currentY = (_startY - tempValueArr[i] / yMax * _fixedHeight);
-
           //曲线连接轨迹
           path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
               currentY, currentX, currentY);
@@ -287,58 +285,39 @@ class ChartLineFocusPainter extends BasePainter {
           // path.lineTo(currentX, currentY);
 
           //阴影轨迹(如果渐变色已经设定的话也走一次性绘制)
-          if (isSamePhase(tempValueArr[i - 1], tempValueArr[i]) ||
-              bean.gradualColors != null) {
-            oldShadowPath.cubicTo(
-                (preX + currentX) / 2,
-                preY,
-                (preX + currentX) / 2,
-                currentY,
-                currentX - gradualStep,
-                currentY);
-            double tempX = (currentX + gradualStep) < _endX
-                ? (currentX + gradualStep)
-                : _endX;
-            oldShadowPath.lineTo(tempX, currentY);
+          if (bean.gradualColors != null ||
+              isSamePhase(tempValueArr[i - 1], tempValueArr[i])) {
+            oldShadowPath.cubicTo((preX + currentX) / 2, preY,
+                (preX + currentX) / 2, currentY, currentX, currentY);
           } else {
+            oldShadowPath.lineTo(preX + gradualStep, preY);
             Path shadowPath = new Path();
             if (tempValueArr[i - 1] > tempValueArr[i]) {
-              oldShadowPath.cubicTo(
-                  (preX + currentX) / 2,
-                  preY,
-                  (preX + currentX) / 2,
-                  currentY,
-                  currentX - gradualStep,
-                  currentY);
               oldShadowPath
+                ..cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
+                    currentY, currentX - gradualStep, currentY)
                 ..lineTo(currentX - gradualStep, _startY)
                 ..lineTo(stepBegainX, _startY)
                 ..close();
 
-              shadowPath.moveTo(currentX, _startY);
-              shadowPath.lineTo(currentX - gradualStep, _startY);
-              shadowPath.lineTo(currentX - gradualStep, currentY);
+              shadowPath
+                ..moveTo(currentX, _startY)
+                ..lineTo(currentX - gradualStep, _startY)
+                ..lineTo(currentX - gradualStep, currentY);
             } else {
               oldShadowPath
                 ..lineTo(preX + gradualStep, _startY)
                 ..lineTo(stepBegainX, _startY)
                 ..close();
 
-              shadowPath.moveTo(currentX, _startY);
-              shadowPath.lineTo(preX + gradualStep, _startY);
-              shadowPath.lineTo(preX + gradualStep, preY);
-              shadowPath.cubicTo(
-                  (preX + currentX) / 2,
-                  preY,
-                  (preX + currentX) / 2,
-                  currentY,
-                  currentX - gradualStep,
-                  currentY);
+              shadowPath
+                ..moveTo(currentX, _startY)
+                ..lineTo(preX + gradualStep, _startY)
+                ..lineTo(preX + gradualStep, preY)
+                ..cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
+                    currentY, currentX - gradualStep, currentY);
             }
-            double tempX = (currentX + gradualStep) < _endX
-                ? (currentX + gradualStep)
-                : _endX;
-            shadowPath.lineTo(tempX, currentY);
+            shadowPath.lineTo(currentX, currentY);
             shadowPaths.add(new ShadowSub(
                 focusPath: oldShadowPath,
                 rectGradient: _shader(i - 1, stepBegainX, currentX,
@@ -352,8 +331,11 @@ class ChartLineFocusPainter extends BasePainter {
             (i == tempValueArr.length - 1)) {
           //结束点
           pathArr.add(path);
+          bool isBeyond = (currentX + gradualStep) > _endX;
+          double tempX = isBeyond ? _endX : (currentX + gradualStep);
           oldShadowPath
-            ..lineTo(currentX + gradualStep, _startY)
+            ..lineTo(tempX, currentY)
+            ..lineTo(tempX, _startY)
             ..lineTo(stepBegainX, _startY)
             ..close();
           shadowPaths.add(new ShadowSub(
@@ -365,12 +347,12 @@ class ChartLineFocusPainter extends BasePainter {
         }
       }
 
-      if (currentX + gradualStep > (_fixedWidth + _startX)) {
+      if ((currentX + gradualStep) > _endX) {
         // 绘制结束
         if (path != null && oldShadowPath != null) {
           pathArr.add(path);
           oldShadowPath
-            ..lineTo(_fixedWidth + _startX, _startY)
+            ..lineTo(_endX, _startY)
             ..lineTo(stepBegainX, _startY)
             ..close();
           shadowPaths.add(new ShadowSub(
