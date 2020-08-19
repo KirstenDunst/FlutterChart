@@ -394,13 +394,9 @@ class ChartLineFocusPainter extends BasePainter {
 
   bool isSamePhase(double one, double other) {
     bool same = false;
-    for (var i = 0; i < yDialValues.length - 1; i++) {
-      if (one > yDialValues[i].titleValue &&
-          one < yDialValues[i + 1].titleValue) {
-        same = (other > yDialValues[i].titleValue &&
-            other < yDialValues[i + 1].titleValue);
-      }
-    }
+    double oneExtrem = getExtremum(one, null);
+    double otherExtrem = getExtremum(other, null);
+    same = oneExtrem == otherExtrem;
     return same;
   }
 
