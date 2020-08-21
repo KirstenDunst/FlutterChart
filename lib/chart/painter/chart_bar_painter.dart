@@ -23,7 +23,7 @@ class ChartBarPainter extends BasePainter {
   bool isShowTouchShadow; //触摸时是否显示阴影
   bool isShowTouchValue; //触摸时是否显示值
   Offset globalPosition; //触摸位置
-  Map<Rect, double> rectMap = new Map();
+  Map<Rect, double> rectMap;
   double basePadding; //默认的边距
 
   static const Color defaultColor = Colors.deepPurple;
@@ -80,16 +80,14 @@ class ChartBarPainter extends BasePainter {
       yMax = calculateMaxMinNew(xDialValues).first;
     }
     rectPadding = 5; //最小间距安排到5
-    cellWidth =
-        _fixedWidth / (xDialValues.length == 0 ? 1 : xDialValues.length);
+    cellWidth = _fixedWidth / (xDialValues.isEmpty ? 1 : xDialValues.length);
     if (rectWidth > (cellWidth - rectWidth)) {
       rectWidth = cellWidth - rectPadding;
     } else {
       rectPadding = cellWidth - rectWidth;
     }
-    if (xyColor == null) {
-      xyColor = defaultColor;
-    }
+    xyColor ??= defaultColor;
+    rectMap ??= {};
   }
 
   ///x,y轴
@@ -109,16 +107,16 @@ class ChartBarPainter extends BasePainter {
 
   //y轴刻度
   void _drawRuler(Canvas canvas, Size size) {
-    if (yDialValues == null || yDialValues.length == 0) {
+    if (yDialValues == null || yDialValues.isEmpty) {
       return;
     }
-    for (int i = 0; i < yDialValues.length; i++) {
+    for (var i = 0; i < yDialValues.length; i++) {
       var tempYModel = yDialValues[i];
 
       ///绘制y轴文本
       var yValue = tempYModel.title;
       var yLength = tempYModel.positionRetioy * _fixedHeight;
-      TextPainter tpTitle = TextPainter(
+      var tpTitle = TextPainter(
           textAlign: TextAlign.right,
           ellipsis: '.',
           maxLines: 1,
@@ -135,8 +133,8 @@ class ChartBarPainter extends BasePainter {
           2 /
           yMax *
           _fixedHeight;
-      TextDirection textDirection = TextDirection.rtl;
-      TextPainter tp = TextPainter(
+      var textDirection = TextDirection.rtl;
+      var tp = TextPainter(
           textAlign: TextAlign.center,
           ellipsis: '.',
           maxLines: 1,
@@ -154,22 +152,21 @@ class ChartBarPainter extends BasePainter {
 
   ///x轴刻度
   void _drawX(Canvas canvas, Size size) {
-    if (xDialValues != null && xDialValues.length > 0) {
-      for (int i = 0; i < xDialValues.length; i++) {
-        double x = startX + (rectPadding + rectWidth) * i;
-        TextPainter tpX = TextPainter(
+    if (xDialValues != null && xDialValues.isNotEmpty) {
+      for (var i = 0; i < xDialValues.length; i++) {
+        var x = startX + (rectPadding + rectWidth) * i;
+        var tpX = TextPainter(
             ellipsis: '.',
             maxLines: 1,
             textAlign: TextAlign.center,
             textDirection: TextDirection.ltr,
             text: TextSpan(
                 text: xDialValues[i].title,
-                style: xDialValues[i].titleStyle != null
-                    ? xDialValues[i].titleStyle
-                    : TextStyle(
-                        color: fontColor != null ? fontColor : defaultColor,
-                        fontSize: fontSize,
-                      )))
+                style: xDialValues[i].titleStyle ??
+                    TextStyle(
+                      color: fontColor ?? defaultColor,
+                      fontSize: fontSize,
+                    )))
           ..layout();
         tpX.paint(canvas,
             Offset(x + cellWidth / 2 - tpX.width / 2, startY + basePadding));
@@ -179,7 +176,7 @@ class ChartBarPainter extends BasePainter {
 
   ///柱状图
   void _drawBar(Canvas canvas, Size size) {
-    if (xDialValues == null || xDialValues.length == 0) return;
+    if (xDialValues == null || xDialValues.isEmpty) return;
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = 12
@@ -189,17 +186,17 @@ class ChartBarPainter extends BasePainter {
     if (yMax <= 0) return;
     rectMap.clear();
     var length = xDialValues.length;
-    for (int i = 0; i < length; i++) {
-      List<Color> gradualColors = [rectShadowColor, rectShadowColor];
+    for (var i = 0; i < length; i++) {
+      var gradualColors = <Color>[rectShadowColor, rectShadowColor];
       if (xDialValues[i].gradualColor != null) {
         gradualColors = xDialValues[i].gradualColor;
       }
-      double left = startX +
+      var left = startX +
           (rectPadding + rectWidth) * i +
           cellWidth / 2 -
           rectWidth / 2;
-      double right = left + rectWidth;
-      double currentHeight =
+      var right = left + rectWidth;
+      var currentHeight =
           startY - xDialValues[i].value / yMax * _fixedHeight * value;
       var rect = Rect.fromLTRB(left, currentHeight, right, startY);
       paint.shader = LinearGradient(
@@ -221,9 +218,9 @@ class ChartBarPainter extends BasePainter {
   void _drawOnPressed(Canvas canvas, Size size) {
     if (!_isAnimationEnd) return;
     if (globalPosition == null) return;
-    if (xDialValues == null || xDialValues.length == 0 || yMax <= 0) return;
+    if (xDialValues == null || xDialValues.isEmpty || yMax <= 0) return;
     try {
-      Offset pointer = globalPosition;
+      var pointer = globalPosition;
 
       ///修复x轴越界
       if (pointer.dx < startX) pointer = Offset(startX, pointer.dy);
@@ -241,11 +238,10 @@ class ChartBarPainter extends BasePainter {
       });
       if (currentRect != null) {
         if (isShowTouchShadow) {
-          var paint = new Paint()
+          var paint = Paint()
             ..isAntiAlias = true
-            ..color = rectShadowColor == null
-                ? defaultRectShadowColor.withOpacity(0.5)
-                : rectShadowColor;
+            ..color =
+                rectShadowColor ?? defaultRectShadowColor.withOpacity(0.5);
 
           canvas.drawRRect(
               RRect.fromRectAndCorners(currentRect,
@@ -261,7 +257,7 @@ class ChartBarPainter extends BasePainter {
               ellipsis: '.',
               maxLines: 1,
               text: TextSpan(
-                  text: "$yValue",
+                  text: '$yValue',
                   style: TextStyle(color: fontColor, fontSize: fontSize)),
               textDirection: TextDirection.ltr)
             ..layout(minWidth: 40, maxWidth: 40)

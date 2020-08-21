@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-03 12:49:26
+ * @LastEditTime: 2020-08-20 20:22:12
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -19,12 +19,9 @@ class DoubleChartlinePage extends StatefulWidget {
 
 class _DoubleChartlineState extends State<DoubleChartlinePage> {
   ChartBeanSystem _chartBeanSystem1, _chartBeanSystem2;
-  List<ChartBean> _chartBeans1, _chartBeans2;
 
   @override
   void initState() {
-    _chartBeans1 = [];
-    _chartBeans2 = [];
     _chartBeanSystem1 = ChartBeanSystem(
       xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
       isDrawX: true,

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-17 17:38:11
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-20 11:43:56
+ * @LastEditTime: 2020-08-20 20:00:48
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -42,7 +42,6 @@ class ChartDimensionality extends StatefulWidget {
     this.isAnimation = true,
   })  : assert(dimensionalityDivisions != null &&
             dimensionalityDivisions.length > 2),
-        assert(lineColor != null),
         assert(size != null),
         super(key: key);
 

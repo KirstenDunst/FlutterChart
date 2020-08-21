@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-17 17:38:37
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-11 14:30:56
+ * @LastEditTime: 2020-08-20 19:17:16
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -57,27 +57,21 @@ class ChartDimensionalityPainter extends BasePainter {
     return true;
   }
 
-  _init(Size size) {
+  void _init(Size size) {
     _initValue();
     _initlizeData(size);
   }
 
   void _initValue() {
-    if (lineColor == null) {
-      lineColor = defaultColor;
-    }
-    if (isDotted == null) {
-      isDotted = false;
-    }
-    if (lineWidth == null) {
-      lineWidth = 1;
-    }
+    lineColor ??= defaultColor;
+    isDotted ??= false;
+    lineWidth ??= 1;
     if (dimensionalityNumber == null || dimensionalityNumber == 0) {
       dimensionalityNumber = 4;
     }
   }
 
-  _initlizeData(Size size) {
+  void _initlizeData(Size size) {
     var startX = basePadding;
     var endX = size.width - basePadding;
     var startY = size.height - basePadding;
@@ -85,8 +79,8 @@ class ChartDimensionalityPainter extends BasePainter {
 
     _centerX = startX + (endX - startX) / 2;
     _centerY = endY + (startY - endY) / 2;
-    double xR = endX - _centerX;
-    double yR = startY - _centerY;
+    var xR = endX - _centerX;
+    var yR = startY - _centerY;
     var tempCenterR = xR.compareTo(yR) > 0 ? yR : xR;
     if (centerR == null || centerR > tempCenterR) {
       centerR = tempCenterR;
@@ -95,30 +89,29 @@ class ChartDimensionalityPainter extends BasePainter {
     _averageAngle = 2 * pi / dimensionalityDivisions.length;
   }
 
-  _createBase(Canvas canvas, Size size) {
-    double speaceIndex = centerR / dimensionalityNumber;
+  void _createBase(Canvas canvas, Size size) {
+    var speaceIndex = centerR / dimensionalityNumber;
     for (var i = 0; i < dimensionalityNumber; i++) {
-      double tempLength = centerR - speaceIndex * i;
-      List<Point> basePoints = [];
+      var tempLength = centerR - speaceIndex * i;
+      var basePoints = <Point>[];
       for (var j = 0; j < dimensionalityDivisions.length; j++) {
         basePoints
             .add(_getBaseCenterLengthAnglePoint(tempLength, _averageAngle * j));
         if (i == 0) {
-          ChartBeanDimensionality model = dimensionalityDivisions[j];
+          var model = dimensionalityDivisions[j];
           _createTextWithPara(
               model.tip, model.tipStyle, _averageAngle * j, canvas, size);
         }
       }
-      Path baseLinePath = Path()
-        ..moveTo(basePoints.first.x, basePoints.first.y);
+      var baseLinePath = Path()..moveTo(basePoints.first.x, basePoints.first.y);
       for (var k = 1; k < basePoints.length; k++) {
-        Point tempPoint = basePoints[k];
+        var tempPoint = basePoints[k];
         baseLinePath..lineTo(tempPoint.x, tempPoint.y);
       }
       baseLinePath
         ..lineTo(basePoints.first.x, basePoints.first.y)
         ..close();
-      Paint basePaint = Paint()
+      var basePaint = Paint()
         ..strokeWidth = lineWidth
         ..color = lineColor
         ..style = PaintingStyle.stroke
@@ -140,9 +133,9 @@ class ChartDimensionalityPainter extends BasePainter {
   }
 
 //绘制维度文字
-  _createTextWithPara(String text, TextStyle textStyle, double angle,
+  void _createTextWithPara(String text, TextStyle textStyle, double angle,
       Canvas canvas, Size size) {
-    TextPainter tp = TextPainter(
+    var tp = TextPainter(
         textAlign: TextAlign.center,
         ellipsis: '.',
         maxLines: 1,
@@ -152,9 +145,9 @@ class ChartDimensionalityPainter extends BasePainter {
         ),
         textDirection: TextDirection.ltr)
       ..layout(minWidth: 0, maxWidth: size.width);
-    Point temPoint = _getBaseCenterLengthAnglePoint(centerR + 10, angle);
-    Offset tempOffset = Offset(0, 0);
-    double sinAngle = sin(angle), cosAngle = cos(angle);
+    var temPoint = _getBaseCenterLengthAnglePoint(centerR + 10, angle);
+    var tempOffset = Offset(0, 0);
+    var sinAngle = sin(angle), cosAngle = cos(angle);
     //double的精度处理问题，这里给一定的伸缩范围
     if ((sinAngle * 100000000).floor() == 0) {
       if (cosAngle > 0) {
@@ -177,36 +170,36 @@ class ChartDimensionalityPainter extends BasePainter {
   }
 
 //绘制内部阴影区域
-  _createPaintShadowPath(Canvas canvas, Size size) {
-    double begainDy = basePadding;
+  void _createPaintShadowPath(Canvas canvas, Size size) {
+    var begainDy = basePadding;
     for (var i = 0; i < dimensionalityTags.length; i++) {
-      DimensionalityBean tempBean = dimensionalityTags[i];
+      var tempBean = dimensionalityTags[i];
 
-      List<Point> basePoints = [];
+      var basePoints = <Point>[];
       for (var j = 0; j < dimensionalityDivisions.length; j++) {
-        double length = 0;
+        var length = 0.0;
         if (j < tempBean.tagContents.length) {
           length = centerR * tempBean.tagContents[j];
         }
         basePoints
             .add(_getBaseCenterLengthAnglePoint(length, _averageAngle * j));
       }
-      Path shadowPath = Path()..moveTo(basePoints.first.x, basePoints.first.y);
+      var shadowPath = Path()..moveTo(basePoints.first.x, basePoints.first.y);
       for (var k = 1; k < basePoints.length; k++) {
-        Point tempPoint = basePoints[k];
+        var tempPoint = basePoints[k];
         shadowPath..lineTo(tempPoint.x, tempPoint.y);
       }
       shadowPath
         ..lineTo(basePoints.first.x, basePoints.first.y)
         ..close();
-      Paint shadowPaint = Paint()
+      var shadowPaint = Paint()
         ..strokeWidth = 1
         ..color = tempBean.tagColor
         ..style = PaintingStyle.fill
         ..isAntiAlias = true;
       canvas.drawPath(shadowPath, shadowPaint);
 
-      TextPainter tp = TextPainter(
+      var tp = TextPainter(
           textAlign: TextAlign.center,
           ellipsis: '.',
           maxLines: 1,
@@ -218,10 +211,10 @@ class ChartDimensionalityPainter extends BasePainter {
         ..layout(minWidth: 0, maxWidth: size.width);
       tp.paint(canvas, Offset(size.width - tp.width - 20, begainDy));
       //绘制标记小椭圆
-      double rightBegainCenterX = size.width - tp.width - 20 - 10;
-      double strghtWidth = (tp.height - 4) / 6 * 10;
-      double strghtHeight = tp.height - 4;
-      Path tipPath = Path()
+      var rightBegainCenterX = size.width - tp.width - 20 - 10;
+      var strghtWidth = (tp.height - 4) / 6 * 10;
+      var strghtHeight = tp.height - 4;
+      var tipPath = Path()
         ..moveTo(
             rightBegainCenterX, begainDy + tp.height / 2 - strghtHeight / 2)
         ..addArc(

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-02 17:04:10
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-05 12:42:50
+ * @LastEditTime: 2020-08-20 20:19:01
  * @Description: 双专注力曲线显示
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -71,17 +71,21 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
   FocusChartBeanMain _focusChartBeanMain1, _focusChartBeanMain2;
   Timer _countdownTimer;
   int _index = 0;
-  List<DialStyle> _yArr = [], _xArr = [];
-  List<ChartBeanFocus> _beanList1 = [], _beanList2 = [];
+  List<DialStyle> _yArr, _xArr;
+  List<ChartBeanFocus> _beanList1, _beanList2;
 
   ChartFocusDoubleLineProvider() {
+    _yArr = [];
+    _xArr = [];
+    _beanList1 = [];
+    _beanList2 = [];
     //制造假数据
     //制造假数据
-    List yValues = ['100', '65', '35', '0'];
-    List xValues = ["0", "20'", "40'", "60'"];
-    List xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
-    List yTexts = ["忘我", "一般", "走神", ''];
-    List yTextColors = [
+    var yValues = ['100', '65', '35', '0'];
+    var xValues = ['0', "20'", "40'", "60'"];
+    var xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
+    var yTexts = ['忘我', '一般', '走神', ''];
+    var yTextColors = [
       Color(0xEEF75E36),
       Color(0xEEFFC278),
       Color(0xEE172B88),
@@ -119,7 +123,7 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
     _focusChartBeanMain1.canvasEnd = () {
       _countdownTimer?.cancel();
       _countdownTimer = null;
-      print("毁灭定时器");
+      print('毁灭定时器');
     };
     _focusChartBeanMain2.chartBeans = _beanList2;
     _focusChartBeanMain2.gradualColors = [Color(0xFFFF605C), Color(0x00FF9A97)];
@@ -130,35 +134,33 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
     _focusChartBeanMain2.canvasEnd = () {
       _countdownTimer?.cancel();
       _countdownTimer = null;
-      print("毁灭定时器");
+      print('毁灭定时器');
     };
     //制造假数据结束
     _loadNewData();
   }
 
   void _loadNewData() async {
-    await UIImageUtil.loadImage('assets/head1.jpg').then((value) {
+    await UIImageUtil.loadImage('assets/head1.png').then((value) {
       _focusChartBeanMain1.centerPoint = value;
     });
     await UIImageUtil.loadImage('assets/head2.jpeg').then((value) {
       _focusChartBeanMain2.centerPoint = value;
     });
 
-    if (_countdownTimer == null) {
-      _countdownTimer = Timer.periodic(new Duration(seconds: 1), (timer) {
-        double value = Random().nextDouble() * 100;
-        _beanList1.add(ChartBeanFocus(
-            focus: value, second: _index > 10 ? (10 + _index) : _index));
+    _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+      var value = Random().nextDouble() * 100;
+      _beanList1.add(ChartBeanFocus(
+          focus: value, second: _index > 10 ? (10 + _index) : _index));
 
-        double value2 = Random().nextDouble() * 100;
-        _beanList2.add(ChartBeanFocus(
-            focus: value2, second: _index > 10 ? (10 + _index) : _index));
-        _focusChartBeanMain1.chartBeans = _beanList1;
-        _focusChartBeanMain2.chartBeans = _beanList2;
-        _index++;
-        notifyListeners();
-      });
-    }
+      var value2 = Random().nextDouble() * 100;
+      _beanList2.add(ChartBeanFocus(
+          focus: value2, second: _index > 10 ? (10 + _index) : _index));
+      _focusChartBeanMain1.chartBeans = _beanList1;
+      _focusChartBeanMain2.chartBeans = _beanList2;
+      _index++;
+      notifyListeners();
+    });
   }
 
   // 不要忘记在这里释放掉Timer
@@ -166,7 +168,7 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
   void dispose() {
     _countdownTimer?.cancel();
     _countdownTimer = null;
-    print("毁灭");
+    print('毁灭');
     super.dispose();
   }
 }

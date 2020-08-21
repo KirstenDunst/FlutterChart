@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-19 16:23:56
+ * @LastEditTime: 2020-08-20 20:20:48
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -22,9 +22,6 @@ class FocusChartLinePage extends StatefulWidget {
 }
 
 class _FocusChartLineState extends State<FocusChartLinePage> {
-  GlobalKey<ChartLineFocusState> _childViewKey =
-      new GlobalKey<ChartLineFocusState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +39,6 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
             semanticContainer: true,
             color: Colors.white,
             child: ChartLineFocus(
-              key: _childViewKey,
               size: Size(MediaQuery.of(context).size.width,
                   MediaQuery.of(context).size.height / 5 * 1.6),
               focusChartBeans: [provider.focusChartBeanMain],
@@ -71,20 +67,23 @@ class ChartFocusLineProvider extends ChangeNotifier {
   List<DialStyle> get yArr => _yArr;
   FocusChartBeanMain get focusChartBeanMain => _focusChartBeanMain;
 
-  List<ChartBeanFocus> _beanList = [];
+  List<ChartBeanFocus> _beanList;
   FocusChartBeanMain _focusChartBeanMain;
   Timer _countdownTimer;
   int _index = 0;
-  List<DialStyle> _yArr = [], _xArr = [];
+  List<DialStyle> _yArr, _xArr;
   List<SectionBean> _xSectionBeans;
 
   ChartFocusLineProvider() {
+    _beanList = [];
+    _xArr = [];
+    _yArr = [];
     //制造假数据
-    List yValues = ['70', '25', '0'];
-    List xValues = ["0", "20'", "60'"];
-    List xPositionRetioy = [0.0, 0.33, 1.0];
-    List yTexts = ["忘我", "一般", ''];
-    List yTextColors = [
+    var yValues = ['70', '25', '0'];
+    var xValues = ['0', "20'", "60'"];
+    var xPositionRetioy = [0.0, 0.33, 1.0];
+    var yTexts = ['忘我', '一般', ''];
+    var yTextColors = [
       Colors.red,
       Colors.blue,
       Colors.blue,
@@ -118,7 +117,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
     _focusChartBeanMain.canvasEnd = () {
       _countdownTimer?.cancel();
       _countdownTimer = null;
-      print("毁灭定时器");
+      print('毁灭定时器');
     };
 
     _xSectionBeans = [
@@ -149,16 +148,14 @@ class ChartFocusLineProvider extends ChangeNotifier {
   }
 
   void _loadNewData() {
-    if (_countdownTimer == null) {
-      _countdownTimer = Timer.periodic(new Duration(seconds: 1), (timer) {
-        double value = Random().nextDouble() * 100;
-        _beanList.add(ChartBeanFocus(
-            focus: value, second: _index > 10 ? (10 + _index) : _index));
-        _focusChartBeanMain.chartBeans = _beanList;
-        _index++;
-        notifyListeners();
-      });
-    }
+    _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+      var value = Random().nextDouble() * 100;
+      _beanList.add(ChartBeanFocus(
+          focus: value, second: _index > 10 ? (10 + _index) : _index));
+      _focusChartBeanMain.chartBeans = _beanList;
+      _index++;
+      notifyListeners();
+    });
   }
 
   // 不要忘记在这里释放掉Timer
@@ -166,7 +163,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
   void dispose() {
     _countdownTimer?.cancel();
     _countdownTimer = null;
-    print("毁灭");
+    print('毁灭');
     super.dispose();
   }
 }

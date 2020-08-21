@@ -65,24 +65,12 @@ class ChartLinePainter extends BasePainter {
   }
 
   void _initValue() {
-    if (xColor == null) {
-      xColor = defaultColor;
-    }
-    if (yColor == null) {
-      yColor = defaultColor;
-    }
-    if (hintLineSolid == null) {
-      hintLineSolid = true;
-    }
-    if (xyLineWidth == null) {
-      xyLineWidth = 2;
-    }
-    if (hintLineColor == null) {
-      hintLineColor = defaultColor;
-    }
-    if (yMax == null) {
-      yMax = 1;
-    }
+    xColor ??= defaultColor;
+    yColor ??= defaultColor;
+    hintLineSolid ??= true;
+    xyLineWidth ??= 2;
+    hintLineColor ??= defaultColor;
+    yMax ??= 1;
   }
 
   ///计算边界
@@ -109,13 +97,12 @@ class ChartLinePainter extends BasePainter {
                 item.xTitleStyle);
           }
           double preX, preY, currentX, currentY;
-          int length = item.chartBeans.length;
-          double W =
-              _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
-          Path _path = new Path();
-          Path _shadowPath = new Path();
-          Point _shadowStartPoint = Point(_startX, _startY);
-          for (int i = 0; i < length; i++) {
+          var length = item.chartBeans.length;
+          var W = _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
+          var _path = Path();
+          var _shadowPath = Path();
+          var _shadowStartPoint = Point(_startX, _startY);
+          for (var i = 0; i < length; i++) {
             currentX = _startX + W * i;
             currentY = (_startY - (item.chartBeans[i].y / yMax) * _fixedHeight);
             if (i == 0) {
@@ -148,9 +135,9 @@ class ChartLinePainter extends BasePainter {
                       _shadowStartPoint.y.toDouble())
                   ..close();
                 shadowPaths.add(_shadowPath);
-                _shadowPath = new Path();
+                _shadowPath = Path();
                 paths.add(_path);
-                _path = new Path();
+                _path = Path();
                 continue;
               }
             }
@@ -227,13 +214,13 @@ class ChartLinePainter extends BasePainter {
     if (yDialValues == null) {
       return;
     }
-    for (int i = 0; i < yDialValues.length; i++) {
+    for (var i = 0; i < yDialValues.length; i++) {
       var tempYModel = yDialValues[i];
 
       ///绘制y轴文本
       var yValue = tempYModel.title;
       var yLength = tempYModel.positionRetioy * _fixedHeight;
-      TextPainter texty = TextPainter(
+      var texty = TextPainter(
           textAlign: TextAlign.right,
           ellipsis: '.',
           maxLines: 1,
@@ -251,7 +238,7 @@ class ChartLinePainter extends BasePainter {
           2 /
           yMax *
           _fixedHeight;
-      TextPainter tp = TextPainter(
+      var tp = TextPainter(
           textAlign: TextAlign.center,
           ellipsis: '.',
           maxLines: 1,
@@ -267,7 +254,7 @@ class ChartLinePainter extends BasePainter {
 
       if (isShowHintX && yLength != 0) {
         //x轴辅助线
-        Path hitXPath = Path();
+        var hitXPath = Path();
         hitXPath
           ..moveTo(_startX, _startY - yLength)
           ..lineTo(_endX + basePadding, _startY - yLength);
@@ -295,12 +282,12 @@ class ChartLinePainter extends BasePainter {
   ///x轴刻度 & 辅助线
   void _drawXRuler(Canvas canvas, Paint paint, List<ChartBean> chartBeans,
       TextStyle textStyle) {
-    if (chartBeans != null && chartBeans.length > 0) {
-      int length = chartBeans.length;
-      double dw = _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
-      for (int i = 0; i < length; i++) {
+    if (chartBeans != null && chartBeans.isNotEmpty) {
+      var length = chartBeans.length;
+      var dw = _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
+      for (var i = 0; i < length; i++) {
         ///绘制x轴文本
-        TextPainter tpX = TextPainter(
+        var tpX = TextPainter(
             textAlign: TextAlign.center,
             ellipsis: '.',
             text: TextSpan(text: chartBeans[i].x, style: textStyle),
@@ -311,7 +298,7 @@ class ChartLinePainter extends BasePainter {
 
         if (isShowHintY) {
           //y轴辅助线
-          Path tempPath = Path()
+          var tempPath = Path()
             ..moveTo(_startX + dw * i, _startY)
             ..lineTo(_startX + dw * i, _endY - basePadding);
           if (hintLineSolid) {
@@ -352,7 +339,7 @@ class ChartLinePainter extends BasePainter {
           canvas
             ..drawPath(
                 shadowPathElement,
-                new Paint()
+                Paint()
                   ..shader = shader
                   ..isAntiAlias = true
                   ..style = PaintingStyle.fill);

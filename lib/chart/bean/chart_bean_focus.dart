@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-06 09:51:26
+ * @LastEditTime: 2020-08-20 20:01:37
  * @Description: 头环绘制曲线属性设置区
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -51,7 +51,7 @@ class DialStyle {
   String title;
   //y轴获取的值，只读
   double get titleValue {
-    if (title == null || title.length == 0) {
+    if (title == null || title.isEmpty) {
       return 0;
     } else {
       return double.parse(title);

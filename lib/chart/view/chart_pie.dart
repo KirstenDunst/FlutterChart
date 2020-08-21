@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-22 11:23:33
+ * @LastEditTime: 2020-08-20 20:01:53
  * @Description: 饼状图绘制区域
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -110,7 +110,7 @@ class ChartPieState extends State<ChartPie>
                   )
                 : null,
             painter: widget.backgroundColor == null ? painter : null),
-        widget.centerWidget != null ? widget.centerWidget : Container(),
+        widget.centerWidget ?? Container(),
       ],
     );
   }

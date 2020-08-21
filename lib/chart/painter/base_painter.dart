@@ -14,9 +14,9 @@ class BasePainter extends CustomPainter {
 
   ///计算极值 最大值,最小值
   List<double> calculateMaxMin(List<ChartBean> chartBeans) {
-    if (chartBeans == null || chartBeans.length == 0) return [0, 0];
-    double maxY = 0.0, minY = 0.0;
-    for (ChartBean bean in chartBeans) {
+    if (chartBeans == null || chartBeans.isEmpty) return [0, 0];
+    var maxY = 0.0, minY = 0.0;
+    for (var bean in chartBeans) {
       if (maxY < bean.y) {
         maxY = bean.y;
       }
@@ -29,9 +29,9 @@ class BasePainter extends CustomPainter {
 
   ///计算极值 最大值,最小值
   List<double> calculateMaxMinNew(List<ChartBeanX> chartBeans) {
-    if (chartBeans == null || chartBeans.length == 0) return [0, 0];
-    double maxY = 0.0, minY = 0.0;
-    for (ChartBeanX bean in chartBeans) {
+    if (chartBeans == null || chartBeans.isEmpty) return [0, 0];
+    var maxY = 0.0, minY = 0.0;
+    for (var bean in chartBeans) {
       if (maxY < bean.value) {
         maxY = bean.value;
       }
