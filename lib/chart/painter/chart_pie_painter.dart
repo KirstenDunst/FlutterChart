@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_pie_bean.dart';
-import 'package:flutter_chart/chart/enum/chart_pie_enum.dart';
-import 'package:flutter_chart/chart/painter/base_painter.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_pie_bean.dart';
+import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
+import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
 
 /// 不同区域的显示文案位置枚举
 enum PieStyleType {

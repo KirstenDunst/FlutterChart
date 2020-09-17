@@ -9,7 +9,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/flutter_chart.dart';
+import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartBarCirclePage extends StatefulWidget {
   static const String routeName = 'chart_bar_circle';
@@ -22,7 +22,7 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         title: Text(ChartBarCirclePage.title),
       ),
       body: _buildChartBarCircle(context),

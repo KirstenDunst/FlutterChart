@@ -1,4 +1,4 @@
-# flutter_chart
+# flutter_chart_csx
 
 A new Flutter package project.
 

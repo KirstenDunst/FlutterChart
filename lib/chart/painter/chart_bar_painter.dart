@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean.dart';
-import 'package:flutter_chart/chart/painter/base_painter.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
 
 class ChartBarPainter extends BasePainter {
   double _fixedHeight, _fixedWidth; //宽高

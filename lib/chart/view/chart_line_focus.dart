@@ -8,9 +8,9 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean_focus.dart';
-import 'package:flutter_chart/chart/painter/chart_line_focus_painter.dart';
-import 'package:flutter_chart/flutter_chart.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
+import 'package:flutter_chart_csx/chart/painter/chart_line_focus_painter.dart';
+import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLineFocus extends StatefulWidget {
   final Size size; //内容宽高

@@ -12,7 +12,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/flutter_chart.dart';
+import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class FocusChartLinePage extends StatefulWidget {
   static const String routeName = 'focus_chart_line';

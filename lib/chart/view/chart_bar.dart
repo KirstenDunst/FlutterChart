@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean.dart';
-import 'package:flutter_chart/chart/painter/chart_bar_painter.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/painter/chart_bar_painter.dart';
 
 class ChartBar extends StatefulWidget {
   final Duration duration;
@@ -15,8 +15,7 @@ class ChartBar extends StatefulWidget {
   final bool isShowX; //是否显示x刻度
   final double rectWidth; //柱状图的宽度
   //以下的四周圆角只有在 rectRadius 为0的时候才生效
-  final double rectRadiusTopLeft,
-      rectRadiusTopRight;
+  final double rectRadiusTopLeft, rectRadiusTopRight;
   final bool isAnimation; //是否执行动画
   final bool isReverse; //是否循环执行动画
   final double fontSize; //刻度文本大小
@@ -51,8 +50,7 @@ class ChartBar extends StatefulWidget {
     this.rectRadiusTopRight = 0,
     this.basePadding = 16,
     this.yMax,
-  })  : 
-        super(key: key);
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChartBarState();
@@ -118,12 +116,16 @@ class ChartBarState extends State<ChartBar>
       return GestureDetector(
         onLongPressStart: (details) {
           setState(() {
-            globalPosition = Offset(details.globalPosition.dx-widget.offsetLeftX, details.globalPosition.dy);
+            globalPosition = Offset(
+                details.globalPosition.dx - widget.offsetLeftX,
+                details.globalPosition.dy);
           });
         },
         onLongPressMoveUpdate: (details) {
           setState(() {
-            globalPosition = Offset(details.globalPosition.dx-widget.offsetLeftX, details.globalPosition.dy);
+            globalPosition = Offset(
+                details.globalPosition.dx - widget.offsetLeftX,
+                details.globalPosition.dy);
           });
         },
         onLongPressUp: () async {

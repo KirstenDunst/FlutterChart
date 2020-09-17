@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean.dart';
-import 'package:flutter_chart/chart/painter/chart_line_painter.dart';
-import 'package:flutter_chart/flutter_chart.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/painter/chart_line_painter.dart';
+import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLine extends StatefulWidget {
   final Size size; //宽高

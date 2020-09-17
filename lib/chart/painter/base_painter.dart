@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
 
 class BasePainter extends CustomPainter {
   @override

@@ -7,7 +7,7 @@
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
  */
-library flutter_chart;
+library flutter_chart_csx;
 
 export 'chart/bean/chart_bean.dart';
 export 'chart/bean/chart_bean_focus.dart';

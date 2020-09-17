@@ -8,8 +8,8 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean_dimensionality.dart';
-import 'package:flutter_chart/chart/painter/chart_dimensionality_painter.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_dimensionality.dart';
+import 'package:flutter_chart_csx/chart/painter/chart_dimensionality_painter.dart';
 
 class ChartDimensionality extends StatefulWidget {
   final List<ChartBeanDimensionality> dimensionalityDivisions; //维度划分的重要参数

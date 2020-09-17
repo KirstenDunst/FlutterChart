@@ -9,9 +9,9 @@
  */
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_pie_bean.dart';
-import 'package:flutter_chart/chart/enum/chart_pie_enum.dart';
-import 'package:flutter_chart/chart/painter/chart_pie_painter.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_pie_bean.dart';
+import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
+import 'package:flutter_chart_csx/chart/painter/chart_pie_painter.dart';
 
 class ChartPie extends StatefulWidget {
   final Duration duration;

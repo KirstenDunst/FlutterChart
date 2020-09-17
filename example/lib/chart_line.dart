@@ -8,7 +8,7 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/flutter_chart.dart';
+import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLinePage extends StatefulWidget {
   static const String routeName = 'chart_line';

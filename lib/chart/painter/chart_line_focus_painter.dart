@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart/chart/bean/chart_bean_focus.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
 import 'package:path_drawing/path_drawing.dart';
 import 'base_painter.dart';
 

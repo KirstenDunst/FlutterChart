@@ -1,7 +1,7 @@
-name: flutter_chart
+name: flutter_chart_csx
 description: A new Flutter package project.
 version: 0.0.1
-author:
+author: CaoShixin <cao_shixin@yahoo.com>
 homepage: https://github.com/BrainCoTech/flutter_modules
 
 environment:
