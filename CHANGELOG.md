@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-07 10:38:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-09-17 14:38:57
+ * @LastEditTime: 2020-12-16 16:31:40
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -42,6 +42,8 @@
     * 双折线: DoubleChartlinePage
     * 饼状图: ChartPiePage
     * 维度图: ChartDimensionalityView
+    * 可拖拽股票曲线： StepCurveLine
+    * 高亮自定义某点四周辅助线：FocusChartSpecialPointPage
 
 
 
