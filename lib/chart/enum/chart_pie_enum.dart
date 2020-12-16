@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-06-30 10:35:46
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-22 10:58:45
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-10-23 13:40:38
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -30,4 +30,14 @@ enum ArrowBegainLocation {
   Bottom,
   //x轴负方向开始
   Left,
+}
+
+//点的类型
+enum PointType {
+  //圆点
+  Circle,
+  //矩形
+  Rectangle,
+  //圆边矩形
+  RoundEdgeRectangle,
 }

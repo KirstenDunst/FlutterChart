@@ -1,61 +1,87 @@
 /*
- * @Author: Cao Shixin
- * @Date: 2020-05-27 11:08:14
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-09 18:26:06
- * @Description: 
- * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
+ * @Author: your name
+ * @Date: 2020-09-30 10:40:00
+ * @LastEditTime: 2020-12-16 16:01:56
+ * @LastEditors: Cao Shixin
+ * @Description: In User Settings Edit
+ * @FilePath: /flutter_chart/example/lib/step_curve_line.dart
  */
-
 import 'dart:async';
 import 'dart:math';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
-class FocusChartLinePage extends StatefulWidget {
-  static const String routeName = 'focus_chart_line';
-  static const String title = 'FN单专注力样式图';
+class StepCurveLine extends StatefulWidget {
+  static const String routeName = 'step_curve_line';
+  static const String title = '折线可点击拖拽显示该点的tip标签';
+
   @override
-  _FocusChartLineState createState() => _FocusChartLineState();
+  _StepCurveLineState createState() => _StepCurveLineState();
 }
 
-class _FocusChartLineState extends State<FocusChartLinePage> {
+class _StepCurveLineState extends State<StepCurveLine> {
+  Offset _offset;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FocusChartLinePage.title),
+        title: Text(StepCurveLine.title),
       ),
       body: ChangeNotifierProvider(
         create: (_) => ChartFocusLineProvider(),
         child: Consumer<ChartFocusLineProvider>(
             builder: (context, provider, child) {
-          return Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-            semanticContainer: true,
-            color: Colors.white,
-            child: ChartLineFocus(
-              size: Size(MediaQuery.of(context).size.width,
-                  MediaQuery.of(context).size.height / 5 * 1.6),
-              focusChartBeans: [provider.focusChartBeanMain],
-              baseBean: BaseBean(
-                isShowHintX: true,
-                isShowHintY: false,
-                hintLineColor: Colors.blue,
-                isHintLineImaginary: false,
-                isLeftYDialSub: false,
-                yMax: 70.0,
-                yDialValues: provider.yArr,
+          return Stack(
+            children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                margin: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                semanticContainer: true,
+                color: Colors.white,
+                child: ChartLineFocus(
+                  size: Size(MediaQuery.of(context).size.width,
+                      MediaQuery.of(context).size.height / 5 * 1.6),
+                  focusChartBeans: [provider.focusChartBeanMain],
+                  baseBean: BaseBean(
+                    isShowHintX: true,
+                    isShowHintY: false,
+                    hintLineColor: Colors.blue,
+                    isHintLineImaginary: false,
+                    isLeftYDialSub: true,
+                    yMax: 70.0,
+                    yDialValues: provider.yArr,
+                  ),
+                  xMax: 20,
+                  xDialValues: provider.xArr,
+                  isPressedHintDottedLine: true,
+                  pressedHintLineColor: Colors.blue,
+                  pressedHintLineWidth: 2,
+                  pressedPointRadius: 5,
+                  pointBack: (point, value) {
+                    setState(() {
+                      _offset = point;
+                    });
+                    print('结果返回：${point}>>>>${value}');
+                  },
+                ),
+                clipBehavior: Clip.antiAlias,
               ),
-              xSectionBeans: provider.xSectionBeans,
-              xMax: 60,
-              xDialValues: provider.xArr,
-            ),
-            clipBehavior: Clip.antiAlias,
+              Positioned(
+                child: IgnorePointer(
+                  child: Container(
+                    color: Colors.red,
+                    // width: 20,
+                    // height: 20,
+                  ),
+                ),
+                left: _offset == null ? 100.0 : _offset.dx,
+                top: _offset == null ? 100.0 : _offset.dy,
+                width: 20,
+                height: 20,
+              ),
+            ],
           );
         }),
       ),
@@ -64,7 +90,6 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
 }
 
 class ChartFocusLineProvider extends ChangeNotifier {
-  List<SectionBean> get xSectionBeans => _xSectionBeans;
   List<DialStyleX> get xArr => _xArr;
   List<DialStyleY> get yArr => _yArr;
   FocusChartBeanMain get focusChartBeanMain => _focusChartBeanMain;
@@ -75,7 +100,6 @@ class ChartFocusLineProvider extends ChangeNotifier {
   int _index = 0;
   List<DialStyleX> _xArr;
   List<DialStyleY> _yArr;
-  List<SectionBean> _xSectionBeans;
 
   ChartFocusLineProvider() {
     _beanList = [];
@@ -108,13 +132,17 @@ class ChartFocusLineProvider extends ChangeNotifier {
     }
 
     _focusChartBeanMain = FocusChartBeanMain();
-    for (var i = 0; i < 30; i++) {
+    for (var i = 0; i <= 20; i++) {
+      var value = Random().nextDouble() * 100;
       _beanList.add(
-          ChartBeanFocus(focus: Random().nextDouble() * 100, second: i + 30));
+          ChartBeanFocus(focus: value, second: i, touchBackValue: '测试传递$i'));
     }
     _focusChartBeanMain.chartBeans = _beanList;
     _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
     _focusChartBeanMain.lineWidth = 1;
+    _focusChartBeanMain.isCurve = false;
+    _focusChartBeanMain.touchEnable = true;
+    _focusChartBeanMain.showSite = true;
     _focusChartBeanMain.isLinkBreak = false;
     _focusChartBeanMain.lineColor = Colors.red;
     _focusChartBeanMain.canvasEnd = () {
@@ -122,35 +150,12 @@ class ChartFocusLineProvider extends ChangeNotifier {
       _countdownTimer = null;
       print('毁灭定时器');
     };
-
-    _xSectionBeans = [
-      SectionBean(
-          title: '训练1',
-          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
-          startRatio: 0.1,
-          widthRatio: 0.2,
-          fillColor: Colors.orange.withOpacity(0.2),
-          borderColor: Colors.red,
-          borderWidth: 2,
-          isBorderSolid: false),
-      SectionBean(
-          title: '训练2',
-          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
-          startRatio: 0.4,
-          widthRatio: 0.05,
-          fillColor: Colors.orange.withOpacity(0.2)),
-      SectionBean(
-          title: '训练3',
-          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
-          startRatio: 0.7,
-          widthRatio: 0.2,
-          fillColor: Colors.orange.withOpacity(0.2))
-    ];
     //制造假数据结束
-    _loadNewData();
+    // _loadNewData();
   }
 
   void _loadNewData() {
+    _beanList.clear();
     _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
       if (_index == 0) {
         _beanList.clear();
@@ -162,6 +167,8 @@ class ChartFocusLineProvider extends ChangeNotifier {
       _index++;
       notifyListeners();
     });
+    _countdownTimer?.cancel();
+    _countdownTimer = null;
   }
 
   // 不要忘记在这里释放掉Timer

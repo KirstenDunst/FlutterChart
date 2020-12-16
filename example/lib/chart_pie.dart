@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-22 11:19:22
+ * @LastEditTime: 2020-12-09 10:53:01
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -32,16 +32,16 @@ class _ChartPieState extends State<ChartPiePage> {
   Widget _buildChartPie(context) {
     var chartPie = ChartPie(
       chartBeans: [
-        ChartPieBean(
-            type: '话费',
-            value: 180,
-            color: Colors.blueGrey,
-            assistTextStyle: TextStyle(fontSize: 12, color: Colors.blueGrey)),
-        ChartPieBean(
-            type: '零食',
-            value: 10,
-            color: Colors.deepPurple,
-            assistTextStyle: TextStyle(fontSize: 12, color: Colors.deepPurple)),
+        // ChartPieBean(
+        //     type: '话费',
+        //     value: 180,
+        //     color: Colors.blueGrey,
+        //     assistTextStyle: TextStyle(fontSize: 12, color: Colors.blueGrey)),
+        // ChartPieBean(
+        //     type: '零食',
+        //     value: 10,
+        //     color: Colors.deepPurple,
+        //     assistTextStyle: TextStyle(fontSize: 12, color: Colors.deepPurple)),
         ChartPieBean(
             type: '衣服',
             value: 1,
@@ -49,31 +49,30 @@ class _ChartPieState extends State<ChartPiePage> {
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.green)),
         ChartPieBean(
             type: '早餐',
-            value: 10,
+            value: 1,
             color: Colors.blue,
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.blue)),
         ChartPieBean(
             type: '水果',
-            value: 10,
+            value: 20,
             color: Colors.red,
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.red)),
         ChartPieBean(
             type: '你猜',
-            value: 20,
+            value: 100,
             color: Colors.orange,
-            assistTextStyle: TextStyle(fontSize: 12, color: Colors.red)),
+            assistTextStyle: TextStyle(fontSize: 20, color: Colors.red)),
       ],
       assistTextShowType: AssistTextShowType.OnlyName,
-      arrowBegainLocation: ArrowBegainLocation.Right,
+      arrowBegainLocation: ArrowBegainLocation.Top,
       backgroundColor: Colors.white,
       assistBGColor: Color(0xFFF6F6F6),
       decimalDigits: 1,
       divisionWidth: 2,
       size: Size(
           MediaQuery.of(context).size.width, MediaQuery.of(context).size.width),
-      R: MediaQuery.of(context).size.width / 3,
+      globalR: MediaQuery.of(context).size.width / 6,
       centerR: 6,
-      duration: Duration(milliseconds: 2000),
       centerColor: Colors.white,
       centerWidget: Text(
         '测试中心widget',

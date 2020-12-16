@@ -1,14 +1,12 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-06-30 10:48:29
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-09 18:35:49
  * @Description: 饼状图参数
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
  */
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class ChartPieBean {

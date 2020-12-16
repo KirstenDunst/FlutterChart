@@ -1,15 +1,16 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-20 20:01:53
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-09 18:03:21
  * @Description: 饼状图绘制区域
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
  */
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_pie_bean.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_pie.dart';
 import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
 import 'package:flutter_chart_csx/chart/painter/chart_pie_painter.dart';
 
@@ -19,12 +20,12 @@ class ChartPie extends StatefulWidget {
   final List<ChartPieBean> chartBeans;
   final Color backgroundColor; //绘制的背景色
   final bool isAnimation; //是否执行动画
-  final double R, centerR; //半径,中心圆半径
+  final double globalR, centerR; //半径,中心圆半径
   final Color centerColor; //中心圆颜色
   final double divisionWidth; //各个占比之间的分割线宽度，默认为0即不显示分割
   final AssistTextShowType assistTextShowType; //辅助性文案显示的样式
   final ArrowBegainLocation arrowBegainLocation; //开始画圆的位置
-  final double basePadding; //默认的边距
+  final BaseBean baseBean;
   final Color assistBGColor; //辅助性文案的背景框背景颜色
   final int decimalDigits; //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
   final Widget centerWidget; //中心组件
@@ -33,16 +34,16 @@ class ChartPie extends StatefulWidget {
     Key key,
     @required this.size,
     @required this.chartBeans,
-    this.duration = const Duration(milliseconds: 800),
+    this.duration = const Duration(milliseconds: 0),
     this.backgroundColor,
     this.isAnimation = true,
-    this.R,
+    this.globalR,
     this.centerR,
     this.centerColor,
     this.divisionWidth = 0,
     this.assistTextShowType = AssistTextShowType.None,
     this.arrowBegainLocation = ArrowBegainLocation.Top,
-    this.basePadding = 16,
+    this.baseBean,
     this.assistBGColor,
     this.decimalDigits = 0,
     this.centerWidget,
@@ -86,16 +87,17 @@ class ChartPieState extends State<ChartPie>
     var painter = ChartPiePainter(
       widget.chartBeans,
       value: _value,
-      R: widget.R,
+      globalR: widget.globalR,
       centerR: widget.centerR,
       centerColor: widget.centerColor,
       divisionWidth: widget.divisionWidth,
       assistTextShowType: widget.assistTextShowType,
       arrowBegainLocation: widget.arrowBegainLocation,
-      basePadding: widget.basePadding,
       assistBGColor: widget.assistBGColor,
       decimalDigits: widget.decimalDigits,
     );
+    painter.baseBean = widget.baseBean;
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[

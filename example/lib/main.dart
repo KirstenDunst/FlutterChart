@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-17 19:34:34
+ * @LastEditTime: 2020-12-16 15:57:16
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -16,6 +16,8 @@ import 'package:example/chart_pie.dart';
 import 'package:example/double_chart_line.dart';
 import 'package:example/focus_chart_double_line.dart';
 import 'package:example/focus_chart_line.dart';
+import 'package:example/focus_chart_special_point.dart';
+import 'package:example/step_curve_line.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -23,6 +25,8 @@ void main() => runApp(MyApp());
 final Map<String, WidgetBuilder> _routes = {
   //FN专注力样式图
   FocusChartLinePage.routeName: (_) => FocusChartLinePage(),
+  //FN专注力特殊点样式图
+  FocusChartSpecialPointPage.routeName: (_) => FocusChartSpecialPointPage(),
   //FN大师竞赛双专注力样式图
   FNDoubleLinePage.routeName: (_) => FNDoubleLinePage(),
   //柱状顶部半圆型
@@ -39,6 +43,8 @@ final Map<String, WidgetBuilder> _routes = {
   ChartPiePage.routeName: (_) => ChartPiePage(),
   //维度图
   ChartDimensionalityView.routeName: (_) => ChartDimensionalityView(),
+  //步进曲线，可拖拽
+  StepCurveLine.routeName: (_) => StepCurveLine(),
 };
 
 class MyApp extends StatelessWidget {
@@ -74,6 +80,9 @@ class _MyAppPageState extends State<MyAppPage> {
           title: FocusChartLinePage.title,
           routeName: FocusChartLinePage.routeName),
       CellModel(
+          title: FocusChartSpecialPointPage.title,
+          routeName: FocusChartSpecialPointPage.routeName),
+      CellModel(
           title: FNDoubleLinePage.title, routeName: FNDoubleLinePage.routeName),
       CellModel(
           title: ChartBarCirclePage.title,
@@ -90,7 +99,8 @@ class _MyAppPageState extends State<MyAppPage> {
       CellModel(title: ChartPiePage.title, routeName: ChartPiePage.routeName),
       CellModel(
           title: ChartDimensionalityView.title,
-          routeName: ChartDimensionalityView.routeName)
+          routeName: ChartDimensionalityView.routeName),
+      CellModel(title: StepCurveLine.title, routeName: StepCurveLine.routeName),
     ];
   }
 

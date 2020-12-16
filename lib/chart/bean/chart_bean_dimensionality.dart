@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-07-17 19:06:36
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-20 14:39:57
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-09 16:57:44
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -30,6 +30,15 @@ class DimensionalityBean {
   //另外：内部的数组包含的是0～1的比率类型的数值。否则大于1的记为1，小于0的记为0
   List<double> tagContents;
 
+  // 右上角标记本次图层的颜色填充圆角矩形的宽和高
+  double tagTipWidth;
+  double tagTipHeight;
+
   DimensionalityBean(
-      {this.tagColor, this.tagTitleStyle, this.tagContents, this.tagTitle});
+      {this.tagColor,
+      this.tagTitleStyle,
+      this.tagContents,
+      this.tagTitle,
+      this.tagTipWidth = 15,
+      this.tagTipHeight = 5});
 }

@@ -1,62 +1,23 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2020-08-20 20:35:07
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-10 10:22:23
+ * @Description: 
+ * @Email: cao_shixin@yahoo.com
+ * @Company: BrainCo
+ */
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
+import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 
-class ChartBean {
-  //x轴坐标显示字段
-  String x;
-  //y轴的值
-  double y;
-  //是否显示占位图，目前只结合线定义的placehoderImage使用
-  bool isShowPlaceImage;
-
-  ChartBean({
-    this.x = '',
-    this.y = 0,
-    this.isShowPlaceImage = false,
-  });
-}
-
-//每条线的定义
-class ChartBeanSystem {
-  //x轴的字体样式
-  TextStyle xTitleStyle;
-  //是否显示x轴的文字，用来处理多个线条绘制的时候，同一x轴坐标不需要绘制多次，则只需要将多条线中一个标记绘制即可
-  bool isDrawX;
-  //线宽
-  double lineWidth;
-  //线条点的特殊处理，如果内容不为空，则在点上面会绘制一个圆点，这个是圆点半径参数
-  double pointRadius;
-  //标记是否为曲线
-  bool isCurve;
-  //点集合
-  List<ChartBean> chartBeans;
-  //Line渐变色，从曲线到x轴从上到下的闭合颜色集
-  List<Color> shaderColors;
-  //曲线或折线的颜色
-  Color lineColor;
-  //占位图是否需要打断线条绘制，如果打断的话这个点的y值将没有意义，只有x轴有效，如果不打断的话，y轴值有效
-  bool placehoderImageBreak;
-  //用户当前进行位置的小图标（比如一个小锁），默认没有只显示y轴的值，如果有内容则显示这个小图标，
-  ui.Image placehoderImage;
-  ChartBeanSystem(
-      {this.xTitleStyle,
-      this.isDrawX = false,
-      this.lineWidth = 2,
-      this.pointRadius = 0,
-      this.isCurve = false,
-      this.chartBeans,
-      this.shaderColors,
-      this.lineColor = Colors.purple,
-      this.placehoderImageBreak = true,
-      this.placehoderImage});
-}
-
-class ChartBeanY {
+//xy的显示点位的两员大将
+//y轴
+class DialStyleY {
   //刻度标志内容(y轴仅适用于内容为数值类型的)
   String title;
   //y轴获取的值，只读
   double get titleValue {
-    if (title == null || title.length == 0) {
+    if (title == null || title.isEmpty) {
       return 0;
     } else {
       return double.parse(title);
@@ -65,30 +26,87 @@ class ChartBeanY {
 
   //刻度标志样式
   TextStyle titleStyle;
-  //两个刻度之间的标注文案（y轴在该刻度下面绘制）,不需要的话不设置
-  String centerSubTitle = '';
-  //标注文案样式
-  TextStyle centerSubTextStyle;
-  //与最大y轴数值的比率，用来计算绘制刻度的位置使用。
+  //与最大数值的比率，用来计算绘制刻度的位置使用。
   double positionRetioy;
-
-  ChartBeanY(
+  //两个刻度之间的标注文案（y轴在该刻度下面绘制）,不需要的话不设置
+  String centerSubTitle;
+  //标注文案样式，centerSubTitle有内容时有效
+  TextStyle centerSubTextStyle;
+  DialStyleY(
       {this.title,
       this.titleStyle,
       this.centerSubTitle,
       this.centerSubTextStyle,
       this.positionRetioy});
 }
-
-class ChartBeanX {
-  //x轴显示的内容
+//x轴
+class DialStyleX {
+  //刻度标志内容
   String title;
   //刻度标志样式
   TextStyle titleStyle;
-  //数值，用来处理柱体的高度。这里不用比值来操作是因为如果外部没有传最大值内部会有最大y值计算。
-  double value;
-  //柱体的渐变色数组
-  List<Color> gradualColor;
+  //与最大数值的比率，用来计算绘制刻度的位置使用。
+  double positionRetioy;
+  DialStyleX({this.title, this.titleStyle, this.positionRetioy});
+}
 
-  ChartBeanX({this.title, this.titleStyle, this.value, this.gradualColor});
+//基本的xy轴设置属性参数
+class BaseBean {
+  //xy轴线条的高度宽度
+  double xyLineWidth;
+  //x轴的颜色
+  Color xColor;
+  //y轴的颜色
+  Color yColor;
+  //顶部的辅助线
+  bool isShowBorderTop;
+  //右侧的辅助线
+  bool isShowBorderRight;
+  //y轴左侧刻度显示，不传则没有
+  List<DialStyleY> yDialValues;
+  //y轴显示副刻度是在左侧还是在右侧，默认左侧
+  bool isLeftYDialSub;
+  //是否显示x轴文本,
+  bool isShowX;
+  //y轴最大值
+  double yMax;
+  //xy轴默认的边距，不包含周围的标注文字高度，只是xy轴的方框距离周围容器的间距
+  EdgeInsets basePadding;
+  //x轴辅助线
+  bool isShowHintX;
+  //y轴的辅助线
+  bool isShowHintY;
+  //辅助线颜色
+  Color hintLineColor;
+  //辅助线宽度
+  double hintLineWidth;
+  //辅助线是否为虚线
+  bool isHintLineImaginary;
+  //是否显示x轴刻度
+  bool isShowXScale;
+  //是否显示y轴刻度
+  bool isShowYScale;
+  //xy轴刻度的高度
+  double rulerWidth;
+
+  BaseBean({
+    this.xyLineWidth = 2,
+    this.xColor = defaultColor,
+    this.yColor = defaultColor,
+    this.isShowBorderTop = false,
+    this.isShowBorderRight = false,
+    this.yDialValues,
+    this.isLeftYDialSub = true,
+    this.isShowX = true,
+    this.yMax = 100.0,
+    this.basePadding = defaultBasePadding,
+    this.isShowHintX = false,
+    this.isShowHintY = false,
+    this.hintLineColor = defaultColor,
+    this.hintLineWidth = 1.0,
+    this.isHintLineImaginary = false,
+    this.isShowXScale = false,
+    this.isShowYScale = false,
+    this.rulerWidth = 4,
+  });
 }

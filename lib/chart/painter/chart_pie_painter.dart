@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_pie_bean.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_pie.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_pie_content.dart';
 import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
+import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
 
 /// 不同区域的显示文案位置枚举
@@ -20,37 +22,39 @@ enum PieStyleType {
 class ChartPiePainter extends BasePainter {
   double value; //当前动画值
   List<ChartPieBean> chartBeans;
-  double R, centerR; //圆弧半径,中心圆半径
+  double globalR, centerR; //圆弧半径,中心圆半径
   Color centerColor; //中心圆颜色
   double divisionWidth; //各个占比之间的分割线宽度，默认为0即不显示分割
   AssistTextShowType assistTextShowType; //辅助性文案显示的样式
   ArrowBegainLocation arrowBegainLocation; //开始画圆的位置
-  double basePadding = 16; //默认的边距
-  static const Color defaultColor = Colors.deepPurple;
-  double startX, endX, startY, endY;
-  double centerX, centerY; //圆心
   Color assistBGColor; //辅助性文案的背景框背景颜色
   int decimalDigits; //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
-  Paint assistPaint;
+
+  double _startX, _endX, _startY, _endY;
+  double _centerX, _centerY; //圆心
+  Paint _assistPaint;
   List<PieBean> _pieBeans;
+  //辅助性文案的绘制区域
+  bool _needCenterAssist;
 
   ChartPiePainter(
     this.chartBeans, {
     this.value = 1,
-    this.R,
+    this.globalR,
     this.centerR,
     this.divisionWidth,
     this.centerColor,
     this.assistTextShowType,
     this.arrowBegainLocation,
-    this.basePadding,
     this.assistBGColor,
     this.decimalDigits,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    super.paint(canvas, size);
     _init(size);
+    _setPieAngle(); //计算角度
     _drawPie(canvas); //画圆弧
     if (divisionWidth > 0) {
       _drawRectSpeace(canvas); //画间隔线
@@ -65,50 +69,44 @@ class ChartPiePainter extends BasePainter {
 
   //初始化
   void _init(Size size) {
-    _initLizeData();
-
-    startX = basePadding;
-    endX = size.width - basePadding;
-    startY = size.height - basePadding;
-    endY = basePadding;
-
-    centerX = startX + (endX - startX) / 2;
-    centerY = endY + (startY - endY) / 2;
-    var xR = endX - centerX;
-    var yR = startY - centerY;
-    var realR = xR.compareTo(yR) > 0 ? yR : xR;
-
-    if (R == null || R == 0) {
-      R = realR;
-    } else {
-      if (R > realR) R = realR;
-    }
-    if (centerR > R) centerR = R;
-    assistPaint = Paint()
-      ..color = assistBGColor
-      ..style = PaintingStyle.fill
-      ..strokeCap = StrokeCap.round
-      ..isAntiAlias = true;
-    _setPieAngle(); //计算角度
-  }
-
-  void _initLizeData() {
-    _pieBeans = [];
+    _pieBeans = <PieBean>[];
     assistBGColor ??= defaultColor;
     centerR ??= 0;
     divisionWidth ??= 0;
     centerColor ??= defaultColor;
     assistTextShowType ??= AssistTextShowType.None;
     arrowBegainLocation ??= ArrowBegainLocation.Top;
-    basePadding ??= 16;
     decimalDigits ??= 0;
+
+    _needCenterAssist = false;
+    _startX = baseBean.basePadding.left;
+    _endX = size.width - baseBean.basePadding.right;
+    _startY = size.height - baseBean.basePadding.bottom;
+    _endY = baseBean.basePadding.top;
+
+    _centerX = _startX + (_endX - _startX) / 2;
+    _centerY = _endY + (_startY - _endY) / 2;
+    var xR = _endX - _centerX;
+    var yR = _startY - _centerY;
+    var realR = xR.compareTo(yR) > 0 ? yR : xR;
+
+    if (globalR == null || globalR == 0) {
+      globalR = realR;
+    } else {
+      if (globalR > realR) globalR = realR;
+    }
+    if (centerR > globalR) centerR = globalR;
+    _assistPaint = Paint()
+      ..color = assistBGColor
+      ..style = PaintingStyle.fill
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = true;
   }
 
-  //辅助性文案的绘制区域
-  bool _needCenterAssist = false;
   void _drawPie(Canvas canvas) {
     var paint = Paint()..isAntiAlias = true;
-    var rect = Rect.fromCircle(center: Offset(centerX, centerY), radius: R);
+    var rect =
+        Rect.fromCircle(center: Offset(_centerX, _centerY), radius: globalR);
     var realAngle = value * 2 * pi; //当前动画值对应的总角度
     _initPieAngleValue();
     for (var i = 0; i < _pieBeans.length; i++) {
@@ -148,9 +146,10 @@ class ChartPiePainter extends BasePainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = divisionWidth
       ..isAntiAlias = true;
-    var arcPoint = Point(centerX + R * cos(angle), centerY + R * sin(angle));
-    canvas.drawLine(
-        Offset(centerX, centerY), Offset(arcPoint.x, arcPoint.y), speacePaint);
+    var arcPoint =
+        Point(_centerX + globalR * cos(angle), _centerY + globalR * sin(angle));
+    canvas.drawLine(Offset(_centerX, _centerY), Offset(arcPoint.x, arcPoint.y),
+        speacePaint);
   }
 
   void _drawCenter(Canvas canvas) {
@@ -159,20 +158,20 @@ class ChartPiePainter extends BasePainter {
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = true;
-    canvas.drawCircle(Offset(centerX, centerY), centerR, paint);
+    canvas.drawCircle(Offset(_centerX, _centerY), centerR, paint);
   }
 
   ///计算各个扇形的起始角度
   void _setPieAngle() {
     _pieBeans.clear();
     var total = _getTotal(chartBeans);
-    var startAngle = 0.0; // 扇形开始的角度 正上方
+    var startAngle = 0.0; // 扇形开始的角度 右侧
     switch (arrowBegainLocation) {
       case ArrowBegainLocation.Top:
         startAngle = -pi / 2;
         break;
       case ArrowBegainLocation.Right:
-        startAngle = 0;
+        startAngle = 0.0;
         break;
       case ArrowBegainLocation.Bottom:
         startAngle = pi / 2;
@@ -181,7 +180,7 @@ class ChartPiePainter extends BasePainter {
         startAngle = pi;
         break;
       default:
-        startAngle = pi;
+        startAngle = 0.0;
     }
     for (var bean in chartBeans) {
       var pieBean = PieBean(
@@ -268,9 +267,9 @@ class ChartPiePainter extends BasePainter {
     var assistTextWidth = tp.width + _speaseWidth;
     var assistTextHeight = tp.height;
 
-    var rowYspeace = (R + 5) * centerSin;
-    var rowXspeace = (R + 5) * centerCos;
-    var rowPoint = Point(centerX + rowXspeace, centerY + rowYspeace);
+    var rowYspeace = (globalR + 5) * centerSin;
+    var rowXspeace = (globalR + 5) * centerCos;
+    var rowPoint = Point(_centerX + rowXspeace, _centerY + rowYspeace);
 
     //尖角的底部宽度默认设置5
     var approachSpeace = 5.0;
@@ -295,7 +294,7 @@ class ChartPiePainter extends BasePainter {
             shadowLeftTopPoint =
                 Point(rowPoint.x - assistTextWidth / 2, _lastYOverlay);
           }
-        } else {
+        } else if (_lastRowDirection != RowDirection.Bottom) {
           if (_lastXY != null && (rowPoint.y + _rowHeiWidth) < _lastXY) {
             //跨域重叠，只存在左上角和右下角
             shadowLeftTopPoint =
@@ -331,7 +330,7 @@ class ChartPiePainter extends BasePainter {
             shadowLeftTopPoint = Point(rowPoint.x - assistTextWidth / 2,
                 _lastYOverlay - assistTextHeight);
           }
-        } else {
+        } else if (_lastRowDirection != RowDirection.Top) {
           if (_lastXY != null && (rowPoint.y - _rowHeiWidth) > _lastXY) {
             //跨域重叠，只存在左上角和右下角
             shadowLeftTopPoint = Point(
@@ -485,7 +484,7 @@ class ChartPiePainter extends BasePainter {
           begainLeftTopPoint.y + assistTextHeight)
       ..lineTo(point.x, point.y)
       ..close();
-    canvas.drawPath(path, assistPaint);
+    canvas.drawPath(path, _assistPaint);
     tp.paint(canvas,
         Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
   }
@@ -509,7 +508,7 @@ class ChartPiePainter extends BasePainter {
           begainLeftTopPoint.y)
       ..lineTo(point.x, point.y)
       ..close();
-    canvas.drawPath(path, assistPaint);
+    canvas.drawPath(path, _assistPaint);
     tp.paint(canvas,
         Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
   }
@@ -533,81 +532,24 @@ class ChartPiePainter extends BasePainter {
           begainLeftTopPoint.y + assistTextHeight / 2 + approachSpeace / 2)
       ..lineTo(point.x, point.y)
       ..close();
-    canvas.drawPath(path, assistPaint);
+    canvas.drawPath(path, _assistPaint);
     tp.paint(canvas,
         Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
   }
 
   //计算可能可能存在和饼状区域有交集的点与圆心的距离，返回：如果有交集返回应该扩展的高度，没有交集返回0
   Point _pointToPointDistance(Point point) {
-    double xDistance = (point.x - centerX);
-    double yDistance = (point.y - centerY);
+    double xDistance = (point.x - _centerX);
+    double yDistance = (point.y - _centerY);
     var quartXY = xDistance * xDistance + yDistance * yDistance;
     var speaceWidth = sqrt(quartXY);
-    if (speaceWidth >= R) {
+    if (speaceWidth >= globalR) {
       return point;
     } else {
-      return Point(centerX + (R + 5) * xDistance / speaceWidth,
-          centerY + (R + 5) * yDistance / speaceWidth);
+      return Point(_centerX + (globalR + 5) * xDistance / speaceWidth,
+          _centerY + (globalR + 5) * yDistance / speaceWidth);
     }
   }
 
   /// 绘制饼状图途中周围显示的尖角标签 结束
-
-}
-
-class RedrawModel {
-  Point rowTopPoint;
-  Point rectTopLeftPoint;
-  TextPainter textPainter;
-  bool isAdjust;
-
-  RedrawModel(
-      {this.rowTopPoint,
-      this.rectTopLeftPoint,
-      this.textPainter,
-      this.isAdjust});
-}
-
-//角的方位
-enum RowDirection {
-  //初始占位
-  Null,
-  //朝上
-  Top,
-  //朝左
-  Left,
-  //朝下
-  Bottom,
-  //朝右
-  Right,
-}
-
-class PieBean {
-  //占比数值，可以任意写数值，会统一计算最后每块的占比
-  double value;
-  //扇形板块的类型标记名称
-  String type;
-  //扇形板块的颜色
-  Color color;
-  //辅助性文案展示的文案样式
-  TextStyle assistTextStyle;
-
-  //辅助性文案（内部计算勿传）
-  String assistText;
-  //所占比例（内部计算勿传）
-  double rate;
-  //开始角度（内部计算）
-  double startAngle;
-  //所占角度（内部计算）
-  double sweepAngle;
-  PieBean(
-      {this.value,
-      this.type,
-      this.color,
-      this.assistTextStyle,
-      this.assistText,
-      this.rate,
-      this.startAngle,
-      this.sweepAngle});
 }

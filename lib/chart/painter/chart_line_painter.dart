@@ -1,50 +1,26 @@
-import 'dart:ui' as ui;
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_line.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_line_content.dart';
 import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
+import 'package:flutter_chart_csx/chart/painter/base_painter_tool.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
-import 'package:path_drawing/path_drawing.dart';
 
 class ChartLinePainter extends BasePainter {
-  double xyLineWidth; //xy轴线条的宽度
-  Color xColor; //x轴的颜色
-  Color yColor; //y轴的颜色
-  double rulerWidth; //刻度的宽度或者高度
-  double yMax; //y轴最大值，用来计算内部绘制点的y轴位置
-  List<DialStyle> yDialValues; //y轴左侧刻度显示，不传则没有
-  bool isShowHintX, isShowHintY; //x、y轴的辅助线
-  bool hintLineSolid; //辅助线是否为实线，在显示辅助线的时候才有效，false的话为虚线，默认实线
-  Color hintLineColor; //辅助线颜色
   List<ChartBeanSystem> chartBeanSystems; //绘制线条的参数内容
-  bool isShowBorderTop, isShowBorderRight; //顶部和右侧的辅助线
 
-  static const double basePadding = 16; //默认的边距
-  static const Color defaultColor = Colors.deepPurple;
   double _startX, _endX, _startY, _endY, _fixedHeight, _fixedWidth;
   List<LineCanvasModel> _lineCanvasModels;
 
-  ChartLinePainter(
-    this.chartBeanSystems, {
-    this.xyLineWidth = 2,
-    this.xColor,
-    this.yColor,
-    this.rulerWidth = 8,
-    this.yMax,
-    this.yDialValues,
-    this.isShowHintX = false,
-    this.isShowHintY = false,
-    this.hintLineSolid = true,
-    this.hintLineColor,
-    this.isShowBorderTop = false,
-    this.isShowBorderRight = false,
-  });
+  ChartLinePainter(this.chartBeanSystems);
 
   @override
   void paint(Canvas canvas, Size size) {
+    super.paint(canvas, size);
     var xyPaint = Paint()
       ..isAntiAlias = true
-      ..strokeWidth = xyLineWidth
+      ..strokeWidth = baseBean.xyLineWidth
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
     _init(canvas, size, xyPaint);
@@ -59,26 +35,15 @@ class ChartLinePainter extends BasePainter {
 
   ///初始化
   void _init(Canvas canvas, Size size, Paint xyPaint) {
-    _initValue();
-    _initBorder(size);
+    _initValue(size);
     _drawXy(canvas, xyPaint); //坐标轴
   }
 
-  void _initValue() {
-    xColor ??= defaultColor;
-    yColor ??= defaultColor;
-    hintLineSolid ??= true;
-    xyLineWidth ??= 2;
-    hintLineColor ??= defaultColor;
-    yMax ??= 1;
-  }
-
-  ///计算边界
-  void _initBorder(Size size) {
-    _startX = basePadding * 2.5; //预留出y轴刻度值所占的空间
-    _endX = size.width - basePadding * 2;
-    _startY = size.height - basePadding * 2;
-    _endY = basePadding * 2;
+  void _initValue(Size size) {
+    _startX = baseBean.basePadding.left; //预留出y轴刻度值所占的空间
+    _endX = size.width - baseBean.basePadding.right;
+    _startY = size.height - baseBean.basePadding.bottom;
+    _endY = baseBean.basePadding.top;
     _fixedHeight = _startY - _endY;
     _fixedWidth = _endX - _startX;
   }
@@ -92,9 +57,22 @@ class ChartLinePainter extends BasePainter {
         var placeImagepoints = <Point>[], pointArr = <Point>[];
         if (item.chartBeans != null && item.chartBeans.isNotEmpty) {
           if (item.isDrawX) {
+            var tempArr = <DialStyleX>[];
+            for (var i = 0; i < item.chartBeans.length; i++) {
+              tempArr.add(DialStyleX(
+                  title: item.chartBeans[i].x,
+                  titleStyle: item.xTitleStyle,
+                  positionRetioy: item.chartBeans.length == 1
+                      ? 0.0
+                      : i / (item.chartBeans.length - 1)));
+            }
             //绘制x轴的文字部分
-            _drawXRuler(canvas, xyPaint..color = xColor, item.chartBeans,
-                item.xTitleStyle);
+            PainterTool.drawCoordinateAxis(
+                canvas,
+                CoordinateAxisModel(_fixedHeight, _fixedWidth,
+                    baseBean: baseBean,
+                    xDialValues: tempArr,
+                    onlyYCoordinate: false));
           }
           double preX, preY, currentX, currentY;
           var length = item.chartBeans.length;
@@ -104,7 +82,8 @@ class ChartLinePainter extends BasePainter {
           var _shadowStartPoint = Point(_startX, _startY);
           for (var i = 0; i < length; i++) {
             currentX = _startX + W * i;
-            currentY = (_startY - (item.chartBeans[i].y / yMax) * _fixedHeight);
+            currentY = (_startY -
+                (item.chartBeans[i].y / baseBean.yMax) * _fixedHeight);
             if (i == 0) {
               preX = currentX;
               preY = currentY;
@@ -177,10 +156,13 @@ class ChartLinePainter extends BasePainter {
             shadowPaths: shadowPaths,
             shaderColors: item.shaderColors,
             points: pointArr,
-            pointColor: item.lineColor,
+            pointType: item.pointType ?? PointType.Circle,
+            pointShaderColors:
+                item.pointShaderColors ?? [item.lineColor, item.lineColor],
             pointRadius: item.pointRadius,
             placeImagePoints: placeImagepoints,
-            placeImage: item.placehoderImage);
+            placeImage: item.placehoderImage,
+            placeImageRatio: item.placeImageRatio);
         _lineCanvasModels.add(lineModel);
       }
     }
@@ -188,139 +170,10 @@ class ChartLinePainter extends BasePainter {
 
   ///x,y轴
   void _drawXy(Canvas canvas, Paint paint) {
-    canvas.drawLine(Offset(_startX, _startY),
-        Offset(_endX + basePadding, _startY), paint..color = xColor); //x轴
-    canvas.drawLine(Offset(_startX, _startY),
-        Offset(_startX, _endY - basePadding), paint..color = yColor); //y轴
-    if (isShowBorderTop) {
-      ///最顶部水平边界线
-      canvas.drawLine(
-          Offset(_startX, _endY - basePadding),
-          Offset(_endX + basePadding, _endY - basePadding),
-          paint..color = xColor);
-    }
-    if (isShowBorderRight) {
-      ///最右侧垂直边界线
-      canvas.drawLine(
-          Offset(_endX + basePadding, _startY),
-          Offset(_endX + basePadding, _endY - basePadding),
-          paint..color = yColor);
-    }
-    _drawYRuler(canvas, paint);
-  }
-
-//绘制y轴 & 辅助线
-  void _drawYRuler(Canvas canvas, Paint paint) {
-    if (yDialValues == null) {
-      return;
-    }
-    for (var i = 0; i < yDialValues.length; i++) {
-      var tempYModel = yDialValues[i];
-
-      ///绘制y轴文本
-      var yValue = tempYModel.title;
-      var yLength = tempYModel.positionRetioy * _fixedHeight;
-      var texty = TextPainter(
-          textAlign: TextAlign.right,
-          ellipsis: '.',
-          maxLines: 1,
-          text: TextSpan(text: '$yValue', style: tempYModel.titleStyle),
-          textDirection: TextDirection.rtl)
-        ..layout();
-      texty.paint(
-          canvas,
-          Offset(
-              _startX - texty.width - 8, _startY - yLength - texty.height / 2));
-      var subLength = (yDialValues[i].titleValue -
-              (i == yDialValues.length - 1
-                  ? 0
-                  : yDialValues[i + 1].titleValue)) /
-          2 /
-          yMax *
-          _fixedHeight;
-      var tp = TextPainter(
-          textAlign: TextAlign.center,
-          ellipsis: '.',
-          maxLines: 1,
-          text: TextSpan(
-              text: tempYModel.centerSubTitle,
-              style: tempYModel.centerSubTextStyle),
-          textDirection: TextDirection.ltr)
-        ..layout();
-      tp.paint(
-          canvas,
-          Offset(tempYModel.isLeft ? (_startX - tp.width - 8) : (_endX + 5),
-              _startY - yLength + subLength.abs() - tp.height / 2));
-
-      if (isShowHintX && yLength != 0) {
-        //x轴辅助线
-        var hitXPath = Path();
-        hitXPath
-          ..moveTo(_startX, _startY - yLength)
-          ..lineTo(_endX + basePadding, _startY - yLength);
-        if (hintLineSolid) {
-          canvas.drawPath(hitXPath, paint..color = hintLineColor);
-        } else {
-          canvas.drawPath(
-            dashPath(
-              hitXPath,
-              dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
-            ),
-            paint..color = hintLineColor,
-          );
-        }
-      }
-
-      ///y轴刻度
-      canvas.drawLine(
-          Offset(_startX, _startY - yLength),
-          Offset(_startX + rulerWidth, _startY - yLength),
-          paint..color = yColor);
-    }
-  }
-
-  ///x轴刻度 & 辅助线
-  void _drawXRuler(Canvas canvas, Paint paint, List<ChartBean> chartBeans,
-      TextStyle textStyle) {
-    if (chartBeans != null && chartBeans.isNotEmpty) {
-      var length = chartBeans.length;
-      var dw = _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
-      for (var i = 0; i < length; i++) {
-        ///绘制x轴文本
-        var tpX = TextPainter(
-            textAlign: TextAlign.center,
-            ellipsis: '.',
-            text: TextSpan(text: chartBeans[i].x, style: textStyle),
-            textDirection: TextDirection.ltr)
-          ..layout();
-        tpX.paint(canvas,
-            Offset(_startX + dw * i - tpX.width / 2, _startY + basePadding));
-
-        if (isShowHintY) {
-          //y轴辅助线
-          var tempPath = Path()
-            ..moveTo(_startX + dw * i, _startY)
-            ..lineTo(_startX + dw * i, _endY - basePadding);
-          if (hintLineSolid) {
-            canvas.drawPath(tempPath, paint..color = hintLineColor);
-          } else {
-            canvas.drawPath(
-              dashPath(
-                tempPath,
-                dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
-              ),
-              paint..color = hintLineColor,
-            );
-          }
-        }
-
-        ///x轴刻度
-        canvas.drawLine(
-            Offset(_startX + dw * i, _startY),
-            Offset(_startX + dw * i, _startY - rulerWidth),
-            paint..color = xColor);
-      }
-    }
+    PainterTool.drawCoordinateAxis(
+        canvas,
+        CoordinateAxisModel(_fixedHeight, _fixedWidth,
+            baseBean: baseBean, onlyYCoordinate: true));
   }
 
   ///曲线或折线
@@ -358,56 +211,70 @@ class ChartLinePainter extends BasePainter {
         });
       }
       if (element.points != null) {
+        var pointPaint = Paint()
+          ..isAntiAlias = true
+          ..strokeWidth = 1
+          ..strokeCap = StrokeCap.round
+          ..style = PaintingStyle.fill;
+
+        var linerGradient = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            tileMode: TileMode.mirror,
+            colors: element.pointShaderColors);
+        var borderRaius = 0.0;
+        switch (element.pointType) {
+          case PointType.Circle:
+            borderRaius = element.pointRadius;
+            break;
+          case PointType.Rectangle:
+            borderRaius = 0;
+            break;
+          case PointType.RoundEdgeRectangle:
+            borderRaius = element.pointRadius / 3 * 2;
+            break;
+          default:
+        }
         //点
         element.points.forEach((pointElement) {
-          var pointPaint = Paint()
-            ..isAntiAlias = true
-            ..strokeCap = StrokeCap.round
-            ..color = element.pointColor
-            ..style = PaintingStyle.fill;
-          canvas.drawCircle(Offset(pointElement.x, pointElement.y),
-              element.pointRadius, pointPaint);
+          var rect = Rect.fromLTRB(
+              pointElement.x - element.pointRadius,
+              pointElement.y - element.pointRadius,
+              pointElement.x + element.pointRadius,
+              pointElement.y + element.pointRadius);
+          pointPaint.shader = linerGradient.createShader(rect);
+          canvas.drawRRect(
+              RRect.fromRectAndCorners(rect,
+                  topLeft: Radius.circular(borderRaius),
+                  topRight: Radius.circular(borderRaius),
+                  bottomLeft: Radius.circular(borderRaius),
+                  bottomRight: Radius.circular(borderRaius)),
+              pointPaint);
         });
       }
       if (element.placeImagePoints != null && element.placeImage != null) {
+        var ratio = element.placeImageRatio;
+        if (element.placeImageRatio == null || element.placeImageRatio > 1.0) {
+          ratio = 1.0;
+        } else if (element.placeImageRatio < 0.0) {
+          ratio = 0.0;
+        }
+        var tempImgWidth = element.placeImage.width * ratio;
+        var tempImgHeight = element.placeImage.height * ratio;
         //占位图
         element.placeImagePoints.forEach((placehoderElement) {
-          canvas.drawImage(
+          canvas.drawImageRect(
               element.placeImage,
-              Offset(placehoderElement.x - element.placeImage.width / 2,
-                  _startY - 10 - element.placeImage.height),
+              Rect.fromLTWH(0, 0, element.placeImage.width.toDouble(),
+                  element.placeImage.height.toDouble()),
+              Rect.fromLTWH(
+                  placehoderElement.x - tempImgWidth / 2,
+                  _startY - 10 * ratio - tempImgHeight,
+                  tempImgWidth,
+                  tempImgHeight),
               Paint());
         });
       }
     });
   }
-}
-
-//绘制图表的计算之后的结果模型集
-class LineCanvasModel {
-  List<Path> paths;
-  Color pathColor;
-  double pathWidth;
-
-  List<Path> shadowPaths;
-  List<Color> shaderColors;
-
-  List<Point> points;
-  Color pointColor;
-  double pointRadius;
-
-//占位图的底部中心点
-  List<Point> placeImagePoints;
-  ui.Image placeImage;
-  LineCanvasModel(
-      {this.paths,
-      this.pathColor,
-      this.pathWidth,
-      this.shadowPaths,
-      this.shaderColors,
-      this.points,
-      this.pointColor,
-      this.pointRadius,
-      this.placeImagePoints,
-      this.placeImage});
 }

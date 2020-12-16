@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-07-17 17:42:38
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-07-20 15:20:29
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-09 17:48:09
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -78,10 +78,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
       centerR: 150,
       backgroundColor: Colors.white,
       lineColor: Colors.blueAccent,
-      isAnimation: true,
-      isReverse: false,
       dimensionalityNumber: 4,
-      duration: Duration(milliseconds: 2000),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-07-17 17:38:11
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-08-20 20:00:48
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-09 16:35:16
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -22,9 +22,6 @@ class ChartDimensionality extends StatefulWidget {
   final int dimensionalityNumber; //阶层：维度图从中心到最外层有几圈
 
   final Color backgroundColor; //绘制的背景色
-  final Duration duration; //动画时长
-  final bool isAnimation; //是否执行动画
-  final bool isReverse; //是否重复执行动画
 
   const ChartDimensionality({
     Key key,
@@ -37,9 +34,6 @@ class ChartDimensionality extends StatefulWidget {
     this.centerR,
     this.dimensionalityNumber = 4,
     this.backgroundColor,
-    this.duration = const Duration(milliseconds: 800),
-    this.isReverse = false,
-    this.isAnimation = true,
   })  : assert(dimensionalityDivisions != null &&
             dimensionalityDivisions.length > 2),
         assert(size != null),
@@ -51,44 +45,11 @@ class ChartDimensionality extends StatefulWidget {
 
 class ChartDimensionalityState extends State<ChartDimensionality>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  double _value = 0;
-  double begin = 0.0, end = 1.0;
-  Offset globalPosition;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.isAnimation) {
-      _controller = AnimationController(vsync: this, duration: widget.duration);
-      Tween(begin: begin, end: end).animate(_controller)
-        ..addStatusListener((status) {
-          if (status == AnimationStatus.completed) {
-            if (widget.isReverse) {
-              _controller.repeat(reverse: widget.isReverse);
-            }
-          }
-        })
-        ..addListener(() {
-          _value = _controller.value;
-          setState(() {});
-        });
-      _controller.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    if (_controller != null) _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     var painter = ChartDimensionalityPainter(
       widget.dimensionalityDivisions,
       dimensionalityTags: widget.dimensionalityTags,
-      value: _value,
       lineColor: widget.lineColor,
       lineWidth: widget.lineWidth,
       isDotted: widget.isDotted,
