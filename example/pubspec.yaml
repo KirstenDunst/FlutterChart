@@ -29,7 +29,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_chart:
+  flutter_chart_csx:
     path: ../
 
 

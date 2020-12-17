@@ -62,13 +62,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_chart:
+  flutter_chart_csx:
     dependency: "direct dev"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.1.4"
+    version: "0.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -116,13 +116,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.4"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.9.0"
   provider:
     dependency: "direct main"
     description:
