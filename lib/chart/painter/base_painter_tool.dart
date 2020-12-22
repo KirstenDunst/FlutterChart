@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-06 15:00:21
- * @LastEditTime: 2020-12-08 16:29:27
+ * @LastEditTime: 2020-12-22 18:09:28
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/painter/chart_line_focus_painter_tool.dart
@@ -276,15 +276,13 @@ class PainterTool {
                       10 -
                       tpY.width,
                   _startY - yLength - tpY.height / 2));
-          var subLength =
-              (coordinateAxisModel.baseBean.yDialValues[i].titleValue -
-                      (i == coordinateAxisModel.baseBean.yDialValues.length - 1
-                          ? 0
-                          : coordinateAxisModel
-                              .baseBean.yDialValues[i + 1].titleValue)) /
-                  2 /
-                  coordinateAxisModel.baseBean.yMax *
-                  coordinateAxisModel.fixedHeight;
+           var nextLength = ((i ==
+                      coordinateAxisModel.baseBean.yDialValues.length - 1)
+                  ? coordinateAxisModel.baseBean.yDialValues.last.positionRetioy
+                  : coordinateAxisModel
+                      .baseBean.yDialValues[i + 1].positionRetioy) *
+              coordinateAxisModel.fixedHeight;
+          var subLength = (yLength + nextLength) / 2;
           var tpSub = TextPainter(
               textAlign: TextAlign.center,
               ellipsis: '.',
@@ -302,7 +300,7 @@ class PainterTool {
                           tpSub.width -
                           10)
                       : (_endX + 8),
-                  _startY - yLength + subLength.abs() - tpSub.height / 2));
+                  _startY - subLength - tpSub.height / 2));
 
           if (coordinateAxisModel.baseBean.isShowHintX && yLength != 0) {
             //x轴辅助线

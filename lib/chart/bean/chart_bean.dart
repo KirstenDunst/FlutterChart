@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-08-20 20:35:07
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-10 10:22:23
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-12-22 18:12:47
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -28,7 +28,7 @@ class DialStyleY {
   TextStyle titleStyle;
   //与最大数值的比率，用来计算绘制刻度的位置使用。
   double positionRetioy;
-  //两个刻度之间的标注文案（y轴在该刻度下面绘制）,不需要的话不设置
+  //两个刻度之间的标注文案（y轴在数组中下一个元素之间绘制，最后一个元素则在最后一个点上面绘制）,不需要的话不设置
   String centerSubTitle;
   //标注文案样式，centerSubTitle有内容时有效
   TextStyle centerSubTextStyle;

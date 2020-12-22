@@ -1,6 +1,6 @@
 name: flutter_chart_csx
 description: 图表库：柱状图，折线图，饼状图，多维图，可拖拽折线，自定义柱状边角radius，支持多曲线绘制.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/KirstenDunst/FlutterChart
 
 environment:

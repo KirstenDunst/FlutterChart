@@ -2,11 +2,15 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-07 10:38:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-16 16:31:40
+ * @LastEditTime: 2020-12-22 18:15:36
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
 -->
+## 0.0.2 202001222
+* 专注力图表
+    * 修复y轴副标题倒序不居中问题
+
 ## 0.0.1 20200917
 * 专注力图表
     * 曲线更平滑
