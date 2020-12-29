@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-08-20 20:35:07
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-22 18:12:47
+ * @LastEditTime: 2020-12-29 10:57:02
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -39,6 +39,7 @@ class DialStyleY {
       this.centerSubTextStyle,
       this.positionRetioy});
 }
+
 //x轴
 class DialStyleX {
   //刻度标志内容

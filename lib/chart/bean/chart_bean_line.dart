@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-09 17:15:01
- * @LastEditTime: 2020-11-17 10:26:23
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-12-29 10:57:16
+ * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/bean/chart_bean_line.dart
  */
@@ -67,8 +67,3 @@ class ChartLineBean {
     this.isShowPlaceImage = false,
   });
 }
-
-
-
-
-
