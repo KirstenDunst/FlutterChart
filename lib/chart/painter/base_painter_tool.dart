@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-06 15:00:21
- * @LastEditTime: 2020-12-29 10:43:12
+ * @LastEditTime: 2020-12-29 11:38:26
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/painter/chart_line_focus_painter_tool.dart
@@ -290,7 +290,7 @@ class PainterTool {
                       10 -
                       tpY.width,
                   _startY - yLength - tpY.height / 2));
-           var nextLength = ((i ==
+          var nextLength = ((i ==
                       coordinateAxisModel.baseBean.yDialValues.length - 1)
                   ? coordinateAxisModel.baseBean.yDialValues.last.positionRetioy
                   : coordinateAxisModel
