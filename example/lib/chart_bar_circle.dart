@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:32:05
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-09 17:29:55
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-12-29 10:53:05
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -79,7 +79,13 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
               titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
               centerSubTitle: 'Focused',
               centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-              positionRetioy: 35 / 100)
+              positionRetioy: 35 / 100),
+          DialStyleY(
+              title: '',
+              titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
+              centerSubTitle: '',
+              centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+              positionRetioy: 0 / 100)
         ],
         yMax: 100.0,
       ),
