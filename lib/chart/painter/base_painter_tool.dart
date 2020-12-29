@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-06 15:00:21
- * @LastEditTime: 2020-12-22 18:09:28
+ * @LastEditTime: 2020-12-29 10:43:12
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/painter/chart_line_focus_painter_tool.dart
@@ -16,6 +16,11 @@ import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 import 'package:path_drawing/path_drawing.dart';
 
 class LineFocusPainterTool {
+  /// 数据处理
+  /// chartBeans：数据源
+  /// isLinkBreak：线条是否是断开的设置
+  /// yMax：y轴的最大值
+  /// showLineSection：是否展示线条区间带
   static List<BeanDealModel> dealValue(
       List<ChartBeanFocus> chartBeans, bool isLinkBreak, double yMax,
       {bool showLineSection = false}) {
@@ -70,6 +75,7 @@ class LineFocusPainterTool {
     return tempValueArr;
   }
 
+  /// 计算数值
   static List<num> dealNumValue(ChartBeanFocus tempModel, double maxNum,
       {bool showLineSection = false}) {
     var value = min(tempModel.focus, maxNum);
@@ -92,7 +98,13 @@ class LineFocusPainterTool {
 }
 
 class PainterTool {
-  //绘制一条线
+  /// 绘制一条线
+  /// canvas：
+  /// startPoint：开始的点
+  /// endPoint：结束点
+  /// isDotteline：连线是否是虚线
+  /// lineColor：线条颜色
+  /// lineWidth：线条宽度
   static void drawline(Canvas canvas, Offset startPoint, endPoint,
       bool isDotteline, Color lineColor, double lineWidth) {
     lineWidth ??= 1.0;
@@ -118,7 +130,9 @@ class PainterTool {
     }
   }
 
-  //绘制坐标轴以及坐标轴上面的刻度和辅助线，一般放在绘制线条之前坐着一步操作，让这一层在最下面
+  /// 绘制坐标轴以及坐标轴上面的刻度和辅助线，一般放在绘制线条之前做这一步操作，让这一层在最下面
+  /// canvas：
+  /// coordinateAxisModel：坐标轴上面的刻度和辅助线参数
   static void drawCoordinateAxis(
     Canvas canvas,
     CoordinateAxisModel coordinateAxisModel,
@@ -159,7 +173,7 @@ class PainterTool {
     }
     if (showX) {
       if (coordinateAxisModel.baseBean.isShowBorderRight) {
-        ///最右侧垂直边界线
+        //最右侧垂直边界线
         canvas.drawLine(
             Offset(_endX, _startY),
             Offset(_endX, coordinateAxisModel.baseBean.basePadding.top),
@@ -177,7 +191,7 @@ class PainterTool {
                 tempXDigalModel.positionRetioy; //两个点之间的x方向距离
           }
           if (coordinateAxisModel.baseBean.isShowX) {
-            ///绘制x轴文本
+            //绘制x轴文本
             var tpx = TextPainter(
                 textAlign: TextAlign.center,
                 ellipsis: '.',
@@ -226,7 +240,7 @@ class PainterTool {
             }
           }
           if (coordinateAxisModel.baseBean.isShowXScale) {
-            ///x轴刻度
+            //x轴刻度
             canvas.drawLine(
                 Offset(coordinateAxisModel.baseBean.basePadding.left + dw,
                     _startY),
@@ -242,7 +256,7 @@ class PainterTool {
 
     if (showY) {
       if (coordinateAxisModel.baseBean.isShowBorderTop) {
-        ///最顶部水平边界线
+        //最顶部水平边界线
         canvas.drawLine(
             Offset(coordinateAxisModel.baseBean.basePadding.left,
                 coordinateAxisModel.baseBean.basePadding.top),
@@ -258,7 +272,7 @@ class PainterTool {
             i++) {
           var tempYModel = coordinateAxisModel.baseBean.yDialValues[i];
 
-          ///绘制y轴文本
+          //绘制y轴文本
           var yValue = tempYModel.title;
           var yLength =
               tempYModel.positionRetioy * coordinateAxisModel.fixedHeight;
@@ -327,7 +341,7 @@ class PainterTool {
             }
           }
           if (coordinateAxisModel.baseBean.isShowYScale) {
-            ///y轴刻度
+            //y轴刻度
             canvas.drawLine(
                 Offset(coordinateAxisModel.baseBean.basePadding.left,
                     _startY - yLength),
@@ -344,7 +358,13 @@ class PainterTool {
     }
   }
 
-  //绘制隔离带，x轴
+  /// 绘制隔离带，x轴
+  /// canvas：
+  /// xSectionBeans：x区间带参数
+  /// startX：x轴的开始位置
+  /// endX：x轴的结束位置
+  /// startY：y轴的开始位置
+  /// endY：y轴的结束位置
   static void drawXIntervalSegmentation(
       Canvas canvas,
       List<SectionBean> xSectionBeans,
@@ -416,7 +436,13 @@ class PainterTool {
     }
   }
 
-  ///绘制某点处的辅助线，并特殊点高亮处理
+  /// 绘制某点处的辅助线，并特殊点高亮处理
+  /// canvas：
+  /// specialPointModel：特殊点参数模型
+  /// startX：x轴的开始位置
+  /// endX：x轴的结束位置
+  /// startY：y轴的开始位置
+  /// endY：y轴的结束位置
   static void drawSpecialPointHintLine(
       Canvas canvas,
       SpecialPointModel specialPointModel,
@@ -513,7 +539,7 @@ class PainterTool {
   }
 }
 
-///绘制xy轴的额所需参数设置
+/// 绘制xy轴的额所需参数设置
 class CoordinateAxisModel {
   final BaseBean baseBean;
   final double fixedWidth;

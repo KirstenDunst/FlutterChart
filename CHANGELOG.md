@@ -2,52 +2,55 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-07 10:38:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-22 18:15:36
- * @Description: 版本更替
+ * @LastEditTime: 2020-12-29 10:46:11
+ * @Description: version log
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
 -->
+## 0.0.3 202001229
+* To improve scores
+
 ## 0.0.2 202001222
-* 专注力图表
-    * 修复y轴副标题倒序不居中问题
+* chart_line_focus
+    * Fixed a problem with Y-axis subheadings not centered in reverse order
 
 ## 0.0.1 20200917
-* 专注力图表
-    * 曲线更平滑
-    * 解决专注力柱状间的分割线问题
-    * 兼容多个同类型模式绘制
-    * 添加最近绘制点的头像支持（对外暴漏一个centerPoint，widget类型，可自定义传入）
-    * fix 专注力图表绘制回调
+* chart_line_focus
+    * The curve is smoother
+    * Solve the problem of dividing lines between columns of concentration
+    * Compatible with multiple drawing modes of the same type
+    * Add avatar support for the most recently drawn point (missing a centerPoint, widget type, customizable incoming)
+    * Fix focuses on table drawing callbacks
 
-* 新增多维图
-    * 维度需要大于等于3个才可以使用
+* chart_dimensionality
+    * Dimensions need to be greater than or equal to 3 to be usable
     * ChartDimensionality
 
-* 折线图
-    * 调整坐标轴计算方式
-    * 添加点位放大功能
-    * 添加自定义占位点功能
+* chart_line
+    * Adjust the calculation mode of coordinate axes
+    * Add point position magnification
+    * Add custom capture site function  
 
-* 柱状图: ChartBar
-    * 方顶
-    * 弧形过渡棱角平顶
-    * 弧形顶
+* chart_bar
+    * rectangular roof
+    * Curved transition Angle flat roof
+    * arc roof
     
-* 饼状图: ChartPie
-    * 添加饼状图添加指示标签解释UI
+* chart_pie
+    * Add pie chart add instruction label to explain UI
 
 
-* example条例显示
-    * 专注力图表: FocusChartLinePage
-    * 柱状顶部半圆型: ChartBarCirclePage
-    * 柱状图顶部自定义弧角: ChartBarRoundPage
-    * 平滑曲线带填充颜色: ChartCurvePage
-    * 折线带填充颜色: ChartLinePage
-    * 双折线: DoubleChartlinePage
-    * 饼状图: ChartPiePage
-    * 维度图: ChartDimensionalityView
-    * 可拖拽股票曲线： StepCurveLine
-    * 高亮自定义某点四周辅助线：FocusChartSpecialPointPage
+* example:
+    * chart_line_focus: **FocusChartLinePage**
+    * Columnar top semicircle: **ChartBarCirclePage**
+    * Customize the arc Angle at the top of the bar chart: **ChartBarRoundPage**
+    * Smooth curve with fill color: **ChartCurvePage**
+    * Polyline with fill color: **ChartLinePage**
+    * Double broken line: **DoubleChartlinePage**
+    * The pie chart: **ChartPiePage**
+    * The dimension figure: **ChartDimensionalityView**
+    * Drag the stock curve： **StepCurveLine**
+    * Highlight custom auxilaries around a point：**FocusChartSpecialPointPage**
 
 
 

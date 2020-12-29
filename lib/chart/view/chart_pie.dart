@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-09 18:03:21
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-12-29 10:45:15
  * @Description: 饼状图绘制区域
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -18,17 +18,27 @@ class ChartPie extends StatefulWidget {
   final Duration duration;
   final Size size;
   final List<ChartPieBean> chartBeans;
-  final Color backgroundColor; //绘制的背景色
-  final bool isAnimation; //是否执行动画
-  final double globalR, centerR; //半径,中心圆半径
-  final Color centerColor; //中心圆颜色
-  final double divisionWidth; //各个占比之间的分割线宽度，默认为0即不显示分割
-  final AssistTextShowType assistTextShowType; //辅助性文案显示的样式
-  final ArrowBegainLocation arrowBegainLocation; //开始画圆的位置
+  //绘制的背景色
+  final Color backgroundColor;
+  //是否执行动画
+  final bool isAnimation;
+  //半径,中心圆半径
+  final double globalR, centerR;
+  //中心圆颜色
+  final Color centerColor;
+  //各个占比之间的分割线宽度，默认为0即不显示分割
+  final double divisionWidth;
+  //辅助性文案显示的样式
+  final AssistTextShowType assistTextShowType;
+  //开始画圆的位置
+  final ArrowBegainLocation arrowBegainLocation;
   final BaseBean baseBean;
-  final Color assistBGColor; //辅助性文案的背景框背景颜色
-  final int decimalDigits; //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
-  final Widget centerWidget; //中心组件
+  //辅助性文案的背景框背景颜色
+  final Color assistBGColor;
+  //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
+  final int decimalDigits;
+  //中心组件
+  final Widget centerWidget;
 
   const ChartPie({
     Key key,

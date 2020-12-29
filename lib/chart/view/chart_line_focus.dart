@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-10 11:36:48
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-12-29 10:44:33
  * @Description: 绘制承载区, 支持多个不同曲线的绘制
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -14,21 +14,28 @@ import 'package:flutter_chart_csx/chart/painter/chart_line_focus_painter.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLineFocus extends StatefulWidget {
-  final Size size; //内容宽高
-  final Color backgroundColor; //绘制的内容背景色
-
+  //内容宽高
+  final Size size;
+  //绘制的内容背景色
+  final Color backgroundColor;
   final List<FocusChartBeanMain> focusChartBeans;
-  final List<DialStyleX> xDialValues; //x轴刻度显示，不传则没有
-  final List<SectionBean> xSectionBeans; //x轴的区间带（不用的话不用设置）
+  //x轴刻度显示，不传则没有
+  final List<DialStyleX> xDialValues;
+  //x轴的区间带（不用的话不用设置）
+  final List<SectionBean> xSectionBeans;
   final BaseBean baseBean;
   final int xMax;
-
   //触摸参数设置
-  final bool isPressedHintDottedLine; //触摸辅助线是否为虚线
-  final double pressedPointRadius; //触摸点半径，大于[W]的时候会默认W的宽度
-  final double pressedHintLineWidth; //触摸辅助线宽度
-  final Color pressedHintLineColor; //触摸辅助线颜色
-  final PressPointBack pointBack; //触摸回调
+  //触摸辅助线是否为虚线
+  final bool isPressedHintDottedLine;
+  //触摸点半径，大于[W]的时候会默认W的宽度
+  final double pressedPointRadius;
+  //触摸辅助线宽度
+  final double pressedHintLineWidth;
+  //触摸辅助线颜色
+  final Color pressedHintLineColor;
+  //触摸回调
+  final PressPointBack pointBack;
 
   const ChartLineFocus({
     Key key,

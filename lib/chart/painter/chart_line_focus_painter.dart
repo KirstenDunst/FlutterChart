@@ -9,19 +9,25 @@ import 'base_painter_tool.dart';
 
 class ChartLineFocusPainter extends BasePainter {
   List<FocusChartBeanMain> focusChartBeans;
-  List<DialStyleX> xDialValues; //x轴刻度显示，不传则没有
-  List<SectionBean> xSectionBeans; //x轴的区间带（不用的话不用设置）
+  //x轴刻度显示，不传则没有
+  List<DialStyleX> xDialValues;
+  //x轴的区间带（不用的话不用设置）
+  List<SectionBean> xSectionBeans;
   //x轴最大值（以秒为单位）
   int xMax = 60;
   //触摸参数设置
-  bool isPressedHintDottedLine; //触摸辅助线是否为虚线
-  double pressedPointRadius; //触摸点半径，大于两点间距一半的的时候会默认间距一半的宽度
-  double pressedHintLineWidth; //触摸辅助线宽度
-  Color pressedHintLineColor; //触摸辅助线颜色
+  //触摸辅助线是否为虚线
+  bool isPressedHintDottedLine;
+  //触摸点半径，大于两点间距一半的的时候会默认间距一半的宽度
+  double pressedPointRadius;
+  //触摸辅助线宽度
+  double pressedHintLineWidth;
+  //触摸辅助线颜色
+  Color pressedHintLineColor;
   Offset touchLocalPosition;
-
   double _startX, _endX, _startY, _endY;
-  double _fixedHeight, _fixedWidth, _xStepWidth; //坐标可容纳的宽高
+  //坐标可容纳的宽高
+  double _fixedHeight, _fixedWidth, _xStepWidth;
   //y轴分布数值是否是正序，即小的在前大的在后
   bool _isPositiveSequence;
   Map<double, TouchModel> _points;
@@ -42,8 +48,8 @@ class ChartLineFocusPainter extends BasePainter {
   void paint(Canvas canvas, Size size) {
     super.paint(canvas, size);
     _init(size);
-    _drawXy(canvas); //坐标轴
-
+    //坐标轴
+    _drawXy(canvas);
     for (var bean in focusChartBeans) {
       //处理数据
       var valueArr = LineFocusPainterTool.dealValue(
@@ -52,7 +58,6 @@ class ChartLineFocusPainter extends BasePainter {
       //计算路径并绘制
       _calculatePath(size, valueArr, bean, canvas);
     }
-
     //绘制区间带
     if (xSectionBeans != null && xSectionBeans.isNotEmpty) {
       PainterTool.drawXIntervalSegmentation(
@@ -85,7 +90,7 @@ class ChartLineFocusPainter extends BasePainter {
     return true;
   }
 
-  ///初始化
+  /// 初始化
   void _init(Size size) {
     xMax ??= 60;
     isPressedHintDottedLine ??= true;
@@ -102,7 +107,7 @@ class ChartLineFocusPainter extends BasePainter {
     _initBorder(size);
   }
 
-  ///计算边界
+  /// 计算边界
   void _initBorder(Size size) {
     _startX = baseBean.basePadding.left;
     _endX = size.width - baseBean.basePadding.right;
@@ -118,7 +123,7 @@ class ChartLineFocusPainter extends BasePainter {
     } catch (e) {}
   }
 
-  ///x,y轴
+  /// x,y轴
   void _drawXy(Canvas canvas) {
     PainterTool.drawCoordinateAxis(
         canvas,
@@ -130,24 +135,21 @@ class ChartLineFocusPainter extends BasePainter {
         ));
   }
 
-  ///计算Path
+  /// 计算Path
   void _calculatePath(Size size, List<BeanDealModel> tempValueArr,
       FocusChartBeanMain bean, Canvas canvas) {
     if (tempValueArr.isEmpty) return;
     double preX, preY, currentX = _startX, currentY, oldX = _startX;
     var oldShadowPath = Path();
     var path = Path();
-
     //线条区间带的记录上下连续
     var lineSections = <LineSection>[];
     var topPoints = <Offset>[];
     var bottomPoints = <Offset>[];
-
     //小区域渐变色显示操作
     var shadowPaths = <ShadowSub>[];
     //线条数组
     var pathArr = <PathModel>[];
-
     //用来控制中间过度线条的大小。
     var gradualStep = _xStepWidth / 4;
     var stepBegainX = _startX;
@@ -378,6 +380,7 @@ class ChartLineFocusPainter extends BasePainter {
         specialPointArr, bean); //曲线或折线
   }
 
+  /// 处理线条区间
   void _dealLineSection(List<Offset> topOffset, List<Offset> bottomOffset,
       double yMax, double yMin, double baseBeanYMax, double currentX,
       {bool lineSectionShow = false}) {
@@ -389,6 +392,7 @@ class ChartLineFocusPainter extends BasePainter {
     }
   }
 
+  /// 是否属于同一区间
   bool _isSamePhase(double one, double other) {
     var same = false;
     var oneExtrem = _getExtremum(one, null);
@@ -397,6 +401,7 @@ class ChartLineFocusPainter extends BasePainter {
     return same;
   }
 
+  /// 获取可承载的阴影所在的最大高度
   double _getExtremum(double value, List<Color> gradualColors) {
     if (gradualColors != null) {
       return _fixedHeight;
@@ -426,6 +431,7 @@ class ChartLineFocusPainter extends BasePainter {
     return extremum;
   }
 
+  /// 获取渐变色
   List<Color> _getGradualColor(double value, List<Color> gradualColors) {
     if (gradualColors != null) {
       return gradualColors;
@@ -450,6 +456,7 @@ class ChartLineFocusPainter extends BasePainter {
     return [mainColor, mainColor.withOpacity(0.3)];
   }
 
+  /// 计算渐变的shader
   Shader _shader(int index, double preX, double currentX,
       List<BeanDealModel> tempValueArr, List<Color> gradualColors) {
     var height =
@@ -532,7 +539,7 @@ class ChartLineFocusPainter extends BasePainter {
       canvas..drawPath(sub, shadowPaint);
     });
 
-    ///先画阴影再画曲线
+    //先画阴影再画曲线
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = bean.sectionModel.borLineWidth ?? 1
@@ -561,7 +568,7 @@ class ChartLineFocusPainter extends BasePainter {
     });
   }
 
-  ///曲线或折线
+  /// 曲线或折线
   void _drawLine(
       Canvas canvas,
       Size size,
@@ -600,7 +607,7 @@ class ChartLineFocusPainter extends BasePainter {
           paint);
     });
 
-    ///如果有点绘制需求，这里再绘制点位
+    //如果有点绘制需求，这里再绘制点位
     if (points != null && points.isNotEmpty) {
       var radius =
           pressedPointRadius > _xStepWidth ? _xStepWidth : pressedPointRadius;
@@ -615,7 +622,7 @@ class ChartLineFocusPainter extends BasePainter {
       });
     }
 
-    ///如果有特殊点绘制需求，这里再绘制特殊点
+    //如果有特殊点绘制需求，这里再绘制特殊点
     if (specialPoints != null && specialPoints.isNotEmpty) {
       specialPoints.forEach((element) {
         PainterTool.drawSpecialPointHintLine(
@@ -624,6 +631,7 @@ class ChartLineFocusPainter extends BasePainter {
     }
   }
 
+  /// 外部拖拽获取触摸点最近的点位
   TouchModel getNearbyPoint(Offset localPosition) {
     var pointer = localPosition;
     var poinArr = _points.keys.toList();

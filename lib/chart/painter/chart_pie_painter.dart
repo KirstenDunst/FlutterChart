@@ -20,16 +20,23 @@ enum PieStyleType {
 }
 
 class ChartPiePainter extends BasePainter {
-  double value; //当前动画值
+  //当前动画值
+  double value;
   List<ChartPieBean> chartBeans;
-  double globalR, centerR; //圆弧半径,中心圆半径
-  Color centerColor; //中心圆颜色
-  double divisionWidth; //各个占比之间的分割线宽度，默认为0即不显示分割
-  AssistTextShowType assistTextShowType; //辅助性文案显示的样式
-  ArrowBegainLocation arrowBegainLocation; //开始画圆的位置
-  Color assistBGColor; //辅助性文案的背景框背景颜色
-  int decimalDigits; //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
-
+  //圆弧半径,中心圆半径
+  double globalR, centerR;
+  //中心圆颜色
+  Color centerColor;
+  //各个占比之间的分割线宽度，默认为0即不显示分割
+  double divisionWidth;
+  //辅助性文案显示的样式
+  AssistTextShowType assistTextShowType;
+  //开始画圆的位置
+  ArrowBegainLocation arrowBegainLocation;
+  //辅助性文案的背景框背景颜色
+  Color assistBGColor;
+  //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
+  int decimalDigits;
   double _startX, _endX, _startY, _endY;
   double _centerX, _centerY; //圆心
   Paint _assistPaint;
@@ -54,12 +61,16 @@ class ChartPiePainter extends BasePainter {
   void paint(Canvas canvas, Size size) {
     super.paint(canvas, size);
     _init(size);
-    _setPieAngle(); //计算角度
-    _drawPie(canvas); //画圆弧
+    //计算角度
+    _setPieAngle();
+    //画圆弧
+    _drawPie(canvas);
     if (divisionWidth > 0) {
-      _drawRectSpeace(canvas); //画间隔线
+      //画间隔线
+      _drawRectSpeace(canvas);
     }
-    _drawCenter(canvas); //画中心圆
+    //画中心圆
+    _drawCenter(canvas);
   }
 
   @override
@@ -67,7 +78,7 @@ class ChartPiePainter extends BasePainter {
     return true;
   }
 
-  //初始化
+  /// 初始化
   void _init(Size size) {
     _pieBeans = <PieBean>[];
     assistBGColor ??= defaultColor;
@@ -103,6 +114,7 @@ class ChartPiePainter extends BasePainter {
       ..isAntiAlias = true;
   }
 
+  /// 绘制圆饼
   void _drawPie(Canvas canvas) {
     var paint = Paint()..isAntiAlias = true;
     var rect =
@@ -132,13 +144,14 @@ class ChartPiePainter extends BasePainter {
     }
   }
 
-  //间隔
+  /// 绘制间隔
   void _drawRectSpeace(Canvas canvas) {
     for (var bean in _pieBeans) {
       _drawSpeaceRect(canvas, bean.startAngle);
     }
   }
 
+  /// 绘制间隔区间
   void _drawSpeaceRect(Canvas canvas, double angle) {
     var speacePaint = Paint()
       ..color = centerColor
@@ -152,6 +165,7 @@ class ChartPiePainter extends BasePainter {
         speacePaint);
   }
 
+  /// 绘制中心区域
   void _drawCenter(Canvas canvas) {
     var paint = Paint()
       ..color = centerColor
@@ -161,7 +175,7 @@ class ChartPiePainter extends BasePainter {
     canvas.drawCircle(Offset(_centerX, _centerY), centerR, paint);
   }
 
-  ///计算各个扇形的起始角度
+  /// 计算各个扇形的起始角度
   void _setPieAngle() {
     _pieBeans.clear();
     var total = _getTotal(chartBeans);
@@ -213,7 +227,7 @@ class ChartPiePainter extends BasePainter {
     }
   }
 
-  ///计算数据总和
+  /// 计算数据总和
   double _getTotal(List<ChartPieBean> data) {
     var total = 0.0;
     for (var bean in data) {
@@ -242,7 +256,8 @@ class ChartPiePainter extends BasePainter {
   //y轴重叠重绘数组
   List<RedrawModel> _yRedrawArrRowTop;
   List<RedrawModel> _yRedrawArrRowBottom;
-  //初始绘制值初始化
+
+  /// 初始绘制值初始化
   void _initPieAngleValue() {
     _rowHeiWidth = 5.0;
     _speaseWidth = 10.0;
@@ -254,6 +269,7 @@ class ChartPiePainter extends BasePainter {
     _lastRowDirection = RowDirection.Null;
   }
 
+  /// 绘制每一块扇形区域
   void _drawPerRatio(Canvas canvas, String title, TextStyle titleStyle,
       double centerSin, double centerCos, int index) {
     var tp = TextPainter(
@@ -427,6 +443,7 @@ class ChartPiePainter extends BasePainter {
     }
   }
 
+  /// 重绘填充色边框
   void _redrawShadowRect(Canvas canvas) {
     if (_redrawArr.isNotEmpty && _fistTopLeftPoint != null) {
       var model = _redrawArr.last;
@@ -465,6 +482,7 @@ class ChartPiePainter extends BasePainter {
     }
   }
 
+  ///重绘底部文案
   void _redrewAllBottomRow(
       Canvas canvas, Point point, Point begainLeftTopPoint, TextPainter tp) {
     var path = Path()..moveTo(point.x, point.y);
@@ -489,6 +507,7 @@ class ChartPiePainter extends BasePainter {
         Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
   }
 
+  /// 重绘顶部文案
   void _redrewAllTopRow(
       Canvas canvas, Point point, Point begainLeftTopPoint, TextPainter tp) {
     var path = Path()..moveTo(point.x, point.y);
@@ -513,6 +532,7 @@ class ChartPiePainter extends BasePainter {
         Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
   }
 
+  /// 重绘左侧文案
   void _redrewAllleftRow(Canvas canvas, Point point, Point begainLeftTopPoint,
       TextPainter tp, bool isAdjust) {
     var path = Path()..moveTo(point.x, point.y);
@@ -537,7 +557,7 @@ class ChartPiePainter extends BasePainter {
         Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
   }
 
-  //计算可能可能存在和饼状区域有交集的点与圆心的距离，返回：如果有交集返回应该扩展的高度，没有交集返回0
+  /// 计算可能可能存在和饼状区域有交集的点与圆心的距离，返回：如果有交集返回应该扩展的高度，没有交集返回0
   Point _pointToPointDistance(Point point) {
     double xDistance = (point.x - _centerX);
     double yDistance = (point.y - _centerY);

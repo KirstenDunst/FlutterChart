@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-07-17 17:38:37
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-10 11:26:23
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2020-12-29 10:41:49
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -16,16 +16,22 @@ import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
 import 'package:path_drawing/path_drawing.dart';
 
 class ChartDimensionalityPainter extends BasePainter {
-  List<ChartBeanDimensionality>
-      dimensionalityDivisions; //维度划分的重要参数(决定有几个内容就是几个维度，从正上方顺时针方向绘制)
-  List<DimensionalityBean> dimensionalityTags; //维度填充数据的重要内容
-  double lineWidth; //线宽
-  bool isDotted; //背景网是否为虚线
-  Color lineColor; //线条颜色
-  double centerR; //圆半径
-  int dimensionalityNumber; //阶层：维度图从中心到最外层有几圈
-
-  double _centerX, _centerY, _averageAngle; //圆心
+  //维度划分的重要参数(决定有几个内容就是几个维度，从正上方顺时针方向绘制)
+  List<ChartBeanDimensionality> dimensionalityDivisions;
+  //维度填充数据的重要内容
+  List<DimensionalityBean> dimensionalityTags;
+  //线宽
+  double lineWidth;
+  //背景网是否为虚线
+  bool isDotted;
+  //线条颜色
+  Color lineColor;
+  //圆半径
+  double centerR;
+  //阶层：维度图从中心到最外层有几圈
+  int dimensionalityNumber;
+  //圆心
+  double _centerX, _centerY, _averageAngle;
 
   ChartDimensionalityPainter(
     this.dimensionalityDivisions, {
@@ -42,7 +48,7 @@ class ChartDimensionalityPainter extends BasePainter {
     super.paint(canvas, size);
     //初始化数据
     _init(size);
-    //绘制基础网状结构
+    // 绘制基础网状结构
     _createBase(canvas, size);
     //绘制内部多边形彩色区域
     _createPaintShadowPath(canvas, size);
@@ -53,11 +59,13 @@ class ChartDimensionalityPainter extends BasePainter {
     return true;
   }
 
+  /// 初始化
   void _init(Size size) {
     _initValue();
     _initlizeData(size);
   }
 
+  /// 初始化数据
   void _initValue() {
     lineColor ??= defaultColor;
     isDotted ??= false;
@@ -67,6 +75,7 @@ class ChartDimensionalityPainter extends BasePainter {
     }
   }
 
+  /// 初始化角度
   void _initlizeData(Size size) {
     var startX = baseBean.basePadding.left;
     var endX = size.width - baseBean.basePadding.right;
@@ -96,6 +105,7 @@ class ChartDimensionalityPainter extends BasePainter {
     _averageAngle = 2 * pi / dimensionalityDivisions.length;
   }
 
+  /// 绘制基本角
   void _createBase(Canvas canvas, Size size) {
     var speaceIndex = centerR / dimensionalityNumber;
     for (var i = 0; i < dimensionalityNumber; i++) {
@@ -134,12 +144,20 @@ class ChartDimensionalityPainter extends BasePainter {
     }
   }
 
+  /// 获取对应弧度在圆边角的对应点
+  /// length：长度
+  /// angle：角度
   Point _getBaseCenterLengthAnglePoint(double length, double angle) {
     return Point(
         _centerX + sin(angle) * length, _centerY - cos(angle) * length);
   }
 
-//绘制维度文字
+  /// 绘制维度文字
+  /// text：文案
+  /// textStyle：文案样式
+  /// angle：角度
+  /// canvas：
+  /// size：
   void _createTextWithPara(String text, TextStyle textStyle, double angle,
       Canvas canvas, Size size) {
     var tp = TextPainter(

@@ -6,15 +6,20 @@ import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
 import 'package:flutter_chart_csx/chart/painter/base_painter_tool.dart';
 
 class ChartBarPainter extends BasePainter {
-  List<ChartBarBeanX> xDialValues; //x轴刻度显示，不传则没有
-  double rectWidth; //柱状图的宽度,如果小的话按照这个显示，如果过于宽，则按照平均宽度减去最小间距5得出的宽度
-  TextStyle rectTopTextStyle; //柱状图顶部的数值显示，默认透明即不显示
+  //x轴刻度显示，不传则没有
+  List<ChartBarBeanX> xDialValues;
+  //柱状图的宽度,如果小的话按照这个显示，如果过于宽，则按照平均宽度减去最小间距5得出的宽度
+  double rectWidth;
+  //柱状图顶部的数值显示，默认透明即不显示
+  TextStyle rectTopTextStyle;
   //以下的四周圆角,默认没有圆角
   BorderRadius borderRadius;
 
   double _fixedHeight, _fixedWidth, _startX, _endX, _startY, _endY;
-  double _rectPadding; //柱状图的间距
-  double _cellWidth; //每一个柱状图的基本宽度
+  //柱状图的间距
+  double _rectPadding;
+  //每一个柱状图的基本宽度
+  double _cellWidth;
 
   ChartBarPainter(
     this.xDialValues, {
@@ -27,8 +32,10 @@ class ChartBarPainter extends BasePainter {
   void paint(Canvas canvas, Size size) {
     super.paint(canvas, size);
     _init(size);
-    _drawXy(canvas, size); //xy轴
-    _drawBar(canvas, size); //柱状图
+    //xy轴
+    _drawXy(canvas, size);
+    //柱状图
+    _drawBar(canvas, size);
   }
 
   @override
@@ -36,7 +43,7 @@ class ChartBarPainter extends BasePainter {
     return true;
   }
 
-  ///初始化
+  /// 初始化
   void _init(Size size) {
     _startX = baseBean.basePadding.left;
     _endX = size.width - baseBean.basePadding.right;
@@ -54,7 +61,7 @@ class ChartBarPainter extends BasePainter {
     rectTopTextStyle ??= TextStyle(color: Colors.transparent, fontSize: 0);
   }
 
-  ///x,y轴
+  /// x,y轴绘制
   void _drawXy(Canvas canvas, Size size) {
     var tempXArr = <DialStyleX>[];
     var halfCellRetioy = _cellWidth * 0.5 / _fixedWidth;
@@ -74,7 +81,7 @@ class ChartBarPainter extends BasePainter {
         ));
   }
 
-  ///柱状图
+  /// 柱状图
   void _drawBar(Canvas canvas, Size size) {
     if (xDialValues == null || xDialValues.isEmpty) return;
     var paint = Paint()

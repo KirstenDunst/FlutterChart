@@ -8,7 +8,8 @@ import 'package:flutter_chart_csx/chart/painter/base_painter_tool.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLinePainter extends BasePainter {
-  List<ChartBeanSystem> chartBeanSystems; //绘制线条的参数内容
+  //绘制线条的参数内容
+  List<ChartBeanSystem> chartBeanSystems;
 
   double _startX, _endX, _startY, _endY, _fixedHeight, _fixedWidth;
   List<LineCanvasModel> _lineCanvasModels;
@@ -33,12 +34,13 @@ class ChartLinePainter extends BasePainter {
     return true;
   }
 
-  ///初始化
+  /// 初始化
   void _init(Canvas canvas, Size size, Paint xyPaint) {
     _initValue(size);
     _drawXy(canvas, xyPaint); //坐标轴
   }
 
+  /// 初始化数据
   void _initValue(Size size) {
     _startX = baseBean.basePadding.left; //预留出y轴刻度值所占的空间
     _endX = size.width - baseBean.basePadding.right;
@@ -48,7 +50,7 @@ class ChartLinePainter extends BasePainter {
     _fixedWidth = _endX - _startX;
   }
 
-  ///计算Path
+  /// 计算Path
   void _initPath(Canvas canvas, Paint xyPaint) {
     _lineCanvasModels = [];
     if (chartBeanSystems != null && chartBeanSystems.isNotEmpty) {
@@ -168,7 +170,7 @@ class ChartLinePainter extends BasePainter {
     }
   }
 
-  ///x,y轴
+  /// x,y轴
   void _drawXy(Canvas canvas, Paint paint) {
     PainterTool.drawCoordinateAxis(
         canvas,
@@ -176,7 +178,7 @@ class ChartLinePainter extends BasePainter {
             baseBean: baseBean, onlyYCoordinate: true));
   }
 
-  ///曲线或折线
+  /// 曲线或折线
   void _drawLine(Canvas canvas) {
     _lineCanvasModels.forEach((element) {
       //阴影区域
