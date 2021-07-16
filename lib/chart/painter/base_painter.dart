@@ -18,23 +18,23 @@ class BasePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     baseBean ??= BaseBean();
     baseBean!
-      ..xyLineWidth ??= 2
-      ..xColor ??= defaultColor
-      ..yColor ??= defaultColor
-      ..isShowBorderTop ??= false
-      ..isShowBorderRight ??= false
-      ..isLeftYDialSub ??= true
-      ..isShowX ??= true
-      ..yMax ??= 100.0
-      ..basePadding ??= defaultBasePadding
-      ..isShowHintX ??= false
-      ..isShowHintY ??= false
-      ..hintLineColor ??= defaultColor
-      ..hintLineWidth ??= 1.0
-      ..isHintLineImaginary ??= false
-      ..isShowXScale ??= false
-      ..isShowYScale ??= false
-      ..rulerWidth ??= 4.0;
+      ..xyLineWidth 
+      ..xColor
+      ..yColor 
+      ..isShowBorderTop 
+      ..isShowBorderRight 
+      ..isLeftYDialSub
+      ..isShowX 
+      ..yMax
+      ..basePadding 
+      ..isShowHintX 
+      ..isShowHintY 
+      ..hintLineColor 
+      ..hintLineWidth 
+      ..isHintLineImaginary 
+      ..isShowXScale 
+      ..isShowYScale
+      ..rulerWidth;
   }
 
   @override

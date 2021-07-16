@@ -93,9 +93,6 @@ class ChartLineFocusPainter extends BasePainter {
   /// 初始化
   void _init(Size size) {
     xMax ??= 60;
-    isPressedHintDottedLine ??= true;
-    pressedPointRadius ??= 4;
-    pressedHintLineWidth ??= 1;
     pressedHintLineColor ??= defaultColor;
     _isPositiveSequence = true;
     _points = <double?, TouchModel>{};
@@ -542,9 +539,9 @@ class ChartLineFocusPainter extends BasePainter {
     //先画阴影再画曲线
     var paint = Paint()
       ..isAntiAlias = true
-      ..strokeWidth = bean.sectionModel!.borLineWidth ?? 1
+      ..strokeWidth = bean.sectionModel!.borLineWidth 
       ..strokeCap = StrokeCap.round
-      ..color = bean.sectionModel!.lineSectionBorColor ?? defaultColor
+      ..color = bean.sectionModel!.lineSectionBorColor
       ..style = PaintingStyle.stroke;
     topPaths.forEach((path) {
       canvas.drawPath(
@@ -598,7 +595,7 @@ class ChartLineFocusPainter extends BasePainter {
       ..style = PaintingStyle.stroke;
     pathArr.forEach((pathModel) {
       canvas.drawPath(
-          pathModel.isHintLineImaginary ?? false
+          pathModel.isHintLineImaginary
               ? dashPath(
                   pathModel.path!,
                   dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),

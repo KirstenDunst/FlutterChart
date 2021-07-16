@@ -107,7 +107,6 @@ class PainterTool {
   /// lineWidth：线条宽度
   static void drawline(Canvas canvas, Offset startPoint, endPoint,
       bool isDotteline, Color lineColor, double lineWidth) {
-    lineWidth ??= 1.0;
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = lineWidth
@@ -385,14 +384,14 @@ class PainterTool {
         ..close();
       var tempPaint = Paint()
         ..isAntiAlias = true
-        ..strokeWidth = item.borderWidth ?? 1
+        ..strokeWidth = item.borderWidth
         ..color = item.fillColor!
         ..style = PaintingStyle.fill;
       canvas.drawPath(tempPath, tempPaint);
       //边缘线
       var borderLinePaint = Paint()
         ..isAntiAlias = true
-        ..strokeWidth = item.borderWidth ?? 1
+        ..strokeWidth = item.borderWidth 
         ..color = item.borderColor ?? Colors.transparent
         ..style = PaintingStyle.stroke;
       var borderLinePath1 = Path()

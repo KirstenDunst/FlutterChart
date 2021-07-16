@@ -53,7 +53,7 @@ class ChartLinePainter extends BasePainter {
   /// 计算Path
   void _initPath(Canvas canvas, Paint xyPaint) {
     _lineCanvasModels = [];
-    if (chartBeanSystems != null && chartBeanSystems.isNotEmpty) {
+    if (chartBeanSystems.isNotEmpty) {
       for (var item in chartBeanSystems) {
         var paths = <Path>[], shadowPaths = <Path>[];
         var placeImagepoints = <Point>[], pointArr = <Point>[];
@@ -158,7 +158,7 @@ class ChartLinePainter extends BasePainter {
             shadowPaths: shadowPaths,
             shaderColors: item.shaderColors,
             points: pointArr,
-            pointType: item.pointType ?? PointType.Circle,
+            pointType: item.pointType,
             pointShaderColors:
                 item.pointShaderColors ?? [item.lineColor, item.lineColor],
             pointRadius: item.pointRadius,

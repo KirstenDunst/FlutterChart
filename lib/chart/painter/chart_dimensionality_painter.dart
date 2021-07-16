@@ -84,8 +84,8 @@ class ChartDimensionalityPainter extends BasePainter {
         ellipsis: '.',
         maxLines: 1,
         text: TextSpan(
-          text: dimensionalityDivisions?.first?.tip ?? '',
-          style: dimensionalityDivisions?.first?.tipStyle ??
+          text: dimensionalityDivisions.first.tip ?? '',
+          style: dimensionalityDivisions.first.tipStyle ??
               TextStyle(fontSize: 10),
         ),
         textDirection: TextDirection.ltr)
