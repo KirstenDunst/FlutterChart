@@ -13,12 +13,12 @@ class ChartPieBean {
   //占比数值，可以任意写数值，会统一计算最后每块的占比
   double value;
   //扇形板块的类型标记名称
-  String type;
+  String? type;
   //扇形板块的颜色
-  Color color;
+  Color? color;
   //辅助性文案展示的文案样式
-  TextStyle assistTextStyle;
+  TextStyle? assistTextStyle;
 
   ChartPieBean(
-      {@required this.value, this.type, this.color, this.assistTextStyle});
+      {required this.value, this.type, this.color, this.assistTextStyle});
 }

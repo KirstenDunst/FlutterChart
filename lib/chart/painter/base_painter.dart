@@ -12,12 +12,12 @@ import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 
 class BasePainter extends CustomPainter {
   //基础设置
-  BaseBean baseBean;
+  BaseBean? baseBean;
 
   @override
   void paint(Canvas canvas, Size size) {
     baseBean ??= BaseBean();
-    baseBean
+    baseBean!
       ..xyLineWidth ??= 2
       ..xColor ??= defaultColor
       ..yColor ??= defaultColor

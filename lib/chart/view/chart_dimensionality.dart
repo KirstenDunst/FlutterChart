@@ -15,7 +15,7 @@ class ChartDimensionality extends StatefulWidget {
   //维度划分的重要参数
   final List<ChartBeanDimensionality> dimensionalityDivisions;
   //维度填充数据的重要内容
-  final List<DimensionalityBean> dimensionalityTags;
+  final List<DimensionalityBean>? dimensionalityTags;
   //宽高
   final Size size;
   //线宽
@@ -23,18 +23,18 @@ class ChartDimensionality extends StatefulWidget {
   //背景网是否为虚线
   final bool isDotted;
   //线条颜色
-  final Color lineColor;
+  final Color? lineColor;
   //圆半径
-  final double centerR;
+  final double? centerR;
   //阶层：维度图从中心到最外层有几圈
   final int dimensionalityNumber;
   //绘制的背景色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   const ChartDimensionality({
-    Key key,
-    @required this.size,
-    @required this.dimensionalityDivisions,
+    Key? key,
+    required this.size,
+    required this.dimensionalityDivisions,
     this.dimensionalityTags,
     this.lineWidth = 4,
     this.isDotted = false,

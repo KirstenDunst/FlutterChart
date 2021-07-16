@@ -17,14 +17,14 @@ class ChartLineFocus extends StatefulWidget {
   //内容宽高
   final Size size;
   //绘制的内容背景色
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final List<FocusChartBeanMain> focusChartBeans;
   //x轴刻度显示，不传则没有
-  final List<DialStyleX> xDialValues;
+  final List<DialStyleX>? xDialValues;
   //x轴的区间带（不用的话不用设置）
-  final List<SectionBean> xSectionBeans;
-  final BaseBean baseBean;
-  final int xMax;
+  final List<SectionBean>? xSectionBeans;
+  final BaseBean? baseBean;
+  final int? xMax;
   //触摸参数设置
   //触摸辅助线是否为虚线
   final bool isPressedHintDottedLine;
@@ -33,14 +33,14 @@ class ChartLineFocus extends StatefulWidget {
   //触摸辅助线宽度
   final double pressedHintLineWidth;
   //触摸辅助线颜色
-  final Color pressedHintLineColor;
+  final Color? pressedHintLineColor;
   //触摸回调
-  final PressPointBack pointBack;
+  final PressPointBack? pointBack;
 
   const ChartLineFocus({
-    Key key,
-    @required this.size,
-    @required this.focusChartBeans,
+    Key? key,
+    required this.size,
+    required this.focusChartBeans,
     this.backgroundColor,
     this.xDialValues,
     this.baseBean,
@@ -60,10 +60,10 @@ class ChartLineFocus extends StatefulWidget {
 
 class ChartLineFocusState extends State<ChartLineFocus>
     with SingleTickerProviderStateMixin {
-  Offset localPosition;
-  bool isCanTouch;
-  FocusChartBeanMain firstCanTouchBean;
-  TouchModel _lastTouchModel;
+  Offset? localPosition;
+  late bool isCanTouch;
+  late FocusChartBeanMain firstCanTouchBean;
+  late TouchModel _lastTouchModel;
 
   @override
   void initState() {
@@ -78,24 +78,24 @@ class ChartLineFocusState extends State<ChartLineFocus>
       }
       // ignore: empty_catches
     } catch (e) {}
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       if (isCanTouch && widget.pointBack != null) {
         //如果可点击，默认显示第一个元素，如果没有
-        var chartBeanFocus = firstCanTouchBean.chartBeans.first;
-        var _startY = widget.size.height - widget.baseBean.basePadding.bottom;
-        var _endY = widget.baseBean.basePadding.top;
+        var chartBeanFocus = firstCanTouchBean.chartBeans!.first;
+        var _startY = widget.size.height - widget.baseBean!.basePadding.bottom;
+        var _endY = widget.baseBean!.basePadding.top;
         var yValue = chartBeanFocus.second == 0 ? chartBeanFocus.focus : 0;
         var value =
             chartBeanFocus.second == 0 ? chartBeanFocus.touchBackValue : null;
         var currentY =
-            (_startY - ((yValue / widget.baseBean.yMax) * (_startY - _endY)));
+            (_startY - ((yValue / widget.baseBean!.yMax) * (_startY - _endY)));
         if (currentY < _endY) {
           currentY = _endY;
         }
-        localPosition = Offset(widget.baseBean.basePadding.left, currentY);
+        localPosition = Offset(widget.baseBean!.basePadding.left, currentY);
         _lastTouchModel =
             TouchModel(offset: localPosition, touchBackValue: value);
-        widget.pointBack(localPosition, value);
+        widget.pointBack!(localPosition, value);
       }
     });
     super.initState();
@@ -121,10 +121,10 @@ class ChartLineFocusState extends State<ChartLineFocus>
     if (isCanTouch) {
       return GestureDetector(
         onTapDown: (details) {
-          var tempModel = painter.getNearbyPoint(details.localPosition);
+          var tempModel = painter.getNearbyPoint(details.localPosition)!;
           if (_lastTouchModel.offset != tempModel.offset) {
             if (widget.pointBack != null) {
-              widget.pointBack(tempModel.offset, tempModel.touchBackValue);
+              widget.pointBack!(tempModel.offset, tempModel.touchBackValue);
             }
             setState(() {
               _lastTouchModel = tempModel;
@@ -133,10 +133,10 @@ class ChartLineFocusState extends State<ChartLineFocus>
           }
         },
         onHorizontalDragUpdate: (details) {
-          var tempModel = painter.getNearbyPoint(details.localPosition);
+          var tempModel = painter.getNearbyPoint(details.localPosition)!;
           if (_lastTouchModel.offset != tempModel.offset) {
             if (widget.pointBack != null) {
-              widget.pointBack(tempModel.offset, tempModel.touchBackValue);
+              widget.pointBack!(tempModel.offset, tempModel.touchBackValue);
             }
             setState(() {
               _lastTouchModel = tempModel;

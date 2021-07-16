@@ -12,10 +12,10 @@ import 'package:flutter/material.dart';
 
 ///内部使用
 class RedrawModel {
-  Point rowTopPoint;
-  Point rectTopLeftPoint;
-  TextPainter textPainter;
-  bool isAdjust;
+  Point? rowTopPoint;
+  Point? rectTopLeftPoint;
+  TextPainter? textPainter;
+  bool? isAdjust;
 
   RedrawModel(
       {this.rowTopPoint,
@@ -40,22 +40,22 @@ enum RowDirection {
 
 class PieBean {
   //占比数值，可以任意写数值，会统一计算最后每块的占比
-  double value;
+  double? value;
   //扇形板块的类型标记名称
-  String type;
+  String? type;
   //扇形板块的颜色
-  Color color;
+  Color? color;
   //辅助性文案展示的文案样式
-  TextStyle assistTextStyle;
+  TextStyle? assistTextStyle;
 
   //辅助性文案（内部计算勿传）
-  String assistText;
+  String? assistText;
   //所占比例（内部计算勿传）
-  double rate;
+  double? rate;
   //开始角度（内部计算）
-  double startAngle;
+  double? startAngle;
   //所占角度（内部计算）
-  double sweepAngle;
+  double? sweepAngle;
   PieBean(
       {this.value,
       this.type,

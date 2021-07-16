@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 
 class ChartBarBeanX {
   //x轴显示的内容
-  String title;
+  String? title;
   //刻度标志样式
-  TextStyle titleStyle;
+  TextStyle? titleStyle;
   //数值，用来处理柱体的高度。这里不用比值来操作是因为如果外部没有传最大值内部会有最大y值计算。
-  num value;
+  num? value;
   //柱体的渐变色数组
-  List<Color> gradualColor;
+  List<Color>? gradualColor;
 
   ChartBarBeanX({this.title, this.titleStyle, this.value, this.gradualColor});
 }

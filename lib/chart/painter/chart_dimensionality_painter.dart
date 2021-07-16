@@ -19,19 +19,19 @@ class ChartDimensionalityPainter extends BasePainter {
   //维度划分的重要参数(决定有几个内容就是几个维度，从正上方顺时针方向绘制)
   List<ChartBeanDimensionality> dimensionalityDivisions;
   //维度填充数据的重要内容
-  List<DimensionalityBean> dimensionalityTags;
+  List<DimensionalityBean>? dimensionalityTags;
   //线宽
-  double lineWidth;
+  double? lineWidth;
   //背景网是否为虚线
-  bool isDotted;
+  bool? isDotted;
   //线条颜色
-  Color lineColor;
+  Color? lineColor;
   //圆半径
-  double centerR;
+  double? centerR;
   //阶层：维度图从中心到最外层有几圈
-  int dimensionalityNumber;
+  int? dimensionalityNumber;
   //圆心
-  double _centerX, _centerY, _averageAngle;
+  late double _centerX, _centerY, _averageAngle;
 
   ChartDimensionalityPainter(
     this.dimensionalityDivisions, {
@@ -77,8 +77,8 @@ class ChartDimensionalityPainter extends BasePainter {
 
   /// 初始化角度
   void _initlizeData(Size size) {
-    var startX = baseBean.basePadding.left;
-    var endX = size.width - baseBean.basePadding.right;
+    var startX = baseBean!.basePadding.left;
+    var endX = size.width - baseBean!.basePadding.right;
     var tp = TextPainter(
         textAlign: TextAlign.center,
         ellipsis: '.',
@@ -90,7 +90,7 @@ class ChartDimensionalityPainter extends BasePainter {
         ),
         textDirection: TextDirection.ltr)
       ..layout(minWidth: 0, maxWidth: size.width);
-    var endY = max(baseBean.basePadding.top, tp.height + 10);
+    var endY = max(baseBean!.basePadding.top, tp.height + 10);
     var startY = size.height - endY;
 
     _centerX = startX + (endX - startX) / 2;
@@ -98,7 +98,7 @@ class ChartDimensionalityPainter extends BasePainter {
     var xR = endX - _centerX;
     var yR = startY - _centerY;
     var tempCenterR = xR.compareTo(yR) > 0 ? yR : xR;
-    if (centerR == null || centerR > tempCenterR) {
+    if (centerR == null || centerR! > tempCenterR) {
       centerR = tempCenterR;
     }
 
@@ -107,9 +107,9 @@ class ChartDimensionalityPainter extends BasePainter {
 
   /// 绘制基本角
   void _createBase(Canvas canvas, Size size) {
-    var speaceIndex = centerR / dimensionalityNumber;
-    for (var i = 0; i < dimensionalityNumber; i++) {
-      var tempLength = centerR - speaceIndex * i;
+    var speaceIndex = centerR! / dimensionalityNumber!;
+    for (var i = 0; i < dimensionalityNumber!; i++) {
+      var tempLength = centerR! - speaceIndex * i;
       var basePoints = <Point>[];
       for (var j = 0; j < dimensionalityDivisions.length; j++) {
         basePoints
@@ -120,21 +120,21 @@ class ChartDimensionalityPainter extends BasePainter {
               model.tip, model.tipStyle, _averageAngle * j, canvas, size);
         }
       }
-      var baseLinePath = Path()..moveTo(basePoints.first.x, basePoints.first.y);
+      var baseLinePath = Path()..moveTo(basePoints.first.x as double, basePoints.first.y as double);
       for (var k = 1; k < basePoints.length; k++) {
         var tempPoint = basePoints[k];
-        baseLinePath..lineTo(tempPoint.x, tempPoint.y);
+        baseLinePath..lineTo(tempPoint.x as double, tempPoint.y as double);
       }
       baseLinePath
-        ..lineTo(basePoints.first.x, basePoints.first.y)
+        ..lineTo(basePoints.first.x as double, basePoints.first.y as double)
         ..close();
       var basePaint = Paint()
-        ..strokeWidth = lineWidth
-        ..color = lineColor
+        ..strokeWidth = lineWidth!
+        ..color = lineColor!
         ..style = PaintingStyle.stroke
         ..isAntiAlias = true;
       canvas.drawPath(
-          isDotted
+          isDotted!
               ? dashPath(
                   baseLinePath,
                   dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
@@ -158,7 +158,7 @@ class ChartDimensionalityPainter extends BasePainter {
   /// angle：角度
   /// canvas：
   /// size：
-  void _createTextWithPara(String text, TextStyle textStyle, double angle,
+  void _createTextWithPara(String? text, TextStyle? textStyle, double angle,
       Canvas canvas, Size size) {
     var tp = TextPainter(
         textAlign: TextAlign.center,
@@ -170,7 +170,7 @@ class ChartDimensionalityPainter extends BasePainter {
         ),
         textDirection: TextDirection.ltr)
       ..layout(minWidth: 0, maxWidth: size.width);
-    var temPoint = _getBaseCenterLengthAnglePoint(centerR + 10, angle);
+    var temPoint = _getBaseCenterLengthAnglePoint(centerR! + 10, angle);
     var tempOffset = Offset(0, 0);
     var sinAngle = sin(angle), cosAngle = cos(angle);
     //double的精度处理问题，这里给一定的伸缩范围
@@ -181,11 +181,11 @@ class ChartDimensionalityPainter extends BasePainter {
             Offset(temPoint.x - tp.size.width / 2, temPoint.y - tp.size.height);
       } else {
         //底角
-        tempOffset = Offset(temPoint.x - tp.size.width / 2, temPoint.y);
+        tempOffset = Offset(temPoint.x - tp.size.width / 2, temPoint.y as double);
       }
     } else if (sinAngle > 0) {
       //右侧
-      tempOffset = Offset(temPoint.x, temPoint.y - tp.size.height / 2);
+      tempOffset = Offset(temPoint.x as double, temPoint.y - tp.size.height / 2);
     } else {
       //左侧
       tempOffset =
@@ -197,29 +197,29 @@ class ChartDimensionalityPainter extends BasePainter {
 //绘制内部阴影区域
   void _createPaintShadowPath(Canvas canvas, Size size) {
     var begainDy = divisionConst;
-    for (var i = 0; i < dimensionalityTags.length; i++) {
-      var tempBean = dimensionalityTags[i];
+    for (var i = 0; i < dimensionalityTags!.length; i++) {
+      var tempBean = dimensionalityTags![i];
 
       var basePoints = <Point>[];
       for (var j = 0; j < dimensionalityDivisions.length; j++) {
         var length = 0.0;
-        if (j < tempBean.tagContents.length) {
-          length = centerR * tempBean.tagContents[j];
+        if (j < tempBean.tagContents!.length) {
+          length = centerR! * tempBean.tagContents![j];
         }
         basePoints
             .add(_getBaseCenterLengthAnglePoint(length, _averageAngle * j));
       }
-      var shadowPath = Path()..moveTo(basePoints.first.x, basePoints.first.y);
+      var shadowPath = Path()..moveTo(basePoints.first.x as double, basePoints.first.y as double);
       for (var k = 1; k < basePoints.length; k++) {
         var tempPoint = basePoints[k];
-        shadowPath..lineTo(tempPoint.x, tempPoint.y);
+        shadowPath..lineTo(tempPoint.x as double, tempPoint.y as double);
       }
       shadowPath
-        ..lineTo(basePoints.first.x, basePoints.first.y)
+        ..lineTo(basePoints.first.x as double, basePoints.first.y as double)
         ..close();
       var shadowPaint = Paint()
         ..strokeWidth = 1
-        ..color = tempBean.tagColor
+        ..color = tempBean.tagColor!
         ..style = PaintingStyle.fill
         ..isAntiAlias = true;
       canvas.drawPath(shadowPath, shadowPaint);
@@ -235,10 +235,10 @@ class ChartDimensionalityPainter extends BasePainter {
           textDirection: TextDirection.ltr)
         ..layout(minWidth: 0, maxWidth: size.width);
       tp.paint(canvas,
-          Offset(size.width - tp.width - baseBean.basePadding.right, begainDy));
+          Offset(size.width - tp.width - baseBean!.basePadding.right, begainDy));
       //绘制标记小椭圆
       var rightBegainCenterX =
-          size.width - tp.width - baseBean.basePadding.right - 5;
+          size.width - tp.width - baseBean!.basePadding.right - 5;
       var tipPath = Path()
         ..moveTo(rightBegainCenterX,
             begainDy + tp.height / 2 - tempBean.tagTipHeight / 2)

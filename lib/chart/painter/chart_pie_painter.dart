@@ -24,25 +24,25 @@ class ChartPiePainter extends BasePainter {
   double value;
   List<ChartPieBean> chartBeans;
   //圆弧半径,中心圆半径
-  double globalR, centerR;
+  double? globalR, centerR;
   //中心圆颜色
-  Color centerColor;
+  Color? centerColor;
   //各个占比之间的分割线宽度，默认为0即不显示分割
-  double divisionWidth;
+  double? divisionWidth;
   //辅助性文案显示的样式
-  AssistTextShowType assistTextShowType;
+  AssistTextShowType? assistTextShowType;
   //开始画圆的位置
-  ArrowBegainLocation arrowBegainLocation;
+  ArrowBegainLocation? arrowBegainLocation;
   //辅助性文案的背景框背景颜色
-  Color assistBGColor;
+  Color? assistBGColor;
   //辅助性百分比显示的小数位数,（饼状图还是真实的比例）
-  int decimalDigits;
-  double _startX, _endX, _startY, _endY;
-  double _centerX, _centerY; //圆心
-  Paint _assistPaint;
-  List<PieBean> _pieBeans;
+  int? decimalDigits;
+  late double _startX, _endX, _startY, _endY;
+  late double _centerX, _centerY; //圆心
+  late Paint _assistPaint;
+  late List<PieBean> _pieBeans;
   //辅助性文案的绘制区域
-  bool _needCenterAssist;
+  late bool _needCenterAssist;
 
   ChartPiePainter(
     this.chartBeans, {
@@ -65,7 +65,7 @@ class ChartPiePainter extends BasePainter {
     _setPieAngle();
     //画圆弧
     _drawPie(canvas);
-    if (divisionWidth > 0) {
+    if (divisionWidth! > 0) {
       //画间隔线
       _drawRectSpeace(canvas);
     }
@@ -90,10 +90,10 @@ class ChartPiePainter extends BasePainter {
     decimalDigits ??= 0;
 
     _needCenterAssist = false;
-    _startX = baseBean.basePadding.left;
-    _endX = size.width - baseBean.basePadding.right;
-    _startY = size.height - baseBean.basePadding.bottom;
-    _endY = baseBean.basePadding.top;
+    _startX = baseBean!.basePadding.left;
+    _endX = size.width - baseBean!.basePadding.right;
+    _startY = size.height - baseBean!.basePadding.bottom;
+    _endY = baseBean!.basePadding.top;
 
     _centerX = _startX + (_endX - _startX) / 2;
     _centerY = _endY + (_startY - _endY) / 2;
@@ -104,11 +104,11 @@ class ChartPiePainter extends BasePainter {
     if (globalR == null || globalR == 0) {
       globalR = realR;
     } else {
-      if (globalR > realR) globalR = realR;
+      if (globalR! > realR) globalR = realR;
     }
-    if (centerR > globalR) centerR = globalR;
+    if (centerR! > globalR!) centerR = globalR;
     _assistPaint = Paint()
-      ..color = assistBGColor
+      ..color = assistBGColor!
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = true;
@@ -118,21 +118,21 @@ class ChartPiePainter extends BasePainter {
   void _drawPie(Canvas canvas) {
     var paint = Paint()..isAntiAlias = true;
     var rect =
-        Rect.fromCircle(center: Offset(_centerX, _centerY), radius: globalR);
+        Rect.fromCircle(center: Offset(_centerX, _centerY), radius: globalR!);
     var realAngle = value * 2 * pi; //当前动画值对应的总角度
     _initPieAngleValue();
     for (var i = 0; i < _pieBeans.length; i++) {
       var bean = _pieBeans[i];
-      var targetAngle = bean.startAngle + bean.sweepAngle;
-      paint..color = bean.color;
+      var targetAngle = bean.startAngle! + bean.sweepAngle!;
+      paint..color = bean.color!;
       if (targetAngle <= realAngle) {
-        canvas.drawArc(rect, bean.startAngle, bean.sweepAngle, true, paint);
-      } else if (bean.startAngle < realAngle) {
-        var sweepAngle = realAngle - bean.startAngle;
-        canvas.drawArc(rect, bean.startAngle, sweepAngle, true, paint);
+        canvas.drawArc(rect, bean.startAngle!, bean.sweepAngle!, true, paint);
+      } else if (bean.startAngle! < realAngle) {
+        var sweepAngle = realAngle - bean.startAngle!;
+        canvas.drawArc(rect, bean.startAngle!, sweepAngle, true, paint);
       }
       if (_needCenterAssist) {
-        var centerRedin = bean.startAngle + bean.sweepAngle / 2;
+        var centerRedin = bean.startAngle! + bean.sweepAngle! / 2;
         var centerSin = sin(centerRedin), centerCos = cos(centerRedin);
         _drawPerRatio(canvas, bean.assistText, bean.assistTextStyle, centerSin,
             centerCos, i);
@@ -147,20 +147,20 @@ class ChartPiePainter extends BasePainter {
   /// 绘制间隔
   void _drawRectSpeace(Canvas canvas) {
     for (var bean in _pieBeans) {
-      _drawSpeaceRect(canvas, bean.startAngle);
+      _drawSpeaceRect(canvas, bean.startAngle!);
     }
   }
 
   /// 绘制间隔区间
   void _drawSpeaceRect(Canvas canvas, double angle) {
     var speacePaint = Paint()
-      ..color = centerColor
+      ..color = centerColor!
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = divisionWidth
+      ..strokeWidth = divisionWidth!
       ..isAntiAlias = true;
     var arcPoint =
-        Point(_centerX + globalR * cos(angle), _centerY + globalR * sin(angle));
+        Point(_centerX + globalR! * cos(angle), _centerY + globalR! * sin(angle));
     canvas.drawLine(Offset(_centerX, _centerY), Offset(arcPoint.x, arcPoint.y),
         speacePaint);
   }
@@ -168,11 +168,11 @@ class ChartPiePainter extends BasePainter {
   /// 绘制中心区域
   void _drawCenter(Canvas canvas) {
     var paint = Paint()
-      ..color = centerColor
+      ..color = centerColor!
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = true;
-    canvas.drawCircle(Offset(_centerX, _centerY), centerR, paint);
+    canvas.drawCircle(Offset(_centerX, _centerY), centerR!, paint);
   }
 
   /// 计算各个扇形的起始角度
@@ -211,18 +211,18 @@ class ChartPiePainter extends BasePainter {
           break;
         case AssistTextShowType.OnlyPercentage:
           _needCenterAssist = true;
-          pieBean.assistText = (rate * 100).toStringAsFixed(decimalDigits);
+          pieBean.assistText = (rate * 100).toStringAsFixed(decimalDigits!);
           break;
         case AssistTextShowType.NamePercentage:
           _needCenterAssist = true;
-          var percentStr = (rate * 100).toStringAsFixed(decimalDigits);
+          var percentStr = (rate * 100).toStringAsFixed(decimalDigits!);
           pieBean.assistText = '$percentStr%${bean.type}';
           break;
         default:
       }
       pieBean.startAngle = startAngle;
       pieBean.sweepAngle = rate * 2 * pi; //当前对象所占比例 对应的 角度
-      startAngle += pieBean.sweepAngle;
+      startAngle += pieBean.sweepAngle!;
       _pieBeans.add(pieBean);
     }
   }
@@ -239,23 +239,23 @@ class ChartPiePainter extends BasePainter {
   /// 绘制饼状图途中周围显示的尖角标签 开始
 
   //角朝向，内部使用
-  RowDirection _lastRowDirection;
+  RowDirection? _lastRowDirection;
   //上一次绘制文案的最大距离,(角朝上的话为x的min，角朝下的话为x的max。以此角朝左右的为y的min，max，绘制是顺时针方向的)
-  double _lastXY;
+  double? _lastXY;
   //y轴的最大值，对应用来上下角出现叠加的时候计算位置使用。
-  double _lastYOverlay;
+  late double _lastYOverlay;
   //可能需要重绘的数组
-  List<RedrawModel> _redrawArr;
+  late List<RedrawModel> _redrawArr;
   var _rowHeiWidth, _speaseWidth; //尖角高5，左右各多5像素
   //如果多个平行绘制的话，文本框之间的间距
   final double _speaceBetween = 2;
   //如果第一个是左角的话记录此位置，以便后面对比是否有重合,
-  Point _fistTopLeftPoint;
+  Point? _fistTopLeftPoint;
   //是否需要加入到重绘数组中，当绘制完其他的角之后即打开，再绘制左角就可加入数组
-  bool _isNeedEnterRedrawArr;
+  late bool _isNeedEnterRedrawArr;
   //y轴重叠重绘数组
-  List<RedrawModel> _yRedrawArrRowTop;
-  List<RedrawModel> _yRedrawArrRowBottom;
+  late List<RedrawModel> _yRedrawArrRowTop;
+  late List<RedrawModel> _yRedrawArrRowBottom;
 
   /// 初始绘制值初始化
   void _initPieAngleValue() {
@@ -270,7 +270,7 @@ class ChartPiePainter extends BasePainter {
   }
 
   /// 绘制每一块扇形区域
-  void _drawPerRatio(Canvas canvas, String title, TextStyle titleStyle,
+  void _drawPerRatio(Canvas canvas, String? title, TextStyle? titleStyle,
       double centerSin, double centerCos, int index) {
     var tp = TextPainter(
         textAlign: TextAlign.center,
@@ -283,8 +283,8 @@ class ChartPiePainter extends BasePainter {
     var assistTextWidth = tp.width + _speaseWidth;
     var assistTextHeight = tp.height;
 
-    var rowYspeace = (globalR + 5) * centerSin;
-    var rowXspeace = (globalR + 5) * centerCos;
+    var rowYspeace = (globalR! + 5) * centerSin;
+    var rowXspeace = (globalR! + 5) * centerCos;
     var rowPoint = Point(_centerX + rowXspeace, _centerY + rowYspeace);
 
     //尖角的底部宽度默认设置5
@@ -292,7 +292,7 @@ class ChartPiePainter extends BasePainter {
     //阴影框的左上角起始点
     Point shadowLeftTopPoint;
     var paint = Paint()
-      ..color = assistBGColor
+      ..color = assistBGColor!
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = true;
@@ -305,16 +305,16 @@ class ChartPiePainter extends BasePainter {
         shadowLeftTopPoint =
             Point(rowPoint.x - assistTextWidth / 2, rowPoint.y + _rowHeiWidth);
         if (_lastRowDirection == RowDirection.Top) {
-          if ((rowPoint.x + assistTextWidth / 2) > _lastXY) {
+          if ((rowPoint.x + assistTextWidth / 2) > _lastXY!) {
             //有重叠
             shadowLeftTopPoint =
                 Point(rowPoint.x - assistTextWidth / 2, _lastYOverlay);
           }
         } else if (_lastRowDirection != RowDirection.Bottom) {
-          if (_lastXY != null && (rowPoint.y + _rowHeiWidth) < _lastXY) {
+          if (_lastXY != null && (rowPoint.y + _rowHeiWidth) < _lastXY!) {
             //跨域重叠，只存在左上角和右下角
             shadowLeftTopPoint =
-                Point(rowPoint.x - assistTextWidth / 2, _lastXY);
+                Point(rowPoint.x - assistTextWidth / 2, _lastXY!);
           }
         }
         //待比对点
@@ -341,16 +341,16 @@ class ChartPiePainter extends BasePainter {
         shadowLeftTopPoint = Point(rowPoint.x - assistTextWidth / 2,
             rowPoint.y - _rowHeiWidth - assistTextHeight);
         if (_lastRowDirection == RowDirection.Bottom) {
-          if ((rowPoint.x - assistTextWidth / 2) < _lastXY) {
+          if ((rowPoint.x - assistTextWidth / 2) < _lastXY!) {
             //有重叠
             shadowLeftTopPoint = Point(rowPoint.x - assistTextWidth / 2,
                 _lastYOverlay - assistTextHeight);
           }
         } else if (_lastRowDirection != RowDirection.Top) {
-          if (_lastXY != null && (rowPoint.y - _rowHeiWidth) > _lastXY) {
+          if (_lastXY != null && (rowPoint.y - _rowHeiWidth) > _lastXY!) {
             //跨域重叠，只存在左上角和右下角
             shadowLeftTopPoint = Point(
-                rowPoint.x - assistTextWidth / 2, _lastXY - assistTextHeight);
+                rowPoint.x - assistTextWidth / 2, _lastXY! - assistTextHeight);
           }
         }
         //待比对点
@@ -384,9 +384,9 @@ class ChartPiePainter extends BasePainter {
           _fistTopLeftPoint = shadowLeftTopPoint;
         }
         if (_lastRowDirection == RowDirection.Left) {
-          if ((rowPoint.y - assistTextHeight / 2) < _lastXY) {
+          if ((rowPoint.y - assistTextHeight / 2) < _lastXY!) {
             //有重叠
-            shadowLeftTopPoint = Point(rowPoint.x + _rowHeiWidth, _lastXY);
+            shadowLeftTopPoint = Point(rowPoint.x + _rowHeiWidth, _lastXY!);
             approachSpeace = assistTextHeight / 2;
             isAdject = true;
           }
@@ -409,21 +409,21 @@ class ChartPiePainter extends BasePainter {
         shadowLeftTopPoint = Point(rowPoint.x - _rowHeiWidth - assistTextWidth,
             rowPoint.y - assistTextHeight / 2);
         if (_lastRowDirection == RowDirection.Right) {
-          if ((rowPoint.y + assistTextHeight / 2) > _lastXY) {
+          if ((rowPoint.y + assistTextHeight / 2) > _lastXY!) {
             //有重叠
             shadowLeftTopPoint = Point(
                 rowPoint.x - _rowHeiWidth - assistTextWidth,
-                _lastXY - assistTextHeight);
+                _lastXY! - assistTextHeight);
             approachSpeace = assistTextHeight / 2;
           }
         }
         path
           ..lineTo(shadowLeftTopPoint.x + assistTextWidth,
               shadowLeftTopPoint.y + assistTextHeight / 2 - approachSpeace / 2)
-          ..lineTo(shadowLeftTopPoint.x + assistTextWidth, shadowLeftTopPoint.y)
-          ..lineTo(shadowLeftTopPoint.x, shadowLeftTopPoint.y)
+          ..lineTo(shadowLeftTopPoint.x + assistTextWidth, shadowLeftTopPoint.y as double)
+          ..lineTo(shadowLeftTopPoint.x as double, shadowLeftTopPoint.y as double)
           ..lineTo(
-              shadowLeftTopPoint.x, shadowLeftTopPoint.y + assistTextHeight)
+              shadowLeftTopPoint.x as double, shadowLeftTopPoint.y + assistTextHeight)
           ..lineTo(shadowLeftTopPoint.x + assistTextWidth,
               shadowLeftTopPoint.y + assistTextHeight)
           ..lineTo(shadowLeftTopPoint.x + assistTextWidth,
@@ -438,7 +438,7 @@ class ChartPiePainter extends BasePainter {
         tp.paint(
             canvas,
             Offset(
-                shadowLeftTopPoint.x + _speaseWidth / 2, shadowLeftTopPoint.y));
+                shadowLeftTopPoint.x + _speaseWidth / 2 as double, shadowLeftTopPoint.y as double));
       }
     }
   }
@@ -447,45 +447,45 @@ class ChartPiePainter extends BasePainter {
   void _redrawShadowRect(Canvas canvas) {
     if (_redrawArr.isNotEmpty && _fistTopLeftPoint != null) {
       var model = _redrawArr.last;
-      if ((model.rectTopLeftPoint.y + model.textPainter.height) >
-          _fistTopLeftPoint.y) {
-        double begainY = _fistTopLeftPoint.y - _speaceBetween;
+      if ((model.rectTopLeftPoint!.y + model.textPainter!.height) >
+          _fistTopLeftPoint!.y) {
+        double begainY = _fistTopLeftPoint!.y - _speaceBetween;
         //反向重排并绘制
         for (var i = _redrawArr.length - 1; i >= 0; i--) {
           var tempModel = _redrawArr[i];
-          begainY -= tempModel.textPainter.height;
-          if (begainY < tempModel.rectTopLeftPoint.y) {
+          begainY -= tempModel.textPainter!.height;
+          if (begainY < tempModel.rectTopLeftPoint!.y) {
             tempModel.rectTopLeftPoint =
-                Point(tempModel.rectTopLeftPoint.x, begainY);
+                Point(tempModel.rectTopLeftPoint!.x, begainY);
             tempModel.isAdjust = true;
           }
-          begainY = tempModel.rectTopLeftPoint.y - _speaceBetween;
+          begainY = tempModel.rectTopLeftPoint!.y - _speaceBetween;
         }
       }
     }
 
     //数组中的重绘
     for (var item in _redrawArr) {
-      _redrewAllleftRow(canvas, item.rowTopPoint, item.rectTopLeftPoint,
-          item.textPainter, item.isAdjust);
+      _redrewAllleftRow(canvas, item.rowTopPoint!, item.rectTopLeftPoint!,
+          item.textPainter!, item.isAdjust!);
     }
     //上下倒着绘制，防止尖角覆盖上一个的内容
     for (var i = _yRedrawArrRowTop.length - 1; i >= 0; i--) {
       var item = _yRedrawArrRowTop[i];
       _redrewAllTopRow(
-          canvas, item.rowTopPoint, item.rectTopLeftPoint, item.textPainter);
+          canvas, item.rowTopPoint!, item.rectTopLeftPoint!, item.textPainter!);
     }
     for (var i = _yRedrawArrRowBottom.length - 1; i >= 0; i--) {
       var item = _yRedrawArrRowBottom[i];
       _redrewAllBottomRow(
-          canvas, item.rowTopPoint, item.rectTopLeftPoint, item.textPainter);
+          canvas, item.rowTopPoint!, item.rectTopLeftPoint!, item.textPainter!);
     }
   }
 
   ///重绘底部文案
   void _redrewAllBottomRow(
       Canvas canvas, Point point, Point begainLeftTopPoint, TextPainter tp) {
-    var path = Path()..moveTo(point.x, point.y);
+    var path = Path()..moveTo(point.x as double, point.y as double);
     var assistTextWidth = tp.width + _speaseWidth;
     var assistTextHeight = tp.height;
     //尖角的底部宽度默认设置5，
@@ -493,68 +493,68 @@ class ChartPiePainter extends BasePainter {
     path
       ..lineTo(begainLeftTopPoint.x + assistTextWidth / 2 - approachSpeace / 2,
           begainLeftTopPoint.y + assistTextHeight)
-      ..lineTo(begainLeftTopPoint.x, begainLeftTopPoint.y + assistTextHeight)
-      ..lineTo(begainLeftTopPoint.x, begainLeftTopPoint.y)
-      ..lineTo(begainLeftTopPoint.x + assistTextWidth, begainLeftTopPoint.y)
+      ..lineTo(begainLeftTopPoint.x as double, begainLeftTopPoint.y + assistTextHeight)
+      ..lineTo(begainLeftTopPoint.x as double, begainLeftTopPoint.y as double)
+      ..lineTo(begainLeftTopPoint.x + assistTextWidth, begainLeftTopPoint.y as double)
       ..lineTo(begainLeftTopPoint.x + assistTextWidth,
           begainLeftTopPoint.y + assistTextHeight)
       ..lineTo(begainLeftTopPoint.x + assistTextWidth / 2 + approachSpeace / 2,
           begainLeftTopPoint.y + assistTextHeight)
-      ..lineTo(point.x, point.y)
+      ..lineTo(point.x as double, point.y as double)
       ..close();
     canvas.drawPath(path, _assistPaint);
     tp.paint(canvas,
-        Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
+        Offset(begainLeftTopPoint.x + _speaseWidth / 2 as double, begainLeftTopPoint.y as double));
   }
 
   /// 重绘顶部文案
   void _redrewAllTopRow(
       Canvas canvas, Point point, Point begainLeftTopPoint, TextPainter tp) {
-    var path = Path()..moveTo(point.x, point.y);
+    var path = Path()..moveTo(point.x as double, point.y as double);
     var assistTextWidth = tp.width + _speaseWidth;
     var assistTextHeight = tp.height;
     //尖角的底部宽度默认设置5，
     var approachSpeace = 5.0;
     path
       ..lineTo(begainLeftTopPoint.x + assistTextWidth / 2 - approachSpeace / 2,
-          begainLeftTopPoint.y)
-      ..lineTo(begainLeftTopPoint.x, begainLeftTopPoint.y)
-      ..lineTo(begainLeftTopPoint.x, begainLeftTopPoint.y + assistTextHeight)
+          begainLeftTopPoint.y as double)
+      ..lineTo(begainLeftTopPoint.x as double, begainLeftTopPoint.y as double)
+      ..lineTo(begainLeftTopPoint.x as double, begainLeftTopPoint.y + assistTextHeight)
       ..lineTo(begainLeftTopPoint.x + assistTextWidth,
           begainLeftTopPoint.y + assistTextHeight)
-      ..lineTo(begainLeftTopPoint.x + assistTextWidth, begainLeftTopPoint.y)
+      ..lineTo(begainLeftTopPoint.x + assistTextWidth, begainLeftTopPoint.y as double)
       ..lineTo(begainLeftTopPoint.x + assistTextWidth / 2 + approachSpeace / 2,
-          begainLeftTopPoint.y)
-      ..lineTo(point.x, point.y)
+          begainLeftTopPoint.y as double)
+      ..lineTo(point.x as double, point.y as double)
       ..close();
     canvas.drawPath(path, _assistPaint);
     tp.paint(canvas,
-        Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
+        Offset(begainLeftTopPoint.x + _speaseWidth / 2 as double, begainLeftTopPoint.y as double));
   }
 
   /// 重绘左侧文案
   void _redrewAllleftRow(Canvas canvas, Point point, Point begainLeftTopPoint,
       TextPainter tp, bool isAdjust) {
-    var path = Path()..moveTo(point.x, point.y);
+    var path = Path()..moveTo(point.x as double, point.y as double);
     var assistTextWidth = tp.width + _speaseWidth;
     var assistTextHeight = tp.height;
     //尖角的底部宽度默认设置5，
     var approachSpeace = isAdjust ? (tp.height / 2) : 5.0;
     path
-      ..lineTo(begainLeftTopPoint.x,
+      ..lineTo(begainLeftTopPoint.x as double,
           begainLeftTopPoint.y + assistTextHeight / 2 - approachSpeace / 2)
-      ..lineTo(begainLeftTopPoint.x, begainLeftTopPoint.y)
-      ..lineTo(begainLeftTopPoint.x + assistTextWidth, begainLeftTopPoint.y)
+      ..lineTo(begainLeftTopPoint.x as double, begainLeftTopPoint.y as double)
+      ..lineTo(begainLeftTopPoint.x + assistTextWidth, begainLeftTopPoint.y as double)
       ..lineTo(begainLeftTopPoint.x + assistTextWidth,
           begainLeftTopPoint.y + assistTextHeight)
-      ..lineTo(begainLeftTopPoint.x, begainLeftTopPoint.y + assistTextHeight)
-      ..lineTo(begainLeftTopPoint.x,
+      ..lineTo(begainLeftTopPoint.x as double, begainLeftTopPoint.y + assistTextHeight)
+      ..lineTo(begainLeftTopPoint.x as double,
           begainLeftTopPoint.y + assistTextHeight / 2 + approachSpeace / 2)
-      ..lineTo(point.x, point.y)
+      ..lineTo(point.x as double, point.y as double)
       ..close();
     canvas.drawPath(path, _assistPaint);
     tp.paint(canvas,
-        Offset(begainLeftTopPoint.x + _speaseWidth / 2, begainLeftTopPoint.y));
+        Offset(begainLeftTopPoint.x + _speaseWidth / 2 as double, begainLeftTopPoint.y as double));
   }
 
   /// 计算可能可能存在和饼状区域有交集的点与圆心的距离，返回：如果有交集返回应该扩展的高度，没有交集返回0
@@ -563,11 +563,11 @@ class ChartPiePainter extends BasePainter {
     double yDistance = (point.y - _centerY);
     var quartXY = xDistance * xDistance + yDistance * yDistance;
     var speaceWidth = sqrt(quartXY);
-    if (speaceWidth >= globalR) {
+    if (speaceWidth >= globalR!) {
       return point;
     } else {
-      return Point(_centerX + (globalR + 5) * xDistance / speaceWidth,
-          _centerY + (globalR + 5) * yDistance / speaceWidth);
+      return Point(_centerX + (globalR! + 5) * xDistance / speaceWidth,
+          _centerY + (globalR! + 5) * yDistance / speaceWidth);
     }
   }
 

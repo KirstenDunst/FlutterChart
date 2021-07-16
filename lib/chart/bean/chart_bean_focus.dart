@@ -11,11 +11,11 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 //长按回调(相对于坐标的偏移point,如果为null则长按辅助消失，value：触摸外传的参数（自给自足）)
-typedef PressPointBack = Function(Offset point, dynamic value);
+typedef PressPointBack = Function(Offset? point, dynamic value);
 
 class FocusChartBeanMain {
   //数据显示点集合
-  List<ChartBeanFocus> chartBeans;
+  List<ChartBeanFocus>? chartBeans;
   //曲线或折线的颜色
   Color lineColor;
   //曲线或折线的线宽
@@ -31,14 +31,14 @@ class FocusChartBeanMain {
   //是否展示线条区间带(true的时候chartBeans中的focusMax与focusMin才有意义)
   bool showLineSection;
   //线条区间带的设置参数模型
-  LineSectionModel sectionModel;
+  LineSectionModel? sectionModel;
   //内部的渐变颜色。不设置的话默认按照解释文案的分层显示，如果设置，即为整体颜色渐变显示,
   //如果showLineSection为true，则显示区间带颜色，不显示闭合x轴的曲线渐变色
-  List<Color> gradualColors;
+  List<Color>? gradualColors;
   //beans的时间轴如果断开，true： 是继续上一个有数值的值绘制，还是 false：断开。按照多条绘制,默认true
   bool isLinkBreak;
   //结束回调
-  VoidCallback canvasEnd;
+  VoidCallback? canvasEnd;
 
   FocusChartBeanMain(
       {this.chartBeans,
@@ -63,7 +63,7 @@ class LineSectionModel {
   //线条区间带的边界是否为虚线
   bool isBorLineImaginary;
   //线条区间带的中间填充颜色
-  List<Color> fillColors;
+  List<Color>? fillColors;
   LineSectionModel(
       {this.lineSectionBorColor = Colors.purple,
       this.borLineWidth = 1,
@@ -77,25 +77,25 @@ class ChartBeanFocus {
   //数值
   num focus;
   //专注值最大值（大师级图表使用,）
-  num focusMax;
+  num? focusMax;
   //专注值最小值（大师级图表使用）
-  num focusMin;
+  num? focusMin;
   //在该点上下左右的辅助线样式，默认不设置就没有辅助线了
-  HintEdgeInset hintEdgeInset;
+  HintEdgeInset? hintEdgeInset;
   //如果所有的点位都想展示出来，这里就不要在这里设置，FocusChartBeanMain里面的showSite打开即可满足
   //某个特定位置的widget（比如一个小头像），默认没有，什么也不显示，
-  ui.Image centerPoint;
+  ui.Image? centerPoint;
   //centerPoint的显示与原大小的比率,方便屏幕适配使用，默认原比例1.0
-  Size centerPointSize;
+  Size? centerPointSize;
   //centerPoint的中心与位置的偏移
   Offset centerPointOffset;
   //centerPoint的中心与位置的偏移的线颜色（目前是虚线颜色连接）
-  Color centerPointOffsetLineColor;
+  Color? centerPointOffsetLineColor;
   //支持触摸的时候，触发回调的外带参数
   dynamic touchBackValue;
 
   ChartBeanFocus(
-      {@required this.focus,
+      {required this.focus,
       this.focusMax,
       this.focusMin,
       this.second = 0,
@@ -109,10 +109,10 @@ class ChartBeanFocus {
 
 //某点上下左右的辅助线显示类型,不设置某个方位的类型就不会绘制
 class HintEdgeInset {
-  final PointHintParam left;
-  final PointHintParam top;
-  final PointHintParam right;
-  final PointHintParam bottom;
+  final PointHintParam? left;
+  final PointHintParam? top;
+  final PointHintParam? right;
+  final PointHintParam? bottom;
 
   const HintEdgeInset.fromLTRB(this.left, this.top, this.right, this.bottom);
 
@@ -130,8 +130,8 @@ class HintEdgeInset {
   });
 
   const HintEdgeInset.symmetric({
-    PointHintParam vertical,
-    PointHintParam horizontal,
+    PointHintParam? vertical,
+    PointHintParam? horizontal,
   })  : left = horizontal,
         top = vertical,
         right = horizontal,
@@ -140,7 +140,7 @@ class HintEdgeInset {
 
 class PointHintParam {
   //辅助线颜色
-  Color hintColor;
+  Color? hintColor;
   //辅助线是否是虚线
   bool isHintLineImaginary;
   //辅助线宽度
@@ -156,15 +156,15 @@ class SectionBean {
   //标题
   String title;
   //标题字体样式
-  TextStyle titleStyle;
+  TextStyle? titleStyle;
   //开始绘制的起始位置占总长度的比例
   double startRatio;
   //绘制的宽度与总宽度的比较
   double widthRatio;
   //内部填充颜色
-  Color fillColor;
+  Color? fillColor;
   //边框颜色,默认没有颜色
-  Color borderColor;
+  Color? borderColor;
   //边框线宽度，默认宽度为1
   double borderWidth;
   //边框线是否为实线还是虚线，默认实线

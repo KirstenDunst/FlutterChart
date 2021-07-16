@@ -16,21 +16,21 @@ import 'package:flutter_chart_csx/chart/painter/chart_bar_painter.dart';
 class ChartBar extends StatefulWidget {
   final Size size;
   //绘制的背景色
-  final Color backgroundColor;
+  final Color? backgroundColor;
   //x轴刻度显示，不传则没有
   final List<ChartBarBeanX> xDialValues;
-  final BaseBean baseBean;
+  final BaseBean? baseBean;
   //柱状图的宽度
   final double rectWidth;
   //柱状图顶部的数值显示，默认透明即不显示
-  final TextStyle rectTopTextStyle;
+  final TextStyle? rectTopTextStyle;
   //以下的四周圆角
   final BorderRadius borderRadius;
 
   const ChartBar({
-    Key key,
-    @required this.size,
-    @required this.xDialValues,
+    Key? key,
+    required this.size,
+    required this.xDialValues,
     this.baseBean,
     this.backgroundColor,
     this.rectWidth = 20,

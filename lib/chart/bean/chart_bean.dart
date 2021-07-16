@@ -14,24 +14,24 @@ import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 //y轴
 class DialStyleY {
   //刻度标志内容(y轴仅适用于内容为数值类型的)
-  String title;
+  String? title;
   //y轴获取的值，只读
   double get titleValue {
-    if (title == null || title.isEmpty) {
+    if (title == null || title!.isEmpty) {
       return 0;
     } else {
-      return double.parse(title);
+      return double.parse(title!);
     }
   }
 
   //刻度标志样式
-  TextStyle titleStyle;
+  TextStyle? titleStyle;
   //与最大数值的比率，用来计算绘制刻度的位置使用。
-  double positionRetioy;
+  double? positionRetioy;
   //两个刻度之间的标注文案（y轴在数组中下一个元素之间绘制，最后一个元素则在最后一个点上面绘制）,不需要的话不设置
-  String centerSubTitle;
+  String? centerSubTitle;
   //标注文案样式，centerSubTitle有内容时有效
-  TextStyle centerSubTextStyle;
+  TextStyle? centerSubTextStyle;
   DialStyleY(
       {this.title,
       this.titleStyle,
@@ -43,11 +43,11 @@ class DialStyleY {
 //x轴
 class DialStyleX {
   //刻度标志内容
-  String title;
+  String? title;
   //刻度标志样式
-  TextStyle titleStyle;
+  TextStyle? titleStyle;
   //与最大数值的比率，用来计算绘制刻度的位置使用。
-  double positionRetioy;
+  double? positionRetioy;
   DialStyleX({this.title, this.titleStyle, this.positionRetioy});
 }
 
@@ -64,7 +64,7 @@ class BaseBean {
   //右侧的辅助线
   bool isShowBorderRight;
   //y轴左侧刻度显示，不传则没有
-  List<DialStyleY> yDialValues;
+  List<DialStyleY>? yDialValues;
   //y轴显示副刻度是在左侧还是在右侧，默认左侧
   bool isLeftYDialSub;
   //是否显示x轴文本,
