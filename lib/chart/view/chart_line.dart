@@ -18,15 +18,15 @@ class ChartLine extends StatefulWidget {
   //宽高
   final Size size;
   //绘制的背景色
-  final Color backgroundColor;
-  final BaseBean baseBean;
+  final Color? backgroundColor;
+  final BaseBean? baseBean;
   //绘制线条的参数内容
   final List<ChartBeanSystem> chartBeanSystems;
 
   const ChartLine({
-    Key key,
-    @required this.size,
-    @required this.chartBeanSystems,
+    Key? key,
+    required this.size,
+    required this.chartBeanSystems,
     this.backgroundColor,
     this.baseBean,
   })  : assert(size != null),
