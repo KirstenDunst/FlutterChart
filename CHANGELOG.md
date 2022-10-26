@@ -2,17 +2,17 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-07 10:38:30
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-26 14:01:06
+ * @LastEditTime: 2022-10-26 14:11:45
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
 -->
 
-## 1.3.0+1
+## 1.3.0+1 20221026
 * 折线图，专注力曲线调整：
     1.支持y轴标注显示在右侧功能
     2.线条支持区间渐变显示
 
-## 1.2.9 
+## 1.2.9 20220927
 * 旋转渐变圆形进度条优化，避免在progress接近1时端点不显示半圆
 
 ## 1.2.8 20220729
