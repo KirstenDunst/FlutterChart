@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:08:14
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-09 18:26:06
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2022-06-23 18:41:55
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -49,9 +49,33 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
                 isHintLineImaginary: false,
                 isLeftYDialSub: false,
                 yMax: 70.0,
+                yMin: 0.0,
                 yDialValues: provider.yArr,
               ),
               xSectionBeans: provider.xSectionBeans,
+              ySectionBeans: [
+                SectionBeanY(
+                    startRatio: 0.0,
+                    widthRatio: 0.3,
+                    fillColor: Colors.red,
+                    borderColor: Colors.orange,
+                    borderWidth: 5,
+                    isBorderSolid: false),
+                SectionBeanY(
+                    startRatio: 0.3,
+                    widthRatio: 0.3,
+                    fillColor: Colors.orange,
+                    borderColor: Colors.yellow,
+                    borderWidth: 5,
+                    isBorderSolid: false),
+                SectionBeanY(
+                    startRatio: 0.6,
+                    widthRatio: 0.4,
+                    fillColor: Colors.yellow,
+                    borderColor: Colors.blue,
+                    borderWidth: 5,
+                    isBorderSolid: false)
+              ],
               xMax: 60,
               xDialValues: provider.xArr,
             ),
@@ -85,11 +109,11 @@ class ChartFocusLineProvider extends ChangeNotifier {
     var yValues = ['70', '25', '0'];
     var xValues = ['0', "20'", "60'"];
     var xPositionRetioy = [0.0, 0.33, 1.0];
-    var yTexts = ['忘我', '一般', ''];
+    var yTexts = ['', '一般', '忘我'];
     var yTextColors = [
+      Colors.blue,
+      Colors.blue,
       Colors.red,
-      Colors.blue,
-      Colors.blue,
     ];
 
     for (var i = 0; i < yValues.length; i++) {
@@ -102,7 +126,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
           title: yValues[i],
           titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
           centerSubTitle: yTexts[i],
-          positionRetioy: double.parse(yValues[i]) / 70.0,
+          positionRetioy: 1 - double.parse(yValues[i]) / 70.0,
           centerSubTextStyle:
               TextStyle(fontSize: 10.0, color: yTextColors[i])));
     }
@@ -113,7 +137,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
           ChartBeanFocus(focus: Random().nextDouble() * 100, second: i + 30));
     }
     _focusChartBeanMain.chartBeans = _beanList;
-    _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
+    // _focusChartBeanMain.gradualColors = [Color(0xFF17605C), Color(0x00549A97)];
     _focusChartBeanMain.lineWidth = 1;
     _focusChartBeanMain.isLinkBreak = false;
     _focusChartBeanMain.lineColor = Colors.red;
@@ -157,7 +181,9 @@ class ChartFocusLineProvider extends ChangeNotifier {
       }
       var value = Random().nextDouble() * 100;
       _beanList.add(ChartBeanFocus(
-          focus: value, second: _index > 10 ? (10 + _index) : _index));
+        focus: value,
+        second: _index > 10 ? (10 + _index) : _index,
+      ));
       _focusChartBeanMain.chartBeans = _beanList;
       _index++;
       notifyListeners();

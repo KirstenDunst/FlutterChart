@@ -1,14 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2020-11-09 18:35:08
- * @LastEditTime: 2020-11-09 18:35:42
- * @LastEditors: your name
+ * @LastEditTime: 2021-05-07 18:02:36
+ * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/bean/chart_bean_pie_content.dart
  */
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 
 ///内部使用
 class RedrawModel {
@@ -18,10 +19,30 @@ class RedrawModel {
   bool isAdjust;
 
   RedrawModel(
-      {this.rowTopPoint,
-      this.rectTopLeftPoint,
-      this.textPainter,
-      this.isAdjust});
+      {required this.rowTopPoint,
+      required this.rectTopLeftPoint,
+      required this.textPainter,
+      this.isAdjust = false});
+}
+
+class Frame {
+  double x;
+  double y;
+  double width;
+  double height;
+  //如果多个平行绘制的话，文本框之间的间距
+  double get speaceBetween => 2;
+  double get maxX => x + width;
+  double get maxY => y + height;
+  double get maxSpaceX => maxX + speaceBetween;
+  double get maxSpaceY => maxY + speaceBetween;
+  double get minSpaceX => x - speaceBetween;
+  double get minSpaceY => y - speaceBetween;
+  Frame(
+      {required this.x,
+      required this.y,
+      required this.width,
+      required this.height});
 }
 
 //角的方位
@@ -49,20 +70,20 @@ class PieBean {
   TextStyle assistTextStyle;
 
   //辅助性文案（内部计算勿传）
-  String assistText;
+  late String assistText;
   //所占比例（内部计算勿传）
-  double rate;
+  late double rate;
   //开始角度（内部计算）
-  double startAngle;
+  late double startAngle;
   //所占角度（内部计算）
-  double sweepAngle;
+  late double sweepAngle;
   PieBean(
-      {this.value,
-      this.type,
-      this.color,
-      this.assistTextStyle,
-      this.assistText,
-      this.rate,
-      this.startAngle,
-      this.sweepAngle});
+      {required this.value,
+      this.type = '',
+      this.color = defaultColor,
+      this.assistTextStyle = defaultTextStyle,
+      this.assistText = '',
+      this.rate = 0.0,
+      this.startAngle = 0.0,
+      this.sweepAngle = 0.0});
 }

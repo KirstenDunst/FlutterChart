@@ -1,43 +1,52 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean_line.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_line_content.dart';
 import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
 import 'package:flutter_chart_csx/chart/painter/base_painter_tool.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLinePainter extends BasePainter {
+  //起始和结束距离两端y轴的单侧间距。默认无间距
+  double bothEndPitchX;
   //绘制线条的参数内容
   List<ChartBeanSystem> chartBeanSystems;
+  //x轴刻度显示，不传则没有
+  List<DialStyleX>? xDialValues;
+  //触摸选中点
+  Offset? touchLocalPosition;
+  //触摸点设置
+  CellPointSet pointSet;
+  //内容绘制结束
+  VoidCallback? paintEnd;
 
-  double _startX, _endX, _startY, _endY, _fixedHeight, _fixedWidth;
-  List<LineCanvasModel> _lineCanvasModels;
+  late double _startX, _endX, _startY, _endY, _fixedHeight, _fixedWidth;
+  late List<LineTouchCellModel> _lineTouchCellModels;
+  late Map<String, TagModel> _tagPoints;
 
-  ChartLinePainter(this.chartBeanSystems);
+  ChartLinePainter(this.chartBeanSystems,
+      {this.bothEndPitchX = 0,
+      this.touchLocalPosition,
+      this.xDialValues,
+      this.pointSet = CellPointSet.normal,
+      this.paintEnd});
 
   @override
   void paint(Canvas canvas, Size size) {
     super.paint(canvas, size);
-    var xyPaint = Paint()
-      ..isAntiAlias = true
-      ..strokeWidth = baseBean.xyLineWidth
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
-    _init(canvas, size, xyPaint);
-    _initPath(canvas, xyPaint);
-    _drawLine(canvas); //曲线或折线
-  }
-
-  @override
-  bool shouldRepaint(ChartLinePainter oldDelegate) {
-    return true;
+    _init(canvas, size);
+    var models = _initPath(canvas);
+    _drawLine(canvas, models, size); //曲线或折线
+    _drawTouchSpecialPointAndHitLine(canvas); //拖拽+点击的特殊点显示
+    paintEnd?.call();
   }
 
   /// 初始化
-  void _init(Canvas canvas, Size size, Paint xyPaint) {
+  void _init(Canvas canvas, Size size) {
+    _tagPoints = <String, TagModel>{};
     _initValue(size);
-    _drawXy(canvas, xyPaint); //坐标轴
+    _drawXY(canvas); //坐标轴
   }
 
   /// 初始化数据
@@ -50,145 +59,158 @@ class ChartLinePainter extends BasePainter {
     _fixedWidth = _endX - _startX;
   }
 
-  /// 计算Path
-  void _initPath(Canvas canvas, Paint xyPaint) {
-    _lineCanvasModels = [];
-    if (chartBeanSystems != null && chartBeanSystems.isNotEmpty) {
-      for (var item in chartBeanSystems) {
-        var paths = <Path>[], shadowPaths = <Path>[];
-        var placeImagepoints = <Point>[], pointArr = <Point>[];
-        if (item.chartBeans != null && item.chartBeans.isNotEmpty) {
-          if (item.isDrawX) {
-            var tempArr = <DialStyleX>[];
-            for (var i = 0; i < item.chartBeans.length; i++) {
-              tempArr.add(DialStyleX(
-                  title: item.chartBeans[i].x,
-                  titleStyle: item.xTitleStyle,
-                  positionRetioy: item.chartBeans.length == 1
-                      ? 0.0
-                      : i / (item.chartBeans.length - 1)));
-            }
-            //绘制x轴的文字部分
-            PainterTool.drawCoordinateAxis(
-                canvas,
-                CoordinateAxisModel(_fixedHeight, _fixedWidth,
-                    baseBean: baseBean,
-                    xDialValues: tempArr,
-                    onlyYCoordinate: false));
-          }
-          double preX, preY, currentX, currentY;
-          var length = item.chartBeans.length;
-          var W = _fixedWidth / (length > 1 ? (length - 1) : 1); //两个点之间的x方向距离
-          var _path = Path();
-          var _shadowPath = Path();
-          var _shadowStartPoint = Point(_startX, _startY);
-          for (var i = 0; i < length; i++) {
-            currentX = _startX + W * i;
-            currentY = (_startY -
-                (item.chartBeans[i].y / baseBean.yMax) * _fixedHeight);
-            if (i == 0) {
-              preX = currentX;
-              preY = currentY;
-            }
-
-            if (i == 0 ||
-                (i > 0 &&
-                    item.chartBeans[i - 1].isShowPlaceImage &&
-                    item.placehoderImageBreak)) {
-              _path.moveTo(currentX, currentY);
-              _shadowStartPoint = Point(currentX, _startY);
-              _shadowPath
-                ..moveTo(currentX, _startY)
-                ..lineTo(currentX, currentY);
-            }
-
-            if (item.chartBeans[i].isShowPlaceImage) {
-              placeImagepoints.add(Point(currentX, currentY));
-
-              if (item.placehoderImageBreak) {
-                _shadowPath
-                  ..lineTo(
-                      (i > 0 && item.chartBeans[i - 1].isShowPlaceImage)
-                          ? currentX
-                          : preX,
-                      _startY)
-                  ..lineTo(_shadowStartPoint.x.toDouble(),
-                      _shadowStartPoint.y.toDouble())
-                  ..close();
-                shadowPaths.add(_shadowPath);
-                _shadowPath = Path();
-                paths.add(_path);
-                _path = Path();
-                continue;
-              }
-            }
-
-            // preX = _startX + W * (i - 1);
-            // preY = (_startY - item.chartBeans[i - 1].y / yMax * _fixedHeight);
-
-            pointArr.add(Point(currentX, currentY));
-            if (item.isCurve) {
-              _path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
-                  currentY, currentX, currentY);
-              _shadowPath.cubicTo((preX + currentX) / 2, preY,
-                  (preX + currentX) / 2, currentY, currentX, currentY);
-            } else {
-              _path.lineTo(currentX, currentY);
-              _shadowPath.lineTo(currentX, currentY);
-            }
-            if (i == length - 1) {
-              _shadowPath
-                ..lineTo(currentX, _startY)
-                ..lineTo(_shadowStartPoint.x.toDouble(),
-                    _shadowStartPoint.y.toDouble())
-                ..close();
-            }
-            preX = currentX;
-            preY = currentY;
-          }
-          paths.add(_path);
-
-          shadowPaths.add(_shadowPath);
-        }
-
-        var lineModel = LineCanvasModel(
-            paths: paths,
-            pathColor: item.lineColor,
-            pathWidth: item.lineWidth,
-            shadowPaths: shadowPaths,
-            shaderColors: item.shaderColors,
-            points: pointArr,
-            pointType: item.pointType ?? PointType.Circle,
-            pointShaderColors:
-                item.pointShaderColors ?? [item.lineColor, item.lineColor],
-            pointRadius: item.pointRadius,
-            placeImagePoints: placeImagepoints,
-            placeImage: item.placehoderImage,
-            placeImageRatio: item.placeImageRatio);
-        _lineCanvasModels.add(lineModel);
-      }
-    }
-  }
-
   /// x,y轴
-  void _drawXy(Canvas canvas, Paint paint) {
+  void _drawXY(Canvas canvas) {
     PainterTool.drawCoordinateAxis(
         canvas,
         CoordinateAxisModel(_fixedHeight, _fixedWidth,
-            baseBean: baseBean, onlyYCoordinate: true));
+            baseBean: baseBean,
+            xDialValues: xDialValues ?? [],
+            xyCoordinate: XYCoordinate.All,
+            bothEndPitchX: bothEndPitchX));
+  }
+
+  /// 计算Path
+  List<LineCanvasModel> _initPath(Canvas canvas) {
+    var _lineCanvasModels = <LineCanvasModel>[];
+    _lineTouchCellModels = <LineTouchCellModel>[];
+    if (chartBeanSystems.isNotEmpty) {
+      for (var i = 0; i < chartBeanSystems.length; i++) {
+        var item = chartBeanSystems[i];
+        var length = item.chartBeans.length;
+        if (length == 0) {
+          continue;
+        }
+        if (item.enableTouch) {
+          _lineTouchCellModels.clear();
+        }
+        double? preY, currentY;
+        late double preX, currentX;
+        var paths = <Path>[], shadowPaths = <Path>[];
+        var pointModels = <LinePointModel>[];
+        var widthEnable = (_fixedWidth - 2 * bothEndPitchX); //两个点之间的x方向距离
+        var _path = Path();
+        var _shadowPath = Path();
+        var _shadowStartPoint = Point(_startX, _startY);
+        var hasLine = false;
+        for (var j = 0; j < length; j++) {
+          var cellBean = item.chartBeans[j];
+          currentX = _startX +
+              bothEndPitchX +
+              (cellBean.xPositionRetioy.clamp(0.0, 1.0) * widthEnable);
+          if (j == 0) {
+            preX = currentX;
+          }
+          if (cellBean.y == null) {
+            pointModels.add(_getPointModel(currentX, cellBean));
+            if (!hasLine) {
+              //去除开始就是null的一系列点设置,这些对_shadowPath无意义，但是pointModels还有一种加锁状态是需要cellBean.y == null来判断的，故写在这里
+              continue;
+            }
+            _shadowPath
+              ..lineTo(preX, _startY)
+              ..lineTo(_shadowStartPoint.x.toDouble(),
+                  _shadowStartPoint.y.toDouble())
+              ..close();
+            shadowPaths.add(_shadowPath);
+            _shadowPath = Path();
+            paths.add(_path);
+            _path = Path();
+            hasLine = false;
+            continue;
+          }
+          currentY = (_startY -
+              ((item.chartBeans[j].y!.clamp(baseBean.yMin, baseBean.yMax) -
+                          baseBean.yMin) /
+                      baseBean.yAdmissSecValue) *
+                  _fixedHeight);
+          //这里记录tag标记map,前面已经处理原始有值的数据才有真实的tag，其他的tag都是默认的空字符串
+          _tagPoints[cellBean.tag] = TagModel(
+              offset: Offset(currentX, currentY),
+              backValue: cellBean.touchBackParam);
+          if (j == 0) {
+            preY = currentY;
+          }
+          if (item.enableTouch) {
+            _lineTouchCellModels.add(LineTouchCellModel(
+                begainPoint: Offset(currentX, currentY),
+                param: cellBean.touchBackParam));
+          }
+          if (j == 0 || (j > 0 && item.chartBeans[j - 1].y == null)) {
+            hasLine = true;
+            _path.moveTo(currentX, currentY);
+            _shadowStartPoint = Point(currentX, _startY);
+            _shadowPath
+              ..moveTo(currentX, _startY)
+              ..lineTo(currentX, currentY);
+          }
+          pointModels
+              .add(_getPointModel(currentX, cellBean, currentY: currentY));
+          if (item.isCurve) {
+            _path.cubicTo((preX + currentX) / 2, preY!, (preX + currentX) / 2,
+                currentY, currentX, currentY);
+            _shadowPath.cubicTo((preX + currentX) / 2, preY,
+                (preX + currentX) / 2, currentY, currentX, currentY);
+          } else {
+            _path.lineTo(currentX, currentY);
+            _shadowPath.lineTo(currentX, currentY);
+          }
+          if (j == length - 1) {
+            _shadowPath
+              ..lineTo(currentX, _startY)
+              ..lineTo(_shadowStartPoint.x.toDouble(),
+                  _shadowStartPoint.y.toDouble())
+              ..close();
+          }
+          preX = currentX;
+          preY = currentY;
+        }
+        paths.add(_path);
+        shadowPaths.add(_shadowPath);
+
+        var lineModel = LineCanvasModel(
+          paths: paths,
+          pathColor: item.lineColor,
+          pathWidth: item.lineWidth,
+          lineGradient: item.lineGradient,
+          shadowPaths: shadowPaths,
+          shaderColors: item.shaderColors,
+          points: pointModels,
+        );
+        _lineCanvasModels.add(lineModel);
+      }
+    }
+    return _lineCanvasModels;
+  }
+
+  //点模型
+  LinePointModel _getPointModel(
+    double currentX,
+    ChartLineBean cellBean, {
+    double? currentY,
+  }) {
+    return LinePointModel(
+      x: currentX,
+      y: currentY,
+      text: cellBean.yShowText,
+      textStyle: cellBean.yShowTextStyle,
+      pointToTextSpace: cellBean.pointToTextSpace,
+      cellPointSet: cellBean.cellPointSet,
+    );
   }
 
   /// 曲线或折线
-  void _drawLine(Canvas canvas) {
-    _lineCanvasModels.forEach((element) {
+  void _drawLine(
+      Canvas canvas, List<LineCanvasModel> lineCanvasModels, Size size) {
+    lineCanvasModels.forEach((lineElement) {
       //阴影区域
-      if (element.shadowPaths != null && element.shaderColors != null) {
-        element.shadowPaths.forEach((shadowPathElement) {
+      if (lineElement.shaderColors != null) {
+        lineElement.shadowPaths.forEach((shadowPathElement) {
           var shader = LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   tileMode: TileMode.clamp,
-                  colors: element.shaderColors)
+                  colors: lineElement.shaderColors!)
               .createShader(
                   Rect.fromLTWH(_startX, _endY, _fixedWidth, _fixedHeight));
           canvas
@@ -200,83 +222,133 @@ class ChartLinePainter extends BasePainter {
                   ..style = PaintingStyle.fill);
         });
       }
-      if (element.paths != null) {
-        //路径
-        element.paths.forEach((pathElement) {
-          var pathPaint = Paint()
-            ..isAntiAlias = true
-            ..strokeWidth = element.pathWidth
-            ..strokeCap = StrokeCap.round
-            ..color = element.pathColor
-            ..style = PaintingStyle.stroke;
-          canvas.drawPath(pathElement, pathPaint);
-        });
-      }
-      if (element.points != null) {
-        var pointPaint = Paint()
+      //路径
+      lineElement.paths.forEach((pathElement) {
+        var pathPaint = Paint()
           ..isAntiAlias = true
-          ..strokeWidth = 1
+          ..strokeWidth = lineElement.pathWidth
           ..strokeCap = StrokeCap.round
-          ..style = PaintingStyle.fill;
-
-        var linerGradient = LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            tileMode: TileMode.mirror,
-            colors: element.pointShaderColors);
-        var borderRaius = 0.0;
-        switch (element.pointType) {
-          case PointType.Circle:
-            borderRaius = element.pointRadius;
-            break;
-          case PointType.Rectangle:
-            borderRaius = 0;
-            break;
-          case PointType.RoundEdgeRectangle:
-            borderRaius = element.pointRadius / 3 * 2;
-            break;
-          default:
-        }
-        //点
-        element.points.forEach((pointElement) {
-          var rect = Rect.fromLTRB(
-              pointElement.x - element.pointRadius,
-              pointElement.y - element.pointRadius,
-              pointElement.x + element.pointRadius,
-              pointElement.y + element.pointRadius);
-          pointPaint.shader = linerGradient.createShader(rect);
-          canvas.drawRRect(
-              RRect.fromRectAndCorners(rect,
-                  topLeft: Radius.circular(borderRaius),
-                  topRight: Radius.circular(borderRaius),
-                  bottomLeft: Radius.circular(borderRaius),
-                  bottomRight: Radius.circular(borderRaius)),
-              pointPaint);
-        });
-      }
-      if (element.placeImagePoints != null && element.placeImage != null) {
-        var ratio = element.placeImageRatio;
-        if (element.placeImageRatio == null || element.placeImageRatio > 1.0) {
-          ratio = 1.0;
-        } else if (element.placeImageRatio < 0.0) {
-          ratio = 0.0;
-        }
-        var tempImgWidth = element.placeImage.width * ratio;
-        var tempImgHeight = element.placeImage.height * ratio;
-        //占位图
-        element.placeImagePoints.forEach((placehoderElement) {
-          canvas.drawImageRect(
-              element.placeImage,
-              Rect.fromLTWH(0, 0, element.placeImage.width.toDouble(),
-                  element.placeImage.height.toDouble()),
+          ..color = lineElement.pathColor
+          ..style = PaintingStyle.stroke;
+        if (lineElement.lineGradient != null) {
+          pathPaint.shader = lineElement.lineGradient!.createShader(
               Rect.fromLTWH(
-                  placehoderElement.x - tempImgWidth / 2,
-                  _startY - 10 * ratio - tempImgHeight,
-                  tempImgWidth,
-                  tempImgHeight),
-              Paint());
-        });
+                  baseBean.basePadding.left,
+                  baseBean.basePadding.top,
+                  size.width - baseBean.basePadding.horizontal,
+                  size.height - baseBean.basePadding.vertical));
+        }
+        canvas.drawPath(pathElement, pathPaint);
+      });
+
+      for (var i = 0; i < lineElement.points.length; i++) {
+        var tempElement = lineElement.points[i];
+        // 点绘制
+        PainterTool.drawSpecialPointHintLine(
+            canvas,
+            PointModel(
+                offset: Offset(tempElement.x, tempElement.y ?? _startY - 10),
+                cellPointSet: tempElement.cellPointSet),
+            _startX,
+            _endX,
+            _startY,
+            _endY);
+        if (tempElement.y == null) {
+          continue;
+        }
+        //文字
+        var tpx = TextPainter(
+            textAlign: TextAlign.center,
+            ellipsis: '.',
+            text:
+                TextSpan(text: tempElement.text, style: tempElement.textStyle),
+            textDirection: TextDirection.ltr)
+          ..layout();
+        tpx.paint(
+          canvas,
+          Offset(tempElement.x - tpx.width / 2,
+              tempElement.y! - tempElement.pointToTextSpace - tpx.height),
+        );
       }
     });
+  }
+
+  //绘制特殊点
+  void _drawTouchSpecialPointAndHitLine(Canvas canvas) {
+    if (_lineTouchCellModels.isNotEmpty && touchLocalPosition != null) {
+      //表示有设置可以触摸的线条
+      PainterTool.drawSpecialPointHintLine(
+          canvas,
+          PointModel(
+            offset: touchLocalPosition!,
+            cellPointSet: pointSet,
+          ),
+          _startX,
+          _endX,
+          _startY,
+          _endY);
+    }
+  }
+
+  //外部拖拽获取触摸点最近的点位, 点击坐标轴以外区域直接返回空offset，和取消一样的效果
+  LineTouchBackModel getNearbyPoint(Offset localPosition,
+      {bool outsidePointClear = true}) {
+    if (localPosition.dx < _startX ||
+        localPosition.dx > _endX ||
+        localPosition.dy > _startY ||
+        localPosition.dy < _endY) {
+      //不在坐标轴内部的点击
+      if (outsidePointClear) {
+        return LineTouchBackModel(
+          startOffset: null,
+        );
+      } else {
+        return LineTouchBackModel(needRefresh: false, startOffset: null);
+      }
+    }
+    _lineTouchCellModels
+        .sort((a, b) => a.begainPoint.dx.compareTo(b.begainPoint.dx));
+    LineTouchCellModel? touchModel;
+    for (var i = 0; i < _lineTouchCellModels.length - 1; i++) {
+      var currentX = _lineTouchCellModels[i].begainPoint.dx;
+      var nextX = _lineTouchCellModels[i + 1].begainPoint.dx;
+      if (i == 0 && localPosition.dx < currentX) {
+        touchModel = _lineTouchCellModels.first;
+        break;
+      }
+      if (i == _lineTouchCellModels.length - 2 && localPosition.dx >= nextX) {
+        touchModel = _lineTouchCellModels[i + 1];
+        break;
+      }
+      if (localPosition.dx >= currentX && localPosition.dx < nextX) {
+        var speaceWidth = nextX - currentX;
+        if (localPosition.dx <= currentX + speaceWidth / 2) {
+          touchModel = _lineTouchCellModels[i];
+        } else {
+          touchModel = _lineTouchCellModels[i + 1];
+        }
+        break;
+      }
+    }
+    if (touchModel == null) {
+      return LineTouchBackModel(
+        startOffset: null,
+      );
+    } else {
+      return LineTouchBackModel(
+          startOffset: touchModel.begainPoint, backParam: touchModel.param);
+    }
+  }
+
+  //外部根据tag获取点偏移信息
+  TagSearchedModel? getDetailWithTag(String tag) {
+    if (_tagPoints.containsKey(tag)) {
+      var tempModel = _tagPoints[tag]!;
+      return TagSearchedModel(
+          xyTopLeftOffset: Offset(_startX, _endY),
+          pointOffset: tempModel.offset,
+          backValue: tempModel.backValue);
+    }
+    return null;
   }
 }

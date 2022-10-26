@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-09 10:53:01
+ * @LastEditTime: 2021-05-08 09:14:59
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -49,24 +49,25 @@ class _ChartPieState extends State<ChartPiePage> {
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.green)),
         ChartPieBean(
             type: '早餐',
-            value: 1,
+            value: 3,
             color: Colors.blue,
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.blue)),
         ChartPieBean(
             type: '水果',
-            value: 20,
+            value: 200,
             color: Colors.red,
             assistTextStyle: TextStyle(fontSize: 12, color: Colors.red)),
         ChartPieBean(
             type: '你猜',
-            value: 100,
+            value: 2,
             color: Colors.orange,
             assistTextStyle: TextStyle(fontSize: 20, color: Colors.red)),
       ],
-      assistTextShowType: AssistTextShowType.OnlyName,
-      arrowBegainLocation: ArrowBegainLocation.Top,
+      assistTextShowType: AssistTextShowType.NamePercentage,
+      arrowBegainLocation: ArrowBegainLocation.Left,
       backgroundColor: Colors.white,
-      assistBGColor: Color(0xFFF6F6F6),
+      assistBGColor: Colors.black,
+      // Color(0xFFF6F6F6),
       decimalDigits: 1,
       divisionWidth: 2,
       size: Size(

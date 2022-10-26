@@ -1,6 +1,7 @@
 # flutter_chart
 
-** 图表库集合：<a href="#柱状图">柱状图</a>、<a href="#饼状图">饼状图</a>、<a href="#折线图">折线图</a>、<a href="#多维图">多维图</a>、<a href="#专注力曲线图">专注力曲线图</a>、
+** 图表库集合：<a href="#柱状图">柱状图</a>、<a href="#饼状图">饼状图</a>、<a href="#折线图">折线图</a>、<a href="#多维图">多维图</a>、<a href="#专注力曲线图">专注力曲线图</a>、<a href="线性指示器">线性指示器</a>、<a href= "弧形指示器">弧形指示器</a>  **
+
 
 # 统一设置
 #### BaseBean 作为统一对外暴漏参数定义，适用于所有基础坐标轴的参数设置（不涉及坐标轴的可以不设置，例如：饼状图，多维图）
@@ -42,6 +43,10 @@
       bool isShowYScale;
       //xy轴刻度的高度
       double rulerWidth;
+      //x轴的单位。默认null，不绘制单位
+      UnitXY? unitX;
+      //y轴的单位。默认null，不绘制单位
+      UnitXY? unitY;
 
       BaseBean({
         this.xyLineWidth = 2,
@@ -62,6 +67,8 @@
         this.isShowXScale = false,
         this.isShowYScale = false,
         this.rulerWidth = 4,
+        this.unitX,
+        this.unitY,
       });
 
 #### xy设置的参数（xy的显示点位的两员大将）
@@ -153,6 +160,7 @@
           MediaQuery.of(context).size.height / 5 * 1.8),
     //柱状图的宽度,如果小的话按照这个显示，如果过于宽，则按照平均宽度减去最小间距5得出的宽度
       rectWidth: 50.0,
+      duration: Duration(seconds: 2),
       //柱体四周圆角,默认没有圆角
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(50), topRight: Radius.circular(50)),
@@ -475,4 +483,52 @@ class FocusChartBeanMain {
 }
 ```
 
+7.线性指示器<a id="线性指示器"></a>
+```flutter
+LinearPercentIndicator(
+                width: 140.0,
+                lineHeight: 14.0,
+                percentModel: PercentModel(
+                  percent: 0.7,
+                  fillColor: Colors.green,
+                ),
+                centerSet: CenterSet(
+                    center: Text(
+                  '70.0%',
+                  style: TextStyle(fontSize: 12.0),
+                )),
+                strokeCap: StrokeCap.square,
+                backgroundGradient: ColorGradientModel(color: Colors.orange),
+                progressGradient: ColorGradientModel(
+                  linearGradient: LinearGradient(
+                    colors: [Colors.red, Colors.blue],
+                  ),
+                ),
+              )
+```
 
+8.弧形指示器<a id="弧形指示器"></a>
+```flutter
+CircularPercentIndicator(
+                size: 100.0,
+                percentModel: PercentModel(
+                  percent: 0.5,
+                ),
+                animationSet: AnimationSet(
+                  animationDuration: 2000,
+                ),
+                progressModel: LineModel(
+                  width: 10.0,
+                  color: Colors.red,
+                ),
+                backgroundModel: LineModel(
+                  color: Colors.orange,
+                ),
+                arcType: ArcType.HALF,
+                center: Text(
+                  '40 hours',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
+                ),
+                strokeCap: StrokeCap.butt,
+              ),
+```

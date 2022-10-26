@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-30 10:40:00
- * @LastEditTime: 2020-12-16 16:01:56
+ * @LastEditTime: 2021-09-22 10:35:07
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/example/lib/step_curve_line.dart
@@ -14,7 +14,7 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class StepCurveLine extends StatefulWidget {
   static const String routeName = 'step_curve_line';
-  static const String title = '折线可点击拖拽显示该点的tip标签';
+  static const String title = 'FN可点击拖拽显示该点的tip标签';
 
   @override
   _StepCurveLineState createState() => _StepCurveLineState();
@@ -22,68 +22,97 @@ class StepCurveLine extends StatefulWidget {
 
 class _StepCurveLineState extends State<StepCurveLine> {
   Offset _offset;
+  final GlobalKey<ChartLineFocusState> globalKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(StepCurveLine.title),
       ),
-      body: ChangeNotifierProvider(
-        create: (_) => ChartFocusLineProvider(),
-        child: Consumer<ChartFocusLineProvider>(
-            builder: (context, provider, child) {
-          return Stack(
-            children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                margin: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
-                semanticContainer: true,
-                color: Colors.white,
-                child: ChartLineFocus(
-                  size: Size(MediaQuery.of(context).size.width,
-                      MediaQuery.of(context).size.height / 5 * 1.6),
-                  focusChartBeans: [provider.focusChartBeanMain],
-                  baseBean: BaseBean(
-                    isShowHintX: true,
-                    isShowHintY: false,
-                    hintLineColor: Colors.blue,
-                    isHintLineImaginary: false,
-                    isLeftYDialSub: true,
-                    yMax: 70.0,
-                    yDialValues: provider.yArr,
+      body: Column(
+        children: [
+          ChangeNotifierProvider(
+            create: (_) => ChartFocusLineProvider(),
+            child: Consumer<ChartFocusLineProvider>(
+                builder: (context, provider, child) {
+              return Stack(
+                children: [
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    margin:
+                        EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                    semanticContainer: true,
+                    color: Colors.white,
+                    child: ChartLineFocus(
+                      key: globalKey,
+                      size: Size(MediaQuery.of(context).size.width,
+                          MediaQuery.of(context).size.height / 5 * 1.6),
+                      focusChartBeans: [provider.focusChartBeanMain],
+                      baseBean: BaseBean(
+                        isShowHintX: true,
+                        isShowHintY: false,
+                        hintLineColor: Colors.blue,
+                        isHintLineImaginary: false,
+                        isLeftYDialSub: true,
+                        yMax: 70.0,
+                        yMin: 0.0,
+                        yDialValues: provider.yArr,
+                      ),
+                      xMax: 600,
+                      xDialValues: provider.xArr,
+                      touchSet: FocusLineTouchSet(
+                        outsidePointClear: false,
+                        pointSet: CellPointSet(
+                          pointShaderColors: [Colors.yellow, Colors.yellow],
+                          pointSize: Size(10, 10),
+                          pointRadius: Radius.circular(5),
+                          hintEdgeInset: HintEdgeInset.all(
+                            PointHintParam(
+                                hintColor: Colors.blue, hintLineWidth: 2),
+                          ),
+                        ),
+                        touchBack: (point, value) {
+                          setState(() {
+                            _offset = point;
+                          });
+                          print('结果返回：${point}>>>>${value}');
+                        },
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAlias,
                   ),
-                  xMax: 20,
-                  xDialValues: provider.xArr,
-                  isPressedHintDottedLine: true,
-                  pressedHintLineColor: Colors.blue,
-                  pressedHintLineWidth: 2,
-                  pressedPointRadius: 5,
-                  pointBack: (point, value) {
-                    setState(() {
-                      _offset = point;
-                    });
-                    print('结果返回：${point}>>>>${value}');
-                  },
-                ),
-                clipBehavior: Clip.antiAlias,
-              ),
-              Positioned(
-                child: IgnorePointer(
-                  child: Container(
-                    color: Colors.red,
-                    // width: 20,
-                    // height: 20,
-                  ),
-                ),
-                left: _offset == null ? 100.0 : _offset.dx,
-                top: _offset == null ? 100.0 : _offset.dy,
-                width: 20,
-                height: 20,
-              ),
-            ],
-          );
-        }),
+                  if (_offset != null)
+                    Positioned(
+                      child: IgnorePointer(
+                        child: Container(
+                          color: Colors.red,
+                        ),
+                      ),
+                      left: _offset.dx,
+                      top: _offset.dy,
+                      width: 20,
+                      height: 20,
+                    ),
+                ],
+              );
+            }),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          GestureDetector(
+            child: Container(
+              width: 200,
+              height: 60,
+              color: Colors.orange,
+              alignment: Alignment.center,
+              child: Text('点击取消图表标记'),
+            ),
+            onTap: () => globalKey.currentState.clearTouchPoint(),
+          ),
+        ],
       ),
     );
   }
@@ -97,7 +126,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
   List<ChartBeanFocus> _beanList;
   FocusChartBeanMain _focusChartBeanMain;
   Timer _countdownTimer;
-  int _index = 0;
+  // int _index = 0;
   List<DialStyleX> _xArr;
   List<DialStyleY> _yArr;
 
@@ -132,7 +161,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
     }
 
     _focusChartBeanMain = FocusChartBeanMain();
-    for (var i = 0; i <= 20; i++) {
+    for (var i = 0; i <= 600; i++) {
       var value = Random().nextDouble() * 100;
       _beanList.add(
           ChartBeanFocus(focus: value, second: i, touchBackValue: '测试传递$i'));
@@ -142,7 +171,6 @@ class ChartFocusLineProvider extends ChangeNotifier {
     _focusChartBeanMain.lineWidth = 1;
     _focusChartBeanMain.isCurve = false;
     _focusChartBeanMain.touchEnable = true;
-    _focusChartBeanMain.showSite = true;
     _focusChartBeanMain.isLinkBreak = false;
     _focusChartBeanMain.lineColor = Colors.red;
     _focusChartBeanMain.canvasEnd = () {
@@ -154,22 +182,22 @@ class ChartFocusLineProvider extends ChangeNotifier {
     // _loadNewData();
   }
 
-  void _loadNewData() {
-    _beanList.clear();
-    _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_index == 0) {
-        _beanList.clear();
-      }
-      var value = Random().nextDouble() * 100;
-      _beanList.add(ChartBeanFocus(
-          focus: value, second: _index > 10 ? (10 + _index) : _index));
-      _focusChartBeanMain.chartBeans = _beanList;
-      _index++;
-      notifyListeners();
-    });
-    _countdownTimer?.cancel();
-    _countdownTimer = null;
-  }
+  // void _loadNewData() {
+  //   _beanList.clear();
+  //   _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+  //     if (_index == 0) {
+  //       _beanList.clear();
+  //     }
+  //     var value = Random().nextDouble() * 100;
+  //     _beanList.add(ChartBeanFocus(
+  //         focus: value, second: _index > 10 ? (10 + _index) : _index));
+  //     _focusChartBeanMain.chartBeans = _beanList;
+  //     _index++;
+  //     notifyListeners();
+  //   });
+  //   _countdownTimer?.cancel();
+  //   _countdownTimer = null;
+  // }
 
   // 不要忘记在这里释放掉Timer
   @override

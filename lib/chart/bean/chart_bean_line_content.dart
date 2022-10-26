@@ -1,50 +1,76 @@
 /*
  * @Author: your name
  * @Date: 2020-11-09 18:36:29
- * @LastEditTime: 2020-11-09 18:37:08
- * @LastEditors: your name
+ * @LastEditTime: 2022-10-21 15:20:54
+ * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/bean/chart_bean_line_content.dart
  */
-import 'dart:math';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
+import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import 'chart_bean.dart';
 
-///内部使用模型
+//内部使用模型
 
 //绘制图表的计算之后的结果模型集
 class LineCanvasModel {
   List<Path> paths;
   Color pathColor;
+  ///曲线或折线的整体绘制区域的渐变设置，如果不为空会覆盖 [lineColor]的设置效果，
+  Gradient? lineGradient;
   double pathWidth;
-
   List<Path> shadowPaths;
-  List<Color> shaderColors;
+  List<Color>? shaderColors;
+  List<LinePointModel> points;
 
-  List<Point> points;
-  //线条点的显示样式,默认圆点
-  PointType pointType;
-  //线条点的特殊处理，如果内容不为空，则在点上面会绘制一个圆点，这个是圆点半径参数
-  double pointRadius;
-  //线条点渐变色，从上到下的闭合颜色集，默认线条颜色
-  List<Color> pointShaderColors;
+  LineCanvasModel({
+    required this.paths,
+    this.pathColor = defaultColor,
+    this.lineGradient,
+    this.pathWidth = 1,
+    required this.shadowPaths,
+    this.shaderColors,
+    required this.points,
+  });
+}
 
-//占位图的底部中心点
-  List<Point> placeImagePoints;
-  ui.Image placeImage;
-  double placeImageRatio;
-  LineCanvasModel(
-      {this.paths,
-      this.pathColor,
-      this.pathWidth,
-      this.shadowPaths,
-      this.shaderColors,
-      this.points,
-      this.pointType,
-      this.pointShaderColors,
-      this.pointRadius,
-      this.placeImagePoints,
-      this.placeImage,
-      this.placeImageRatio = 1.0});
+//节点的内部模型
+class LinePointModel {
+  //位置点
+  double x;
+  //如果为null表示断开的点，（针对占位图有特殊处理，其他模式不用绘制）
+  double? y;
+  //显示文案
+  String text;
+  //显示文案的样式
+  TextStyle textStyle;
+  //点中心距离文字底部的距离（目前文字都是在点的上面绘制）
+  double pointToTextSpace;
+  //点设置，默认圆点,半径0，默认颜色填充
+  CellPointSet cellPointSet;
+
+  LinePointModel(
+      {required this.x,
+      this.y,
+      this.text = '',
+      this.textStyle = defaultTextStyle,
+      this.pointToTextSpace = 0,
+      this.cellPointSet = CellPointSet.normal});
+}
+
+//点击的时候带出来的参数
+class LineTouchBackModel {
+  bool needRefresh;
+  Offset? startOffset;
+  dynamic backParam;
+  LineTouchBackModel(
+      {this.needRefresh = true, required this.startOffset, this.backParam});
+}
+
+class LineTouchCellModel {
+  //开始的点，左上角
+  Offset begainPoint;
+  //柱体的点击外带参数
+  dynamic param;
+  LineTouchCellModel({required this.begainPoint, this.param});
 }

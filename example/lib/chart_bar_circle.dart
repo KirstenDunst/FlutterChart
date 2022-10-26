@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:32:05
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-29 10:53:05
+ * @LastEditTime: 2022-10-26 13:57:55
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -34,31 +34,96 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
     var chartBar = ChartBar(
       xDialValues: [
         ChartBarBeanX(
-            title: '12-01', value: 30, gradualColor: [Colors.red, Colors.red]),
+          title: '12-01',
+          value: 30,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.red, Colors.red],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        ),
         ChartBarBeanX(
-            title: '12-02',
-            value: 100,
-            gradualColor: [Colors.yellow, Colors.yellow]),
+          title: '12-02',
+          value: 100,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.yellow, Colors.yellow],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        ),
         ChartBarBeanX(
-            title: '12-03',
-            value: 70,
-            gradualColor: [Colors.green, Colors.green]),
+          title: '12-03',
+          value: 70,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.green, Colors.green],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        ),
         ChartBarBeanX(
-            title: '12-04',
-            value: 70,
-            gradualColor: [Colors.blue, Colors.blue]),
+          title: '12-04',
+          value: 70,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.blue, Colors.blue],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        ),
         ChartBarBeanX(
-            title: '12-05',
-            value: 30,
-            gradualColor: [Colors.deepPurple, Colors.deepPurple]),
+          title: '12-05',
+          value: 30,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.deepPurple, Colors.deepPurple],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        ),
         ChartBarBeanX(
-            title: '12-06',
-            value: 90,
-            gradualColor: [Colors.deepOrange, Colors.deepOrange]),
+          title: '12-06',
+          value: 90,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.deepOrange, Colors.deepOrange],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        ),
         ChartBarBeanX(
-            title: '12-07',
-            value: 50,
-            gradualColor: [Colors.greenAccent, Colors.greenAccent])
+          title: '12-07',
+          value: 50,
+          sectionColors: [
+            SectionColor(
+              starRate: 0,
+              endRate: 1,
+              gradualColor: [Colors.greenAccent, Colors.greenAccent],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            )
+          ],
+        )
       ],
       baseBean: BaseBean(
         yDialValues: [
@@ -79,21 +144,14 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
               titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
               centerSubTitle: 'Focused',
               centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-              positionRetioy: 35 / 100),
-          DialStyleY(
-              title: '',
-              titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-              centerSubTitle: '',
-              centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
-              positionRetioy: 0 / 100)
+              positionRetioy: 35 / 100)
         ],
         yMax: 100.0,
+        yMin: 0.0,
       ),
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
       rectWidth: 50.0,
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(50), topRight: Radius.circular(50)),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

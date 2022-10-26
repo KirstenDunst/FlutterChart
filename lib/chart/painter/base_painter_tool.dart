@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-06 15:00:21
- * @LastEditTime: 2020-12-29 11:38:26
+ * @LastEditTime: 2022-10-21 14:59:32
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/painter/chart_line_focus_painter_tool.dart
@@ -10,20 +10,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';
+import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
 import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 import 'package:path_drawing/path_drawing.dart';
 
 class LineFocusPainterTool {
-  /// 数据处理
-  /// chartBeans：数据源
-  /// isLinkBreak：线条是否是断开的设置
-  /// yMax：y轴的最大值
-  /// showLineSection：是否展示线条区间带
-  static List<BeanDealModel> dealValue(
-      List<ChartBeanFocus> chartBeans, bool isLinkBreak, double yMax,
-      {bool showLineSection = false}) {
+  static List<BeanDealModel> dealValue(List<ChartBeanFocus>? chartBeans,
+      bool isLinkBreak, double yMax, double yMin,
+      {bool showLineSection = false, bool isPositiveSequence = true}) {
     var tempValueArr = <BeanDealModel>[];
     if (chartBeans != null && chartBeans.isNotEmpty) {
       var indexValue = chartBeans.first.second;
@@ -32,18 +29,15 @@ class LineFocusPainterTool {
       for (var i = 0; i <= endSecond; i++) {
         if (i == indexValue) {
           var tempModel = chartBeans[index];
-          var resultNumArr = LineFocusPainterTool.dealNumValue(tempModel, yMax,
+          var resultNumArr = LineFocusPainterTool.dealNumValue(
+              tempModel, yMax, yMin,
               showLineSection: showLineSection);
           tempValueArr.add(BeanDealModel(
             value: resultNumArr.first,
             valueMax: resultNumArr[1],
             valueMin: resultNumArr.last,
-            hintEdgeInset: tempModel.hintEdgeInset,
-            centerPoint: tempModel.centerPoint,
-            centerPointOffset: tempModel.centerPointOffset,
-            centerPointOffsetLineColor:
-                tempModel.centerPointOffsetLineColor ?? defaultColor,
-            placeImageSize: tempModel.centerPointSize,
+            cellPointSet: tempModel.cellPointSet,
+            tag: tempModel.tag,
             touchBackValue: tempModel.touchBackValue,
           ));
           indexValue = i == endSecond
@@ -53,11 +47,11 @@ class LineFocusPainterTool {
         } else {
           if (!isLinkBreak) {
             if (index == 0) {
-              tempValueArr.add(
-                  BeanDealModel(value: null, valueMax: null, valueMin: null));
+              tempValueArr
+                  .add(BeanDealModel(value: null, valueMax: 0, valueMin: 0));
             } else {
               var resultNumArr = LineFocusPainterTool.dealNumValue(
-                  chartBeans[index], yMax,
+                  chartBeans[index], yMax, yMin,
                   showLineSection: showLineSection);
               tempValueArr.add(BeanDealModel(
                 value: resultNumArr.first,
@@ -66,8 +60,8 @@ class LineFocusPainterTool {
               ));
             }
           } else {
-            tempValueArr.add(
-                BeanDealModel(value: null, valueMax: null, valueMin: null));
+            tempValueArr
+                .add(BeanDealModel(value: null, valueMax: 0, valueMin: 0));
           }
         }
       }
@@ -75,39 +69,29 @@ class LineFocusPainterTool {
     return tempValueArr;
   }
 
-  /// 计算数值
-  static List<num> dealNumValue(ChartBeanFocus tempModel, double maxNum,
+  static List<double> dealNumValue(
+      ChartBeanFocus tempModel, double maxNum, double minNum,
       {bool showLineSection = false}) {
-    var value = min(tempModel.focus, maxNum);
-    value = max(value, 0.0);
+    var value = (tempModel.focus.clamp(minNum, maxNum).toDouble()) - minNum;
     var valuemax = value;
     var valuemin = value;
     if (showLineSection) {
       if (tempModel.focusMax != null && tempModel.focusMin != null) {
-        valuemax = min(tempModel.focusMax, maxNum);
-        valuemin = min(tempModel.focusMin, maxNum);
-        valuemax = max(valuemax, 0.0);
-        valuemin = max(valuemin, 0.0);
+        valuemax =
+            (tempModel.focusMax!.clamp(minNum, maxNum).toDouble()) - minNum;
+        valuemin =
+            (tempModel.focusMin!.clamp(minNum, maxNum).toDouble()) - minNum;
       }
-    } else {
-      valuemax = null;
-      valuemin = null;
     }
     return [value, valuemax, valuemin];
   }
 }
 
 class PainterTool {
-  /// 绘制一条线
-  /// canvas：
-  /// startPoint：开始的点
-  /// endPoint：结束点
-  /// isDotteline：连线是否是虚线
-  /// lineColor：线条颜色
-  /// lineWidth：线条宽度
-  static void drawline(Canvas canvas, Offset startPoint, endPoint,
-      bool isDotteline, Color lineColor, double lineWidth) {
-    lineWidth ??= 1.0;
+  //绘制一条线
+  static void drawline(Canvas canvas, Offset startPoint, Offset endPoint,
+      bool isDotteline, Color lineColor, double d,
+      {double lineWidth = 1.0}) {
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = lineWidth
@@ -130,9 +114,7 @@ class PainterTool {
     }
   }
 
-  /// 绘制坐标轴以及坐标轴上面的刻度和辅助线，一般放在绘制线条之前做这一步操作，让这一层在最下面
-  /// canvas：
-  /// coordinateAxisModel：坐标轴上面的刻度和辅助线参数
+  //绘制坐标轴以及坐标轴上面的刻度和辅助线，一般放在绘制线条之前做这一步操作，让这一层在最下面
   static void drawCoordinateAxis(
     Canvas canvas,
     CoordinateAxisModel coordinateAxisModel,
@@ -159,21 +141,62 @@ class PainterTool {
         paint
           ..color = coordinateAxisModel.baseBean.yColor
           ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth); //y轴
-
+    if (coordinateAxisModel.baseBean.unitX != null) {
+      //绘制x轴单位内容
+      var model = coordinateAxisModel.baseBean.unitX!;
+      var tp = TextPainter(
+          textAlign: TextAlign.center,
+          ellipsis: '.',
+          text: TextSpan(text: model.text, style: model.textStyle),
+          textDirection: TextDirection.ltr)
+        ..layout();
+      tp.paint(
+        canvas,
+        Offset(
+            _endX + overPadding + model.offset.dx, _startY + model.offset.dy),
+      );
+    }
+    if (coordinateAxisModel.baseBean.unitY != null) {
+      //绘制y轴单位内容
+      var model = coordinateAxisModel.baseBean.unitY!;
+      var tp = TextPainter(
+          textAlign: TextAlign.center,
+          ellipsis: '.',
+          text: TextSpan(text: model.text, style: model.textStyle),
+          textDirection: TextDirection.ltr)
+        ..layout();
+      tp.paint(
+        canvas,
+        Offset(
+            coordinateAxisModel.baseBean.basePadding.left -
+                model.offset.dx -
+                tp.width,
+            coordinateAxisModel.baseBean.basePadding.top -
+                overPadding -
+                model.offset.dy -
+                tp.height),
+      );
+    }
     var showX = true;
     var showY = true;
-    if (coordinateAxisModel.onlyYCoordinate != null) {
-      if (coordinateAxisModel.onlyYCoordinate) {
-        showX = false;
+    switch (coordinateAxisModel.xyCoordinate) {
+      case XYCoordinate.All:
+        showX = true;
         showY = true;
-      } else {
+        break;
+      case XYCoordinate.OnlyX:
         showX = true;
         showY = false;
-      }
+        break;
+      case XYCoordinate.OnlyY:
+        showX = false;
+        showY = true;
+        break;
+      default:
     }
     if (showX) {
       if (coordinateAxisModel.baseBean.isShowBorderRight) {
-        //最右侧垂直边界线
+        ///最右侧垂直边界线
         canvas.drawLine(
             Offset(_endX, _startY),
             Offset(_endX, coordinateAxisModel.baseBean.basePadding.top),
@@ -181,82 +204,93 @@ class PainterTool {
               ..color = coordinateAxisModel.baseBean.yColor
               ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth);
       }
-      if (coordinateAxisModel.xDialValues != null &&
-          coordinateAxisModel.xDialValues.isNotEmpty) {
-        for (var i = 0; i < coordinateAxisModel.xDialValues.length; i++) {
-          var tempXDigalModel = coordinateAxisModel.xDialValues[i];
-          var dw = 0.0;
-          if (tempXDigalModel.positionRetioy != null) {
-            dw = coordinateAxisModel.fixedWidth *
-                tempXDigalModel.positionRetioy; //两个点之间的x方向距离
-          }
-          if (coordinateAxisModel.baseBean.isShowX) {
-            //绘制x轴文本
-            var tpx = TextPainter(
-                textAlign: TextAlign.center,
-                ellipsis: '.',
-                text: TextSpan(
-                    text: tempXDigalModel.title,
-                    style: tempXDigalModel.titleStyle),
-                textDirection: TextDirection.ltr)
-              ..layout();
-            //绘制文案在底部bottom内部居中显示
-            var transitHeight = max(
-                (coordinateAxisModel.baseBean.basePadding.bottom - tpx.height) /
-                    2.0,
-                0.0);
-            tpx.paint(
-                canvas,
-                Offset(
-                    coordinateAxisModel.baseBean.basePadding.left +
-                        dw -
-                        tpx.width / 2,
-                    _startY + transitHeight));
-          }
-          if (coordinateAxisModel.baseBean.isShowHintY && i != 0) {
-            //y轴辅助线
-            var hitYPath = Path();
-            hitYPath
-              ..moveTo(
-                  coordinateAxisModel.baseBean.basePadding.left + dw, _startY)
-              ..lineTo(coordinateAxisModel.baseBean.basePadding.left + dw,
-                  coordinateAxisModel.baseBean.basePadding.top - overPadding);
-            if (coordinateAxisModel.baseBean.isHintLineImaginary) {
-              canvas.drawPath(
-                dashPath(
-                  hitYPath,
-                  dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
-                ),
+      for (var i = 0; i < coordinateAxisModel.xDialValues.length; i++) {
+        var tempXDigalModel = coordinateAxisModel.xDialValues[i];
+        var dw = 0.0;
+        if (tempXDigalModel.positionRetioy != null) {
+          dw = (coordinateAxisModel.fixedWidth -
+                  2 * coordinateAxisModel.bothEndPitchX) *
+              tempXDigalModel.positionRetioy!; //两个点之间的x方向距离
+        }
+        if (coordinateAxisModel.baseBean.isShowX) {
+          ///绘制x轴文本
+          var tpx = TextPainter(
+              textAlign: TextAlign.center,
+              ellipsis: '.',
+              text: TextSpan(
+                  text: tempXDigalModel.title,
+                  style: tempXDigalModel.titleStyle),
+              textDirection: TextDirection.ltr)
+            ..layout();
+          //绘制文案在底部bottom内部居中显示
+          var transitHeight = max(
+              (coordinateAxisModel.baseBean.basePadding.bottom - tpx.height) /
+                  2.0,
+              0.0);
+          tpx.paint(
+              canvas,
+              Offset(
+                  coordinateAxisModel.baseBean.basePadding.left +
+                      dw +
+                      coordinateAxisModel.bothEndPitchX -
+                      tpx.width / 2,
+                  _startY + transitHeight));
+        }
+        if (coordinateAxisModel.baseBean.isShowHintY && i != 0) {
+          //y轴辅助线
+          var hitYPath = Path();
+          hitYPath
+            ..moveTo(
+                coordinateAxisModel.baseBean.basePadding.left +
+                    dw +
+                    coordinateAxisModel.bothEndPitchX,
+                _startY)
+            ..lineTo(
+                coordinateAxisModel.baseBean.basePadding.left +
+                    dw +
+                    coordinateAxisModel.bothEndPitchX,
+                coordinateAxisModel.baseBean.basePadding.top - overPadding);
+          if (coordinateAxisModel.baseBean.isHintLineImaginary) {
+            canvas.drawPath(
+              dashPath(
+                hitYPath,
+                dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
+              ),
+              paint
+                ..color = coordinateAxisModel.baseBean.hintLineColor
+                ..strokeWidth = coordinateAxisModel.baseBean.hintLineWidth,
+            );
+          } else {
+            canvas.drawPath(
+                hitYPath,
                 paint
                   ..color = coordinateAxisModel.baseBean.hintLineColor
-                  ..strokeWidth = coordinateAxisModel.baseBean.hintLineWidth,
-              );
-            } else {
-              canvas.drawPath(
-                  hitYPath,
-                  paint
-                    ..color = coordinateAxisModel.baseBean.hintLineColor
-                    ..strokeWidth = coordinateAxisModel.baseBean.hintLineWidth);
-            }
+                  ..strokeWidth = coordinateAxisModel.baseBean.hintLineWidth);
           }
-          if (coordinateAxisModel.baseBean.isShowXScale) {
-            //x轴刻度
-            canvas.drawLine(
-                Offset(coordinateAxisModel.baseBean.basePadding.left + dw,
-                    _startY),
-                Offset(coordinateAxisModel.baseBean.basePadding.left + dw,
-                    _startY - coordinateAxisModel.baseBean.rulerWidth),
-                paint
-                  ..color = coordinateAxisModel.baseBean.xColor
-                  ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth);
-          }
+        }
+        if (coordinateAxisModel.baseBean.isShowXScale) {
+          ///x轴刻度
+          canvas.drawLine(
+              Offset(
+                  coordinateAxisModel.baseBean.basePadding.left +
+                      dw +
+                      coordinateAxisModel.bothEndPitchX,
+                  _startY),
+              Offset(
+                  coordinateAxisModel.baseBean.basePadding.left +
+                      dw +
+                      coordinateAxisModel.bothEndPitchX,
+                  _startY - coordinateAxisModel.baseBean.rulerWidth),
+              paint
+                ..color = coordinateAxisModel.baseBean.xColor
+                ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth);
         }
       }
     }
 
     if (showY) {
       if (coordinateAxisModel.baseBean.isShowBorderTop) {
-        //最顶部水平边界线
+        ///最顶部水平边界线
         canvas.drawLine(
             Offset(coordinateAxisModel.baseBean.basePadding.left,
                 coordinateAxisModel.baseBean.basePadding.top),
@@ -265,14 +299,13 @@ class PainterTool {
               ..color = coordinateAxisModel.baseBean.xColor
               ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth);
       }
-      if (coordinateAxisModel.baseBean.yDialValues != null &&
-          coordinateAxisModel.baseBean.yDialValues.isNotEmpty) {
+      if (coordinateAxisModel.baseBean.yDialValues.isNotEmpty) {
         for (var i = 0;
             i < coordinateAxisModel.baseBean.yDialValues.length;
             i++) {
           var tempYModel = coordinateAxisModel.baseBean.yDialValues[i];
 
-          //绘制y轴文本
+          ///绘制y轴文本
           var yValue = tempYModel.title;
           var yLength =
               tempYModel.positionRetioy * coordinateAxisModel.fixedHeight;
@@ -286,13 +319,17 @@ class PainterTool {
           tpY.paint(
               canvas,
               Offset(
-                  coordinateAxisModel.baseBean.basePadding.left -
-                      10 -
-                      tpY.width,
+                  coordinateAxisModel.baseBean.isLeftYDial
+                      ? (coordinateAxisModel.baseBean.basePadding.left -
+                          10 -
+                          tpY.width)
+                      : _endX + 8,
                   _startY - yLength - tpY.height / 2));
           var nextLength = ((i ==
                       coordinateAxisModel.baseBean.yDialValues.length - 1)
-                  ? coordinateAxisModel.baseBean.yDialValues.last.positionRetioy
+                  ? 0.0
+                  //放到最后一个，无论是哪里，都是和最后一个0的比较
+                  // coordinateAxisModel.baseBean.yDialValues.last.positionRetioy
                   : coordinateAxisModel
                       .baseBean.yDialValues[i + 1].positionRetioy) *
               coordinateAxisModel.fixedHeight;
@@ -341,7 +378,7 @@ class PainterTool {
             }
           }
           if (coordinateAxisModel.baseBean.isShowYScale) {
-            //y轴刻度
+            ///y轴刻度
             canvas.drawLine(
                 Offset(coordinateAxisModel.baseBean.basePadding.left,
                     _startY - yLength),
@@ -358,13 +395,7 @@ class PainterTool {
     }
   }
 
-  /// 绘制隔离带，x轴
-  /// canvas：
-  /// xSectionBeans：x区间带参数
-  /// startX：x轴的开始位置
-  /// endX：x轴的结束位置
-  /// startY：y轴的开始位置
-  /// endY：y轴的结束位置
+  //绘制隔离带，x轴
   static void drawXIntervalSegmentation(
       Canvas canvas,
       List<SectionBean> xSectionBeans,
@@ -386,7 +417,7 @@ class PainterTool {
       var tempPaint = Paint()
         ..isAntiAlias = true
         ..strokeWidth = item.borderWidth ?? 1
-        ..color = item.fillColor
+        ..color = item.fillColor!
         ..style = PaintingStyle.fill;
       canvas.drawPath(tempPath, tempPaint);
       //边缘线
@@ -436,119 +467,205 @@ class PainterTool {
     }
   }
 
-  /// 绘制某点处的辅助线，并特殊点高亮处理
-  /// canvas：
-  /// specialPointModel：特殊点参数模型
-  /// startX：x轴的开始位置
-  /// endX：x轴的结束位置
-  /// startY：y轴的开始位置
-  /// endY：y轴的结束位置
-  static void drawSpecialPointHintLine(
+  //绘制隔离带，y轴
+  static void drawYIntervalSegmentation(
       Canvas canvas,
-      SpecialPointModel specialPointModel,
+      List<SectionBeanY> ySectionBeans,
       double startX,
       double endX,
       double startY,
       double endY) {
-    if (specialPointModel == null || specialPointModel.offset == null) {
-      return;
+    var _fixedHeight = startY - endY;
+    for (var item in ySectionBeans) {
+      var tempStartY = endY + (_fixedHeight - _fixedHeight * item.startRatio);
+      var tempHeight = _fixedHeight * item.widthRatio;
+      var tempPath = Path()
+        ..moveTo(startX, tempStartY)
+        ..lineTo(endX, tempStartY)
+        ..lineTo(endX, tempStartY - tempHeight)
+        ..lineTo(startX, tempStartY - tempHeight)
+        ..lineTo(startX, tempStartY)
+        ..close();
+      var tempPaint = Paint()
+        ..isAntiAlias = true
+        ..strokeWidth = 0
+        ..color = item.fillColor!
+        ..style = PaintingStyle.fill;
+      canvas.drawPath(tempPath, tempPaint);
+      //边缘线
+      var borderLinePaint = Paint()
+        ..isAntiAlias = true
+        ..strokeWidth = item.borderWidth ?? 1
+        ..color = item.borderColor ?? Colors.transparent
+        ..style = PaintingStyle.stroke;
+      var borderLinePath1 = Path()
+        ..moveTo(startX, tempStartY)
+        ..lineTo(endX, tempStartY);
+      var borderLinePath2 = Path()
+        ..moveTo(startX, tempStartY - tempHeight)
+        ..lineTo(endX, tempStartY - tempHeight);
+      if (item.isBorderSolid) {
+        canvas.drawPath(borderLinePath1, borderLinePaint);
+        canvas.drawPath(borderLinePath2, borderLinePaint);
+      } else {
+        canvas.drawPath(
+          dashPath(
+            borderLinePath1,
+            dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
+          ),
+          borderLinePaint,
+        );
+        canvas.drawPath(
+          dashPath(
+            borderLinePath2,
+            dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
+          ),
+          borderLinePaint,
+        );
+      }
     }
-    if (specialPointModel.hintEdgeInset != null) {
-      var hintEdgeInset = specialPointModel.hintEdgeInset;
+  }
+
+  ///绘制某点处的辅助线，并特殊点高亮处理
+  static void drawSpecialPointHintLine(Canvas canvas, PointModel pointModel,
+      double startX, double endX, double startY, double endY) {
+    if (pointModel.cellPointSet.hintEdgeInset != HintEdgeInset.none) {
+      var hintEdgeInset = pointModel.cellPointSet.hintEdgeInset;
       if (hintEdgeInset.left != null) {
         drawline(
             canvas,
-            specialPointModel.offset,
-            Offset(startX, specialPointModel.offset.dy),
-            hintEdgeInset.left.isHintLineImaginary,
-            hintEdgeInset.left.hintColor,
-            hintEdgeInset.left.hintLineWidth);
+            pointModel.offset,
+            Offset(startX, pointModel.offset.dy),
+            hintEdgeInset.left!.isHintLineImaginary,
+            hintEdgeInset.left!.hintColor,
+            hintEdgeInset.left!.hintLineWidth);
       }
       if (hintEdgeInset.right != null) {
         drawline(
             canvas,
-            specialPointModel.offset,
-            Offset(endX, specialPointModel.offset.dy),
-            hintEdgeInset.right.isHintLineImaginary,
-            hintEdgeInset.right.hintColor,
-            hintEdgeInset.right.hintLineWidth);
+            pointModel.offset,
+            Offset(endX, pointModel.offset.dy),
+            hintEdgeInset.right!.isHintLineImaginary,
+            hintEdgeInset.right!.hintColor,
+            hintEdgeInset.right!.hintLineWidth);
       }
       if (hintEdgeInset.top != null) {
         drawline(
             canvas,
-            specialPointModel.offset,
-            Offset(specialPointModel.offset.dx, endY),
-            hintEdgeInset.top.isHintLineImaginary,
-            hintEdgeInset.top.hintColor,
-            hintEdgeInset.top.hintLineWidth);
+            pointModel.offset,
+            Offset(pointModel.offset.dx, endY),
+            hintEdgeInset.top!.isHintLineImaginary,
+            hintEdgeInset.top!.hintColor,
+            hintEdgeInset.top!.hintLineWidth);
       }
       if (hintEdgeInset.bottom != null) {
         drawline(
             canvas,
-            specialPointModel.offset,
-            Offset(specialPointModel.offset.dx, startY),
-            hintEdgeInset.bottom.isHintLineImaginary,
-            hintEdgeInset.bottom.hintColor,
-            hintEdgeInset.bottom.hintLineWidth);
+            pointModel.offset,
+            Offset(pointModel.offset.dx, startY),
+            hintEdgeInset.bottom!.isHintLineImaginary,
+            hintEdgeInset.bottom!.hintColor,
+            hintEdgeInset.bottom!.hintLineWidth);
       }
     }
-    if (specialPointModel.centerPoint != null) {
-      // var ratio = specialPointModel.placeImageRatio;
+    var centerPointOffset = pointModel.cellPointSet.centerPointOffset;
+    if (centerPointOffset != Offset.zero) {
+      drawline(
+          canvas,
+          pointModel.offset,
+          Offset(pointModel.offset.dx + centerPointOffset.dx,
+              pointModel.offset.dy + centerPointOffset.dy),
+          true,
+          pointModel.cellPointSet.centerPointOffsetLineColor,
+          2);
+    }
+    drawSpecialPoint(canvas, pointModel, centerPointOffset);
+  }
 
-      if (specialPointModel.centerPointOffset != null &&
-          specialPointModel.centerPointOffset != Offset.zero) {
-        drawline(
-            canvas,
-            specialPointModel.offset,
-            Offset(
-                specialPointModel.offset.dx +
-                    specialPointModel.centerPointOffset.dx,
-                specialPointModel.offset.dy +
-                    specialPointModel.centerPointOffset.dy),
-            true,
-            specialPointModel.centerPointOffsetLineColor,
-            2);
+  static void drawSpecialPoint(
+      Canvas canvas, PointModel pointModel, Offset centerPointOffset) {
+    if (pointModel.cellPointSet.pointType == PointType.PlacehoderImage) {
+      if (pointModel.cellPointSet.placehoderImage == null) {
+        return;
       }
+
+      var placeImageSize = pointModel.cellPointSet.placeImageSize;
       canvas.drawImageRect(
-        specialPointModel.centerPoint,
-        Rect.fromLTWH(0, 0, specialPointModel.centerPoint.width.toDouble(),
-            specialPointModel.centerPoint.height.toDouble()),
+        pointModel.cellPointSet.placehoderImage!,
         Rect.fromLTWH(
-            specialPointModel.offset.dx -
-                specialPointModel.placeImageSize.width / 2 +
-                specialPointModel.centerPointOffset.dx,
-            specialPointModel.offset.dy -
-                specialPointModel.placeImageSize.height / 2 +
-                specialPointModel.centerPointOffset.dy,
-            specialPointModel.placeImageSize.width,
-            specialPointModel.placeImageSize.height),
+            0,
+            0,
+            pointModel.cellPointSet.placehoderImage!.width.toDouble(),
+            pointModel.cellPointSet.placehoderImage!.height.toDouble()),
+        Rect.fromLTWH(
+            pointModel.offset.dx -
+                placeImageSize.width / 2 +
+                centerPointOffset.dx,
+            pointModel.offset.dy -
+                placeImageSize.height / 2 +
+                centerPointOffset.dy,
+            placeImageSize.width,
+            placeImageSize.height),
         Paint(),
       );
     } else {
+      var centerOffset = Offset(pointModel.offset.dx + centerPointOffset.dx,
+          pointModel.offset.dy + centerPointOffset.dy);
+      var rect = Rect.fromLTRB(
+        centerOffset.dx - pointModel.cellPointSet.pointSize.width / 2,
+        centerOffset.dy - pointModel.cellPointSet.pointSize.height / 2,
+        centerOffset.dx + pointModel.cellPointSet.pointSize.width / 2,
+        centerOffset.dy + pointModel.cellPointSet.pointSize.height / 2,
+      );
+      var paint = Paint()
+        ..isAntiAlias = true
+        ..strokeWidth = 1.0
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.fill
+        ..shader = LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                tileMode: TileMode.mirror,
+                colors: pointModel.cellPointSet.pointShaderColors ??
+                    [defaultColor, defaultColor, defaultColor.withOpacity(0.3)])
+            .createShader(rect);
       canvas
-        ..drawCircle(
-            specialPointModel.offset,
-            specialPointModel.specialPointWidth,
-            Paint()
-              ..isAntiAlias = true
-              ..strokeWidth = specialPointModel.specialPointWidth
-              ..strokeCap = StrokeCap.round
-              ..color = specialPointModel.specialPointColor
-              ..style = PaintingStyle.fill);
+        ..drawDRRect(
+            RRect.fromRectAndCorners(rect,
+                topLeft: pointModel.cellPointSet.pointRadius,
+                topRight: pointModel.cellPointSet.pointRadius,
+                bottomLeft: pointModel.cellPointSet.pointRadius,
+                bottomRight: pointModel.cellPointSet.pointRadius),
+            RRect.zero,
+            paint);
     }
   }
 }
 
-/// 绘制xy轴的额所需参数设置
+//绘制xy轴情况
+enum XYCoordinate {
+  //只绘制x轴
+  OnlyX,
+  //只绘制y轴
+  OnlyY,
+  //x轴y轴都绘制
+  All,
+}
+
+///绘制xy轴的额所需参数设置
 class CoordinateAxisModel {
-  final BaseBean baseBean;
-  final double fixedWidth;
-  final double fixedHeight;
-  // true：只绘制Y轴，false：只绘制x轴，null：则xy轴都绘制。
-  final bool onlyYCoordinate;
+  BaseBean baseBean;
+  double fixedWidth;
+  //起始和结束距离两端y轴的单侧间距。默认无间距
+  double bothEndPitchX;
+  double fixedHeight;
+  XYCoordinate xyCoordinate;
   //X轴数据
-  final List<DialStyleX> xDialValues;
+  List<DialStyleX> xDialValues;
 
   CoordinateAxisModel(this.fixedHeight, this.fixedWidth,
-      {this.baseBean, this.xDialValues, this.onlyYCoordinate});
+      {required this.baseBean,
+      required this.xDialValues,
+      this.xyCoordinate = XYCoordinate.All,
+      this.bothEndPitchX = 0});
 }

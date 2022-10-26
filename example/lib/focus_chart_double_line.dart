@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-07-02 17:04:10
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-08 16:31:06
+ * @LastEditTime: 2021-09-22 08:45:22
  * @Description: 双专注力曲线显示
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -55,6 +55,7 @@ class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
                 xColor: Colors.black,
                 yColor: Colors.black,
                 yMax: 100.0,
+                yMin: 0.0,
                 yDialValues: provider.yArr,
               ),
               xMax: 60,
@@ -93,11 +94,11 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
     var yValues = ['100', '65', '35', '0'];
     var xValues = ['0', "20'", "40'", "60'"];
     var xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
-    var yTexts = ['忘我', '一般', '走神', ''];
+    var yTexts = ['', '忘我', '一般', '走神'];
     var yTextColors = [
+      Color(0xEE172B88),
       Color(0xEEF75E36),
       Color(0xEEFFC278),
-      Color(0xEE172B88),
       Color(0xEE172B88),
     ];
 
@@ -107,26 +108,27 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
         title: xValues[i],
         positionRetioy: xPositionRetioy[i],
       ));
-      _yArr.add(DialStyleY(
+      _yArr.add(
+        DialStyleY(
           title: yValues[i],
           titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
           centerSubTitle: yTexts[i],
-          positionRetioy: double.parse(yValues[i]) / 100.0,
-          centerSubTextStyle:
-              TextStyle(fontSize: 10.0, color: yTextColors[i])));
+          positionRetioy: 1 - double.parse(yValues[i]) / 100.0,
+          centerSubTextStyle: TextStyle(fontSize: 10.0, color: yTextColors[i]),
+        ),
+      );
     }
 
     _focusChartBeanMain1 = FocusChartBeanMain(
-        showLineSection: true,
         sectionModel: LineSectionModel(),
         gradualColors: [Colors.orange, Colors.orange],
         lineWidth: 1,
         isLinkBreak: false,
         lineColor: Colors.blue);
     _focusChartBeanMain2 = FocusChartBeanMain(
-        gradualColors: [Color(0xFFFF605C), Color(0x00FF9A97)],
+        // gradualColors: [Color(0xFFFF605C), Color(0x00FF9A97)],
         lineWidth: 1,
-        isLinkBreak: false,
+        isLinkBreak: true,
         lineColor: Colors.red,
         isLineImaginary: true);
     for (var i = 0; i <= 30; i++) {
@@ -155,31 +157,43 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
     _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
       if (_beanList1.isNotEmpty) {
         var model = _beanList1.last;
-        model.centerPoint = null;
+        model.cellPointSet = CellPointSet.normal;
       }
       if (_beanList2.isNotEmpty) {
         var model = _beanList2.last;
-        model.centerPoint = null;
+        model.cellPointSet = CellPointSet.normal;
       }
       var value = Random().nextDouble() * 100;
-      _beanList1.add(ChartBeanFocus(
+      _beanList1.add(
+        ChartBeanFocus(
           focus: value,
           focusMax: value + 5,
           focusMin: value - 5,
           second: _index > 10 ? (10 + _index) : _index,
-          centerPoint: _image1,
-          centerPointSize: Size(20, 20),
-          centerPointOffsetLineColor: Colors.blue,
-          centerPointOffset: Offset(0, -20)));
+          cellPointSet: CellPointSet(
+            pointType: PointType.PlacehoderImage,
+            placehoderImage: _image1,
+            placeImageSize: Size(20, 20),
+            centerPointOffsetLineColor: Colors.blue,
+            centerPointOffset: Offset(0, -20),
+          ),
+        ),
+      );
 
       var value2 = Random().nextDouble() * 100;
-      _beanList2.add(ChartBeanFocus(
+      _beanList2.add(
+        ChartBeanFocus(
           focus: value2,
           second: _index > 10 ? (10 + _index) : _index,
-          centerPoint: _image2,
-          centerPointSize: Size(20, 20),
-          centerPointOffsetLineColor: Colors.red,
-          centerPointOffset: Offset(0, -20)));
+          cellPointSet: CellPointSet(
+            pointType: PointType.PlacehoderImage,
+            placehoderImage: _image2,
+            placeImageSize: Size(20, 20),
+            centerPointOffsetLineColor: Colors.red,
+            centerPointOffset: Offset(0, -20),
+          ),
+        ),
+      );
       _focusChartBeanMain1.chartBeans = _beanList1;
       _focusChartBeanMain2.chartBeans = _beanList2;
       _index++;

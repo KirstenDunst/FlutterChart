@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-06 17:48:40
- * @LastEditTime: 2020-11-10 10:25:25
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-07 09:40:04
+ * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/enum/painter_const.dart
  */
@@ -21,3 +21,6 @@ const EdgeInsets defaultBasePadding = EdgeInsets.only(
 
 //默认颜色
 const Color defaultColor = Colors.deepPurple;
+
+//默认字体样式
+const TextStyle defaultTextStyle = TextStyle(color: defaultColor, fontSize: 10);

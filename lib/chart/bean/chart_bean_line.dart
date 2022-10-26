@@ -1,69 +1,87 @@
 /*
  * @Author: your name
  * @Date: 2020-11-09 17:15:01
- * @LastEditTime: 2020-12-29 10:57:16
+ * @LastEditTime: 2022-10-21 15:20:35
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/bean/chart_bean_line.dart
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
-import 'dart:ui' as ui;
+import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+
+import 'chart_bean.dart';
+import 'chart_typedef.dart';
 
 //每条线的定义
 class ChartBeanSystem {
-  //x轴的字体样式
-  TextStyle xTitleStyle;
-  //是否显示x轴的文字，用来处理多个线条绘制的时候，同一x轴坐标不需要绘制多次，则只需要将多条线中一个标记绘制即可
-  bool isDrawX;
   //线宽
   double lineWidth;
-  //线条点的显示样式,默认圆点
-  PointType pointType;
-  //线条点的特殊处理，如果内容不为空，则在点上面会绘制，这个是圆点半径参数
-  double pointRadius;
-  //线条点渐变色，从上到下的闭合颜色集，默认线条颜色
-  List<Color> pointShaderColors;
   //标记是否为曲线
   bool isCurve;
   //点集合
   List<ChartLineBean> chartBeans;
-  //Line渐变色，从曲线到x轴从上到下的闭合颜色集
-  List<Color> shaderColors;
+  //Line渐变色，从曲线到x轴从上到下的闭合颜色集,不设置则没有闭合渐变色
+  List<Color>? shaderColors;
   //曲线或折线的颜色
   Color lineColor;
-  //占位图是否需要打断线条绘制，如果打断的话这个点的y值将没有意义，只有x轴有效，如果不打断的话，y轴值有效
-  bool placehoderImageBreak;
-  //用户当前进行位置的小图标（比如一个小锁），默认没有只显示y轴的值，如果有内容则显示这个小图标，
-  ui.Image placehoderImage;
-  double placeImageRatio;
+  ///曲线或折线的整体绘制区域的渐变设置，如果不为空会覆盖 [lineColor]的设置效果，
+  Gradient? lineGradient;
+  //是否支持可点击，匹配外部的可点击参数设置,多条线都设置可点击的话，只会取最后一条线的点做可点击处理
+  bool enableTouch;
+
   ChartBeanSystem(
-      {this.xTitleStyle,
-      this.isDrawX = false,
-      this.lineWidth = 2,
-      this.pointType = PointType.Circle,
-      this.pointRadius = 0,
-      this.pointShaderColors,
+      {this.lineWidth = 2,
       this.isCurve = false,
-      this.chartBeans,
+      required this.chartBeans,
       this.shaderColors,
-      this.lineColor = Colors.purple,
-      this.placehoderImageBreak = true,
-      this.placehoderImage,
-      this.placeImageRatio = 1.0});
+      this.lineColor = defaultColor,
+      this.lineGradient,
+      this.enableTouch = false});
 }
 
 class ChartLineBean {
-  //x轴坐标显示字段
-  String x;
-  //y轴的值
-  double y;
-  //是否显示占位图，目前只结合线定义的placehoderImage使用
-  bool isShowPlaceImage;
+  //x轴坐标占有比例（0～1）
+  double xPositionRetioy;
+  //y轴的值,如果为null表示连接断开绘制（此时如果pointType为PlacehoderImage，占位图会在对应x轴的指定y的位置，作此位置x对应的y占位）
+  double? y;
+  //y轴展示的文本内容，默认为空，即：不展示
+  String yShowText;
+  //y轴展示的文本内容样式
+  TextStyle yShowTextStyle;
+  //点中心距离文字底部的距离（目前文字都是在点的上面绘制）
+  double pointToTextSpace;
+  //点设置，默认圆点,半径0，默认颜色填充
+  CellPointSet cellPointSet;
+  //点标记，用于根据查找点
+  String tag;
+  //点击的时候外带的数据
+  dynamic touchBackParam;
 
-  ChartLineBean({
-    this.x = '',
-    this.y = 0,
-    this.isShowPlaceImage = false,
+  ChartLineBean(
+      {this.xPositionRetioy = 0,
+      this.y,
+      this.yShowText = '',
+      this.yShowTextStyle = defaultTextStyle,
+      this.pointToTextSpace = 0,
+      this.cellPointSet = CellPointSet.normal,
+      this.tag = '',
+      this.touchBackParam});
+}
+
+//触摸参数设置
+class LineTouchSet {
+  //点击坐标轴以外的绘图区域是否取消触摸点的选中？，默认取消选中
+  bool outsidePointClear;
+  //触摸点设置
+  CellPointSet pointSet;
+  //触摸点四周辅助线设置
+  HintEdgeInset hintEdgeInset;
+  //触摸回调
+  PointPressPointBack? touchBack;
+  LineTouchSet({
+    this.outsidePointClear = true,
+    this.hintEdgeInset = HintEdgeInset.none,
+    this.pointSet = CellPointSet.normal,
+    this.touchBack,
   });
 }

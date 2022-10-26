@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-06-30 10:35:46
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2020-12-29 11:38:15
+ * @LastEditTime: 2021-09-18 17:39:39
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -34,10 +34,8 @@ enum ArrowBegainLocation {
 
 //点的类型
 enum PointType {
-  //圆点
-  Circle,
   //矩形
   Rectangle,
-  //圆边矩形
-  RoundEdgeRectangle,
+  //占位图
+  PlacehoderImage
 }

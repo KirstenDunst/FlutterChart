@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:34:30
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-09 17:32:22
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2022-07-28 16:15:36
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -22,59 +22,171 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
 
   @override
   void initState() {
-    _chartLineBeanSystem1 = ChartBeanSystem(
-      xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
-      isDrawX: true,
-      lineWidth: 2,
-      pointRadius: 4,
-      isCurve: false,
-      chartBeans: [
-        ChartLineBean(x: '3-01', y: 30),
-        ChartLineBean(x: '3-02', y: 88, isShowPlaceImage: true),
-        ChartLineBean(x: '3-03', y: 20),
-        ChartLineBean(x: '3-04', y: 67),
-        ChartLineBean(x: '3-05', y: 10),
-        ChartLineBean(x: '3-06', y: 40, isShowPlaceImage: true),
-        ChartLineBean(x: '3-07', y: 10),
-        ChartLineBean(x: '3-08', y: 100, isShowPlaceImage: false),
-      ],
-      shaderColors: [
-        Colors.blue.withOpacity(0.3),
-        Colors.blue.withOpacity(0.1)
-      ],
-      lineColor: Colors.cyan,
-      placehoderImageBreak: true,
-    );
-    _chartLineBeanSystem2 = ChartBeanSystem(
-      xTitleStyle: TextStyle(color: Colors.grey, fontSize: 12),
-      isDrawX: false,
-      lineWidth: 2,
-      pointRadius: 10,
-      pointType: PointType.RoundEdgeRectangle,
-      pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
-      isCurve: false,
-      chartBeans: [
-        ChartLineBean(x: '3-01', y: 70, isShowPlaceImage: false),
-        ChartLineBean(x: '3-02', y: 20),
-        ChartLineBean(x: '3-03', y: 30),
-        ChartLineBean(x: '3-04', y: 50, isShowPlaceImage: true),
-        ChartLineBean(x: '3-05', y: 100, isShowPlaceImage: true),
-        ChartLineBean(x: '3-06', y: 30, isShowPlaceImage: false),
-        ChartLineBean(x: '3-07', y: 0),
-        ChartLineBean(x: '3-08', y: 0, isShowPlaceImage: false),
-      ],
-      shaderColors: [Colors.red.withOpacity(0.3), Colors.red.withOpacity(0.1)],
-      lineColor: Colors.red,
-      placehoderImageBreak: false,
-    );
-    UIImageUtil.loadImage('assets/lock.jpg').then((value) {
-      _chartLineBeanSystem1.placehoderImage = value;
-      _chartLineBeanSystem2.placehoderImage = value;
-      _chartLineBeanSystem1.placeImageRatio = 0.5;
-      _chartLineBeanSystem2.placeImageRatio = 0.5;
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      var uiimage = await UIImageUtil.loadImage('assets/lock.jpg');
+      _chartLineBeanSystem1 = ChartBeanSystem(
+        lineWidth: 2,
+        chartBeans: [
+          ChartLineBean(
+            xPositionRetioy: 0 / 7,
+            y: 30,
+            cellPointSet: CellPointSet(
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 1 / 7,
+            cellPointSet: CellPointSet(
+              pointType: PointType.PlacehoderImage,
+              placehoderImage: uiimage,
+              placeImageSize: Size(10, 10),
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 2 / 7,
+            cellPointSet: CellPointSet(
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 3 / 7,
+            y: 67,
+            cellPointSet: CellPointSet(
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 4 / 7,
+            // y: 10,
+            cellPointSet: CellPointSet(
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 5 / 7,
+            // y: 40,
+            cellPointSet: CellPointSet(
+              pointType: PointType.PlacehoderImage,
+              placehoderImage: uiimage,
+              placeImageSize: Size(10, 10),
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 6 / 7,
+            y: 10,
+            cellPointSet: CellPointSet(
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 7 / 7,
+            y: 100,
+            cellPointSet: CellPointSet(
+              pointType: PointType.PlacehoderImage,
+              placehoderImage: null,
+              placeImageSize: Size(10, 10),
+              pointSize: Size(8, 8),
+              pointRadius: Radius.circular(4),
+            ),
+          ),
+        ],
+        shaderColors: [
+          Colors.blue.withOpacity(0.3),
+          Colors.blue.withOpacity(0.1)
+        ],
+        lineColor: Colors.cyan,
+      );
+      _chartLineBeanSystem2 = ChartBeanSystem(
+        lineWidth: 2,
+        isCurve: false,
+        chartBeans: [
+          ChartLineBean(
+            xPositionRetioy: 0 / 7,
+            y: 70,
+            cellPointSet: CellPointSet(
+              pointSize: Size(10, 10),
+              pointRadius: Radius.circular(5),
+              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+            ),
+          ),
+          ChartLineBean(
+              xPositionRetioy: 1 / 7,
+              y: 20,
+              cellPointSet: CellPointSet(
+                pointSize: Size(10, 10),
+                pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              )),
+          ChartLineBean(
+            xPositionRetioy: 2 / 7,
+            y: 30,
+            cellPointSet: CellPointSet(
+              pointSize: Size(10, 10),
+              pointRadius: Radius.circular(5),
+              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 3 / 7,
+            y: 50,
+            cellPointSet: CellPointSet(
+              pointSize: Size(10, 10),
+              pointRadius: Radius.circular(5),
+              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 4 / 7,
+            y: 100,
+            cellPointSet: CellPointSet(
+              pointSize: Size(10, 10),
+              pointRadius: Radius.circular(5),
+              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+            ),
+          ),
+          ChartLineBean(
+              xPositionRetioy: 5 / 7,
+              y: 30,
+              cellPointSet: CellPointSet(
+                pointSize: Size(10, 10),
+                pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              )),
+          ChartLineBean(
+            xPositionRetioy: 6 / 7,
+            y: 0,
+            cellPointSet: CellPointSet(
+              pointSize: Size(10, 10),
+              pointRadius: Radius.circular(5),
+              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+            ),
+          ),
+          ChartLineBean(
+            xPositionRetioy: 7 / 7,
+            y: 0,
+            cellPointSet: CellPointSet(
+              pointSize: Size(10, 10),
+              pointRadius: Radius.circular(5),
+              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+            ),
+          ),
+        ],
+        shaderColors: [
+          Colors.red.withOpacity(0.3),
+          Colors.red.withOpacity(0.1)
+        ],
+        lineColor: Colors.red,
+      );
       setState(() {});
     });
-    super.initState();
   }
 
   @override
@@ -88,7 +200,18 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
   }
 
   Widget _buildDoubleChartLine(context) {
+    var xarr = ['3-01', '3-02', '3-03', '3-04', '3-05', '3-06', '3-07', '3-08'];
+    var tempXs = <DialStyleX>[];
+    for (var i = 0; i < xarr.length; i++) {
+      tempXs.add(
+        DialStyleX(
+            title: xarr[i],
+            titleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+            positionRetioy: (1 / (xarr.length - 1)) * i),
+      );
+    }
     var chartLine = ChartLine(
+      xDialValues: tempXs,
       chartBeanSystems: [_chartLineBeanSystem1, _chartLineBeanSystem2],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
@@ -118,7 +241,8 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             positionRetioy: 100 / 100.0,
           )
         ],
-        yMax: 100,
+        yMax: 100.0,
+        yMin: 0.0,
         xyLineWidth: 0.5,
         isShowHintX: true,
         isHintLineImaginary: true,

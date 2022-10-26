@@ -1,41 +1,40 @@
 /*
  * @Author: your name
  * @Date: 2020-09-29 13:25:19
- * @LastEditTime: 2020-12-29 10:43:32
+ * @LastEditTime: 2022-01-21 14:03:11
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/view/chart_bar.dart
  */
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_bar.dart';
+import 'package:flutter_chart_csx/chart/bean/chart_bean_bar_content.dart';
 import 'package:flutter_chart_csx/chart/painter/chart_bar_painter.dart';
 
 class ChartBar extends StatefulWidget {
+  // 动画的时长，默认不设置表示没有动画
+  final Duration? duration;
   final Size size;
   //绘制的背景色
-  final Color backgroundColor;
+  final Color? backgroundColor;
   //x轴刻度显示，不传则没有
   final List<ChartBarBeanX> xDialValues;
-  final BaseBean baseBean;
+  final BaseBean? baseBean;
   //柱状图的宽度
   final double rectWidth;
-  //柱状图顶部的数值显示，默认透明即不显示
-  final TextStyle rectTopTextStyle;
-  //以下的四周圆角
-  final BorderRadius borderRadius;
+  //点击设置,null的话不会启动点击效果
+  final TouchSet? touchSet;
 
   const ChartBar({
-    Key key,
-    @required this.size,
-    @required this.xDialValues,
+    Key? key,
+    required this.size,
+    required this.xDialValues,
+    this.duration,
     this.baseBean,
     this.backgroundColor,
     this.rectWidth = 20,
-    this.rectTopTextStyle,
-    this.borderRadius = BorderRadius.zero,
+    this.touchSet,
   }) : super(key: key);
 
   @override
@@ -44,25 +43,92 @@ class ChartBar extends StatefulWidget {
 
 class ChartBarState extends State<ChartBar>
     with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
+  double _value = 0;
+  late bool _isCanTouch;
+  TouchBackModel? _lastTouchModel;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.duration != null) {
+      _controller = AnimationController(vsync: this, duration: widget.duration);
+      Tween(begin: 0.0, end: 1.0).animate(_controller!)
+        ..addListener(() {
+          setState(() {
+            _value = _controller!.value;
+          });
+        });
+      _controller!.forward();
+    } else {
+      _value = 1.0;
+    }
+    _isCanTouch = widget.touchSet != null;
+  }
+
+  //清除点击的点
+  void clearTouchPoint() {
+    if (_isCanTouch && widget.touchSet!.touchBack != null) {
+      widget.touchSet!.touchBack!(null, Size.zero, null);
+    }
+    _lastTouchModel = null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var painter = ChartBarPainter(
-      widget.xDialValues,
-      rectWidth: widget.rectWidth,
-      rectTopTextStyle: widget.rectTopTextStyle,
-      borderRadius: widget.borderRadius,
-    );
-    painter..baseBean = widget.baseBean;
-    return CustomPaint(
-        size: widget.size,
-        foregroundPainter: widget.backgroundColor != null ? painter : null,
-        child: widget.backgroundColor != null
-            ? Container(
-                width: widget.size.width,
-                height: widget.size.height,
-                color: widget.backgroundColor,
-              )
-            : null,
-        painter: widget.backgroundColor == null ? painter : null);
+    var painter = ChartBarPainter(widget.xDialValues,
+        value: _value, rectWidth: widget.rectWidth)
+      ..baseBean = widget.baseBean ?? BaseBean(yDialValues: []);
+    if (_isCanTouch) {
+      return GestureDetector(
+        onTapDown: (details) => _dealTouchPoint(painter, details.localPosition),
+        onHorizontalDragUpdate: (details) =>
+            _dealTouchPoint(painter, details.localPosition),
+        child: CustomPaint(
+          size: widget.size,
+          painter: widget.backgroundColor == null ? painter : null,
+          foregroundPainter: widget.backgroundColor != null ? painter : null,
+          child: widget.backgroundColor != null
+              ? Container(
+                  width: widget.size.width,
+                  height: widget.size.height,
+                  color: widget.backgroundColor,
+                )
+              : null,
+        ),
+      );
+    } else {
+      return CustomPaint(
+          size: widget.size,
+          foregroundPainter: widget.backgroundColor != null ? painter : null,
+          child: widget.backgroundColor != null
+              ? Container(
+                  width: widget.size.width,
+                  height: widget.size.height,
+                  color: widget.backgroundColor,
+                )
+              : null,
+          painter: widget.backgroundColor == null ? painter : null);
+    }
+  }
+
+  void _dealTouchPoint(ChartBarPainter painter, Offset touchOffset) {
+    var tempModel = painter.getNearbyPoint(touchOffset,
+        defaultCancelTouchChoose: widget.touchSet?.outsidePointClear ?? true);
+    if (tempModel.needRefresh &&
+        (_lastTouchModel == null ||
+            (_lastTouchModel!.startOffset != tempModel.startOffset))) {
+      if (widget.touchSet!.touchBack != null) {
+        widget.touchSet!.touchBack!(
+            tempModel.startOffset, tempModel.size, tempModel.backParam);
+      }
+      _lastTouchModel = tempModel;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 }

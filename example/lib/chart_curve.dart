@@ -1,8 +1,8 @@
 /*
  * @Author: Cao Shixin
  * @Date: 2020-05-27 11:33:43
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-09 18:10:41
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2022-07-28 16:13:53
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -22,21 +22,18 @@ class _ChartCurveState extends State<ChartCurvePage> {
 
   @override
   void initState() {
+    var dataarr = [30.0, 88.0, 20.0, 67.0, 10.0, 40.0, 10.0];
+    var tempDatas = <ChartLineBean>[];
+    for (var i = 0; i < dataarr.length; i++) {
+      tempDatas.add(
+        ChartLineBean(
+            y: dataarr[i], xPositionRetioy: (1 / (dataarr.length - 1)) * i),
+      );
+    }
     _chartLineBeanSystem = ChartBeanSystem(
-      xTitleStyle: TextStyle(color: Colors.red, fontSize: 12),
-      isDrawX: true,
       lineWidth: 2,
-      pointRadius: 0,
       isCurve: true,
-      chartBeans: [
-        ChartLineBean(x: '12-01', y: 30),
-        ChartLineBean(x: '12-02', y: 88),
-        ChartLineBean(x: '12-03', y: 20),
-        ChartLineBean(x: '12-04', y: 67),
-        ChartLineBean(x: '12-05', y: 10),
-        ChartLineBean(x: '12-06', y: 40),
-        ChartLineBean(x: '12-07', y: 10),
-      ],
+      chartBeans: tempDatas,
       shaderColors: [
         Colors.blueAccent.withOpacity(0.3),
         Colors.blueAccent.withOpacity(0.1)
@@ -58,7 +55,18 @@ class _ChartCurveState extends State<ChartCurvePage> {
 
   ///curve
   Widget _buildChartCurve(context) {
+    var xarr = ['12-01', '12-02', '12-03', '12-04', '12-05', '12-06', '12-07'];
+    var tempXs = <DialStyleX>[];
+    for (var i = 0; i < xarr.length; i++) {
+      tempXs.add(
+        DialStyleX(
+            title: xarr[i],
+            titleStyle: TextStyle(color: Colors.red, fontSize: 12),
+            positionRetioy: (1 / (xarr.length - 1)) * i),
+      );
+    }
     var chartLine = ChartLine(
+      xDialValues: tempXs,
       chartBeanSystems: [_chartLineBeanSystem],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
@@ -87,7 +95,8 @@ class _ChartCurveState extends State<ChartCurvePage> {
             positionRetioy: 100 / 100.0,
           )
         ],
-        yMax: 100,
+        yMax: 100.0,
+        yMin: 0.0,
         isShowHintY: true,
         isHintLineImaginary: true,
       ),
