@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-10-21 14:02:45
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-21 14:59:52
+ * @LastEditTime: 2023-03-28 15:16:30
  * @Description: 
  */
 import 'dart:async';
@@ -66,9 +66,40 @@ class _FocusChartGradientLineState extends State<FocusChartGradientLinePage> {
                       ),
                       clipBehavior: Clip.antiAlias,
                     ),
-                    SizedBox(
-                      height: 1000,
-                    )
+                    SizedBox(height: 20),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      margin: EdgeInsets.only(
+                          left: 16, right: 16, top: 8, bottom: 8),
+                      semanticContainer: true,
+                      color: Colors.white,
+                      child: Stack(
+                        children: [
+                          ChartLineFocus(
+                            size: Size(MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height / 5 * 2.5),
+                            focusChartBeans: [
+                              provider.focusChartBeanMains.first
+                            ],
+                            baseBean: BaseBean(
+                              isShowHintX: true,
+                              isShowHintY: false,
+                              hintLineColor: Colors.blue,
+                              isHintLineImaginary: false,
+                              isLeftYDial: false,
+                              isLeftYDialSub: false,
+                              rulerWidth: -4,
+                              isShowXScale: true,
+                              yDialValues: provider.reverseYarr,
+                            ),
+                            xMax: 60,
+                            xDialValues: provider.xArr,
+                          ),
+                        ],
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                    ),
                   ],
                 );
         }),
@@ -80,19 +111,21 @@ class _FocusChartGradientLineState extends State<FocusChartGradientLinePage> {
 class ChartFocusLineProvider extends ChangeNotifier {
   List<DialStyleX> get xArr => _xArr;
   List<DialStyleY> get yArr => _yArr;
+  List<DialStyleY> get reverseYarr => _reverseYarr;
   List<FocusChartBeanMain> get focusChartBeanMains => _focusChartBeanMains;
 
   List<FocusChartBeanMain> _focusChartBeanMains;
   List<DialStyleX> _xArr;
-  List<DialStyleY> _yArr;
+  List<DialStyleY> _yArr, _reverseYarr;
 
   ChartFocusLineProvider() {
     _focusChartBeanMains = [];
 
     _xArr = [];
     _yArr = [];
+    _reverseYarr = [];
     //制造假数据
-    var yValues = ['100', '70', '25', '0'];
+    var yValues = ['100', '66', '33', '0'];
     var xValues = ['0', "20'", "40'", "60'"];
     var xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
     var yTexts = ['Relaxed', 'Neutral', 'Active', ''];
@@ -109,6 +142,20 @@ class ChartFocusLineProvider extends ChangeNotifier {
         title: xValues[i],
         positionRetioy: xPositionRetioy[i],
       ));
+      _reverseYarr.add(DialStyleY(
+          title: yValues[i],
+          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+          centerSubTitle: yTexts[yTexts.length - 1 - i],
+          positionRetioy: 1 - double.parse(yValues[i]) / 100.0,
+          hintLineColor: i == yValues.length - 1
+              ? Colors.transparent
+              : (i == yValues.length - 2 ? Colors.orange : null),
+          fillColors: yTexts[yTexts.length - 1 - i] == 'Relaxed'
+              ? [Colors.blue.withOpacity(0.3), Colors.blue.withOpacity(0.1)]
+              : null,
+          centerSubTextStyle: TextStyle(
+              fontSize: 10.0, color: yTextColors[yTextColors.length - 1 - i])));
+
       _yArr.add(DialStyleY(
           title: yValues[i],
           titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
@@ -124,10 +171,10 @@ class ChartFocusLineProvider extends ChangeNotifier {
     var image = await UIImageUtil.loadImage('assets/head1.png');
     for (var i = 0; i < 1; i++) {
       var _focusChartBeanMain = FocusChartBeanMain();
-      _focusChartBeanMain.gradualColors = [
-        Colors.transparent,
-        Colors.transparent
-      ];
+      // _focusChartBeanMain.gradualColors = [
+      //   Colors.transparent,
+      //   Colors.transparent
+      // ];
       _focusChartBeanMain.lineWidth = 5;
       _focusChartBeanMain.isLinkBreak = false;
       _focusChartBeanMain.lineColor = Colors.red;
@@ -146,10 +193,10 @@ class ChartFocusLineProvider extends ChangeNotifier {
           ],
           stops: [
             0.0,
-            0.23,
-            0.27,
-            0.68,
-            0.72,
+            0.32,
+            0.34,
+            0.65,
+            0.67,
             1.0
           ]);
       _focusChartBeanMain.canvasEnd = () {
@@ -158,6 +205,9 @@ class ChartFocusLineProvider extends ChangeNotifier {
       var tempArr = [30, 50];
       var _beanList = <ChartBeanFocus>[];
       for (var i = 0; i < 60; i++) {
+        if (i < 10) {
+          continue;
+        }
         _beanList.add(ChartBeanFocus(
           focus: Random().nextDouble() * 100,
           second: i,
@@ -196,7 +246,6 @@ class ChartFocusLineProvider extends ChangeNotifier {
                       ),
                     )
                   : CellPointSet.normal),
-          // centerPointOffsetLineColor: Colors.transparent,
         ));
       }
       _focusChartBeanMain.chartBeans = _beanList;

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-06 15:00:21
- * @LastEditTime: 2022-10-21 14:59:32
+ * @LastEditTime: 2023-03-28 15:19:46
  * @LastEditors: Cao Shixin
  * @Description: In User Settings Edit
  * @FilePath: /flutter_chart/lib/chart/painter/chart_line_focus_painter_tool.dart
@@ -367,13 +367,15 @@ class PainterTool {
                     dashArray: CircularIntervalList<double>(<double>[5.0, 4.0]),
                   ),
                   paint
-                    ..color = coordinateAxisModel.baseBean.hintLineColor
+                    ..color = tempYModel.hintLineColor ??
+                        coordinateAxisModel.baseBean.hintLineColor
                     ..strokeWidth = coordinateAxisModel.baseBean.hintLineWidth);
             } else {
               canvas.drawPath(
                   hitXPath,
                   paint
-                    ..color = coordinateAxisModel.baseBean.hintLineColor
+                    ..color = tempYModel.hintLineColor ??
+                        coordinateAxisModel.baseBean.hintLineColor
                     ..strokeWidth = coordinateAxisModel.baseBean.hintLineWidth);
             }
           }
@@ -627,7 +629,7 @@ class PainterTool {
                 end: Alignment.bottomCenter,
                 tileMode: TileMode.mirror,
                 colors: pointModel.cellPointSet.pointShaderColors ??
-                    [defaultColor, defaultColor, defaultColor.withOpacity(0.3)])
+                    [defaultColor, defaultColor.withOpacity(0.3)])
             .createShader(rect);
       canvas
         ..drawDRRect(

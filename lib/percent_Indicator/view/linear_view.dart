@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-09-23 17:26:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-09-24 17:21:40
+ * @LastEditTime: 2023-03-28 15:07:57
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -91,7 +91,7 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() {
           _containerWidth = _containerKey.currentContext?.size?.width ?? 0.0;

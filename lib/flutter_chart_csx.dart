@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-26 13:54:20
+ * @LastEditTime: 2023-03-28 15:12:16
  * @Description: 公共头文件
  * @Email: cao_shixin@yahoo.com
  */
@@ -33,3 +33,7 @@ export 'percent_Indicator/enum/common_enum.dart';
 export 'percent_Indicator/model/circular_model.dart';
 export 'percent_Indicator/model/linear_model.dart';
 export 'percent_Indicator/model/percent_model.dart';
+
+//常用小组件
+export 'normal_widget/ui/custom_check_box.dart';
+export 'normal_widget/ui/done_widget.dart';

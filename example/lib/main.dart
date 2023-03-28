@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-03-29 10:26:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-26 13:58:23
+ * @LastEditTime: 2023-03-28 15:12:53
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'chart_dimensionality_view_1.dart';
 import 'chart_dimensionality_view_2.dart';
 import 'chart_line_gradiet.dart';
+import 'normal_widget.dart';
 
 void main() => runApp(MyApp());
 
@@ -67,6 +68,8 @@ final Map<String, WidgetBuilder> _routes = {
   PercentIndicatorCircle.routeName: (_) => PercentIndicatorCircle(),
   //线条进度指示器
   PercentIndicatorLine.routeName: (_) => PercentIndicatorLine(),
+  //常用小组件展示
+  NormalWidget.routeName: (_) => NormalWidget(),
 };
 
 class MyApp extends StatelessWidget {
@@ -144,6 +147,7 @@ class _MyAppPageState extends State<MyAppPage> {
       CellModel(
           title: PercentIndicatorLine.title,
           routeName: PercentIndicatorLine.routeName),
+      CellModel(title: NormalWidget.title, routeName: NormalWidget.routeName),
     ];
   }
 

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-08-20 20:35:07
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-21 14:55:55
+ * @LastEditTime: 2023-03-28 15:22:48
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -35,11 +35,20 @@ class DialStyleY {
   String centerSubTitle;
   //标注文案样式，centerSubTitle有内容时有效
   TextStyle centerSubTextStyle;
+
+  /// 如果有辅助线的时候，需要特殊设置的辅助线颜色，这个参数对标baseBean模型参数中的[hintLineColor]，这里不为空的以后，这个[positionRetioy]的辅助线颜色设置以此为准
+  Color? hintLineColor;
+  /// 目前只对ChartLineFocus有效，其他图表暂时无意义
+  /// 如果FocusChartBeanMain中的参数[gradualColors]参数设置为null的时候，区间渐变从此区间顶topcenter，到区间底部bottomcenter的LinearGradient颜色填充。如果不设置则默认此区间y轴副文本颜色，bottomcenter为此区间y轴副文本颜色的0.3
+  List<Color>? fillColors;
+
   DialStyleY(
       {required this.title,
       this.titleStyle = defaultTextStyle,
       this.centerSubTitle = '',
       this.centerSubTextStyle = defaultTextStyle,
+      this.hintLineColor,
+      this.fillColors,
       required this.positionRetioy});
 }
 
@@ -150,7 +159,6 @@ class UnitXY {
       this.textStyle = defaultTextStyle});
 }
 
-
 class CellPointSet {
   //线条点的显示样式,默认矩形模式
   final PointType pointType;
@@ -186,8 +194,6 @@ class CellPointSet {
 
   static const CellPointSet normal = CellPointSet();
 }
-
-
 
 //某点上下左右的辅助线显示类型,不设置某个方位的类型就不会绘制
 class HintEdgeInset {

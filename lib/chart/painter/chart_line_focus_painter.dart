@@ -286,8 +286,9 @@ class ChartLineFocusPainter extends BasePainter {
             PointModel(
                 offset: Offset(currentX, currentY),
                 cellPointSet: tempValueArr[i].cellPointSet,
-                sectionColor:
-                    _getGradualColor(tempValueArr[i].value!, null).first),
+                sectionColor: _getGradualColor(tempValueArr[i].value!, null,
+                        isPoint: true)
+                    .first),
           );
         }
         if (isPressPoints) {
@@ -333,8 +334,9 @@ class ChartLineFocusPainter extends BasePainter {
             PointModel(
                 offset: Offset(currentX, currentY!),
                 cellPointSet: tempValueArr[i].cellPointSet,
-                sectionColor:
-                    _getGradualColor(tempValueArr[i].value!, null).first),
+                sectionColor: _getGradualColor(tempValueArr[i].value!, null,
+                        isPoint: true)
+                    .first),
           );
         }
         if (isPressPoints) {
@@ -395,31 +397,48 @@ class ChartLineFocusPainter extends BasePainter {
     return extremum;
   }
 
-  /// 获取渐变色
-  List<Color> _getGradualColor(double value, List<Color>? gradualColors) {
+  /// 获取渐变色, [isPoint]应该是之前calm的时候定制的可渐变的点显示使用，后面优化可以以此参考
+  List<Color> _getGradualColor(double value, List<Color>? gradualColors,
+      {bool isPoint = false}) {
     if (gradualColors != null) {
       return gradualColors;
     }
-    var mainColor =
-        _getCommonDealValueRelyOn(value)?.centerSubTextStyle.color ??
-            defaultColor;
-    return [mainColor, mainColor.withOpacity(0.3)];
+    var tempModel = _getCommonDealValueRelyOn(value);
+    var defaultMainColor = tempModel?.centerSubTextStyle.color ?? defaultColor;
+    if (isPoint) {
+      return [defaultMainColor, defaultMainColor.withOpacity(0.3)];
+    }
+    //区间渐变颜色可自定义外抛
+    return tempModel?.fillColors ??
+        [defaultMainColor, defaultMainColor.withOpacity(0.3)];
   }
 
   DialStyleY? _getCommonDealValueRelyOn(double value) {
     DialStyleY? _tempDialStyleY;
-    if (_isPositiveSequence && value >= baseBean.yDialValues.first.titleValue) {
-      _tempDialStyleY = baseBean.yDialValues.first;
-    } else if (!_isPositiveSequence &&
-        value >= baseBean.yDialValues.last.titleValue) {
-      _tempDialStyleY = baseBean.yDialValues[baseBean.yDialValues.length - 1];
+    if (_isPositiveSequence) {
+      if (value >= baseBean.yDialValues.first.titleValue) {
+        _tempDialStyleY = baseBean.yDialValues.first;
+      } else if (value <= baseBean.yDialValues.last.titleValue) {
+        _tempDialStyleY = baseBean.yDialValues.last;
+      } else {
+        for (var i = 0; i < baseBean.yDialValues.length - 1; i++) {
+          if (value <= baseBean.yDialValues[i].titleValue &&
+              value > baseBean.yDialValues[i + 1].titleValue) {
+            _tempDialStyleY = baseBean.yDialValues[i];
+          }
+        }
+      }
     } else {
-      for (var i = 0; i < baseBean.yDialValues.length - 1; i++) {
-        if ((value <= baseBean.yDialValues[i].titleValue &&
-                value > baseBean.yDialValues[i + 1].titleValue) ||
-            (value > baseBean.yDialValues[i].titleValue &&
-                value <= baseBean.yDialValues[i + 1].titleValue)) {
-          _tempDialStyleY = baseBean.yDialValues[i];
+      if (value >= baseBean.yDialValues.last.titleValue) {
+        _tempDialStyleY = baseBean.yDialValues.last;
+      } else if (value <= baseBean.yDialValues.first.titleValue) {
+        _tempDialStyleY = baseBean.yDialValues.first;
+      } else {
+        for (var i = 0; i < baseBean.yDialValues.length - 1; i++) {
+          if (value > baseBean.yDialValues[i].titleValue &&
+              value <= baseBean.yDialValues[i + 1].titleValue) {
+            _tempDialStyleY = baseBean.yDialValues[i];
+          }
         }
       }
     }
