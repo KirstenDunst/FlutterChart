@@ -1,6 +1,8 @@
 # flutter_chart
 
-** 图表库集合：<a href="#柱状图">柱状图</a>、<a href="#饼状图">饼状图</a>、<a href="#折线图">折线图</a>、<a href="#多维图">多维图</a>、<a href="#专注力曲线图">专注力曲线图</a>、<a href="线性指示器">线性指示器</a>、<a href= "弧形指示器">弧形指示器</a>  **
+![所有功能示例](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/function_introduction.png)
+
+** 图表库集合：<a href="#柱状图">柱状图</a>、<a href="#饼状图">饼状图</a>、<a href="#折线图">折线图</a>、<a href="#多维图">多维图</a>、<a href="#专注力曲线图">专注力曲线图</a>、<a href="#记忆力图表游戏结果">记忆力游戏结果图</a>、<a href="线性指示器">线性指示器</a>、<a href= "弧形指示器">弧形指示器</a>、<a href= "常用小组件">常用小组件</a> **
 
 
 # 统一设置
@@ -332,6 +334,8 @@ class _ChartLineState extends State<ChartLinePage> {
 
 4.多维图<a id="多维图"></a>
 ![多维图](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/dimensionality.png)
+![多维图](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/dimensionality_1.png)
+![多维图](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/dimensionality_2.png)
 ```flutter
 Widget _buildWidget(BuildContext context) {
     var chartLine = ChartDimensionality(
@@ -483,7 +487,20 @@ class FocusChartBeanMain {
 }
 ```
 
+6.记忆力图表游戏结果<a id="记忆力图表游戏结果"></a>
+
+```flutter
+  ResultMemory(
+    contentWidth: 500,
+    extraJson: pic_extraJson,
+    // isShow: true,
+    backgroundColor: Colors.orange,
+  )
+```
+
+
 7.线性指示器<a id="线性指示器"></a>
+![线性指示器](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/indicator_line.png)
 ```flutter
 LinearPercentIndicator(
                 width: 140.0,
@@ -508,6 +525,8 @@ LinearPercentIndicator(
 ```
 
 8.弧形指示器<a id="弧形指示器"></a>
+![弧形指示器](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/indicator_circle_1.png)
+![弧形指示器](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/indicator_circle_2.png)
 ```flutter
 CircularPercentIndicator(
                 size: 100.0,
@@ -531,4 +550,27 @@ CircularPercentIndicator(
                 ),
                 strokeCap: StrokeCap.butt,
               ),
+```
+
+9.常用小组件<a id="常用小组件"></a>
+![常用小组件](https://github.com/KirstenDunst/Resource/blob/main/flutter_chart/normal_widget.gif)
+```flutter
+// 方形选中和非选中“对勾”
+CustomCheckbox(
+              strokeWidth: 3,
+              strokeColor: Colors.orange,
+              normalBorderColor: Colors.cyan,
+              fillColor: Colors.red,
+              radius: 3,
+              value: _checked,
+              onChanged: _onChange,
+            ),
+//圆形选中和非选中“对勾”
+DoneWidget(
+            outline: true,
+            value: _checked,
+            color: Colors.orange,
+            normalBorderColor: Colors.cyan,
+            onChanged: _onChange,
+          ),
 ```
