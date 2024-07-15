@@ -11,7 +11,8 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class NormalWidget extends StatefulWidget {
   static const String routeName = '/normal_widget';
   static const String title = '常用小组件展示';
-  const NormalWidget({Key key}) : super(key: key);
+
+  const NormalWidget({super.key});
 
   @override
   State<NormalWidget> createState() => _NormalwidgetState();
@@ -23,11 +24,11 @@ class _NormalwidgetState extends State<NormalWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(NormalWidget.title),
+        title: const Text(NormalWidget.title),
       ),
       body: Column(
         children: [
-          Text('CustomCheckbox show:'),
+          const Text('CustomCheckbox show:'),
           CustomCheckbox(
             value: _checked,
             onChanged: _onChange,
@@ -58,7 +59,7 @@ class _NormalwidgetState extends State<NormalWidget> {
               onChanged: _onChange,
             ),
           ),
-          Text('DoneWidget show:'),
+          const Text('DoneWidget show:'),
           DoneWidget(
             value: _checked,
             onChanged: _onChange,

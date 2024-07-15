@@ -128,9 +128,20 @@ class PainterTool {
         coordinateAxisModel.fixedHeight;
     var _endX = coordinateAxisModel.baseBean.basePadding.left +
         coordinateAxisModel.fixedWidth;
+    //基准线距离xy区域底部的高度
+    var baseLineYHeight = coordinateAxisModel.baseBean.xBaseLineY == null
+        ? 0.0
+        : ((coordinateAxisModel.baseBean.xBaseLineY!.clamp(
+                    coordinateAxisModel.baseBean.yMin,
+                    coordinateAxisModel.baseBean.yMax) -
+                coordinateAxisModel.baseBean.yMin) /
+            (coordinateAxisModel.baseBean.yMax -
+                coordinateAxisModel.baseBean.yMin) *
+            coordinateAxisModel.fixedHeight);
+    var xLineY = _startY - baseLineYHeight;
     canvas.drawLine(
-        Offset(coordinateAxisModel.baseBean.basePadding.left, _startY),
-        Offset(_endX + overPadding, _startY),
+        Offset(coordinateAxisModel.baseBean.basePadding.left, xLineY),
+        Offset(_endX + overPadding, xLineY),
         paint
           ..color = coordinateAxisModel.baseBean.xColor
           ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth); //x轴
@@ -141,41 +152,49 @@ class PainterTool {
         paint
           ..color = coordinateAxisModel.baseBean.yColor
           ..strokeWidth = coordinateAxisModel.baseBean.xyLineWidth); //y轴
-    if (coordinateAxisModel.baseBean.unitX != null) {
-      //绘制x轴单位内容
-      var model = coordinateAxisModel.baseBean.unitX!;
-      var tp = TextPainter(
-          textAlign: TextAlign.center,
-          ellipsis: '.',
-          text: TextSpan(text: model.text, style: model.textStyle),
-          textDirection: TextDirection.ltr)
-        ..layout();
-      tp.paint(
-        canvas,
-        Offset(
-            _endX + overPadding + model.offset.dx, _startY + model.offset.dy),
-      );
-    }
-    if (coordinateAxisModel.baseBean.unitY != null) {
-      //绘制y轴单位内容
-      var model = coordinateAxisModel.baseBean.unitY!;
-      var tp = TextPainter(
-          textAlign: TextAlign.center,
-          ellipsis: '.',
-          text: TextSpan(text: model.text, style: model.textStyle),
-          textDirection: TextDirection.ltr)
-        ..layout();
-      tp.paint(
-        canvas,
-        Offset(
-            coordinateAxisModel.baseBean.basePadding.left -
-                model.offset.dx -
-                tp.width,
-            coordinateAxisModel.baseBean.basePadding.top -
-                overPadding -
-                model.offset.dy -
-                tp.height),
-      );
+    if (coordinateAxisModel.baseBean.units != null) {
+      //绘制xy轴单位内容
+      for (var model in coordinateAxisModel.baseBean.units!) {
+        var tp = TextPainter(
+            textAlign: TextAlign.center,
+            ellipsis: '.',
+            text: TextSpan(text: model.text, style: model.textStyle),
+            textDirection: TextDirection.ltr)
+          ..layout();
+        var offset = Offset.zero;
+        switch (model.baseOrientation) {
+          case UnitOrientation.topLeft:
+            offset = Offset(
+                coordinateAxisModel.baseBean.basePadding.left -
+                    model.spaceDif.dx -
+                    tp.width,
+                coordinateAxisModel.baseBean.basePadding.top -
+                    overPadding -
+                    model.spaceDif.dy -
+                    tp.height);
+            break;
+          case UnitOrientation.topRight:
+            offset = Offset(
+                _endX + overPadding + model.spaceDif.dx,
+                coordinateAxisModel.baseBean.basePadding.top -
+                    overPadding -
+                    model.spaceDif.dy -
+                    tp.height);
+            break;
+          case UnitOrientation.bottomLeft:
+            offset = Offset(
+                coordinateAxisModel.baseBean.basePadding.left -
+                    model.spaceDif.dx -
+                    tp.width,
+                _startY + model.spaceDif.dy);
+            break;
+          case UnitOrientation.bottomRight:
+            offset = Offset(_endX + overPadding + model.spaceDif.dx,
+                _startY + model.spaceDif.dy);
+            break;
+        }
+        tp.paint(canvas, offset);
+      }
     }
     var showX = true;
     var showY = true;
@@ -196,7 +215,7 @@ class PainterTool {
     }
     if (showX) {
       if (coordinateAxisModel.baseBean.isShowBorderRight) {
-        ///最右侧垂直边界线
+        //最右侧垂直边界线
         canvas.drawLine(
             Offset(_endX, _startY),
             Offset(_endX, coordinateAxisModel.baseBean.basePadding.top),
@@ -213,7 +232,7 @@ class PainterTool {
               tempXDigalModel.positionRetioy!; //两个点之间的x方向距离
         }
         if (coordinateAxisModel.baseBean.isShowX) {
-          ///绘制x轴文本
+          //绘制x轴文本
           var tpx = TextPainter(
               textAlign: TextAlign.center,
               ellipsis: '.',
@@ -237,18 +256,14 @@ class PainterTool {
                   _startY + transitHeight));
         }
         if (coordinateAxisModel.baseBean.isShowHintY && i != 0) {
+          var xStart = coordinateAxisModel.baseBean.basePadding.left +
+              dw +
+              coordinateAxisModel.bothEndPitchX;
           //y轴辅助线
           var hitYPath = Path();
           hitYPath
-            ..moveTo(
-                coordinateAxisModel.baseBean.basePadding.left +
-                    dw +
-                    coordinateAxisModel.bothEndPitchX,
-                _startY)
-            ..lineTo(
-                coordinateAxisModel.baseBean.basePadding.left +
-                    dw +
-                    coordinateAxisModel.bothEndPitchX,
+            ..moveTo(xStart, _startY)
+            ..lineTo(xStart,
                 coordinateAxisModel.baseBean.basePadding.top - overPadding);
           if (coordinateAxisModel.baseBean.isHintLineImaginary) {
             canvas.drawPath(
@@ -269,13 +284,16 @@ class PainterTool {
           }
         }
         if (coordinateAxisModel.baseBean.isShowXScale) {
-          ///x轴刻度
+          //x轴刻度
           canvas.drawLine(
               Offset(
                   coordinateAxisModel.baseBean.basePadding.left +
                       dw +
                       coordinateAxisModel.bothEndPitchX,
-                  _startY),
+                  xLineY +
+                      (xLineY == _startY
+                          ? 0
+                          : coordinateAxisModel.baseBean.rulerWidth)),
               Offset(
                   coordinateAxisModel.baseBean.basePadding.left +
                       dw +
@@ -290,7 +308,7 @@ class PainterTool {
 
     if (showY) {
       if (coordinateAxisModel.baseBean.isShowBorderTop) {
-        ///最顶部水平边界线
+        //最顶部水平边界线
         canvas.drawLine(
             Offset(coordinateAxisModel.baseBean.basePadding.left,
                 coordinateAxisModel.baseBean.basePadding.top),
@@ -304,56 +322,39 @@ class PainterTool {
             i < coordinateAxisModel.baseBean.yDialValues.length;
             i++) {
           var tempYModel = coordinateAxisModel.baseBean.yDialValues[i];
-
-          ///绘制y轴文本
-          var yValue = tempYModel.title;
           var yLength =
               tempYModel.positionRetioy * coordinateAxisModel.fixedHeight;
-          var tpY = TextPainter(
-              textAlign: TextAlign.right,
-              ellipsis: '.',
-              maxLines: 1,
-              text: TextSpan(text: '$yValue', style: tempYModel.titleStyle),
-              textDirection: TextDirection.rtl)
-            ..layout();
-          tpY.paint(
-              canvas,
-              Offset(
-                  coordinateAxisModel.baseBean.isLeftYDial
-                      ? (coordinateAxisModel.baseBean.basePadding.left -
-                          10 -
-                          tpY.width)
-                      : _endX + 8,
-                  _startY - yLength - tpY.height / 2));
-          var nextLength = ((i ==
-                      coordinateAxisModel.baseBean.yDialValues.length - 1)
-                  ? 0.0
-                  //放到最后一个，无论是哪里，都是和最后一个0的比较
-                  // coordinateAxisModel.baseBean.yDialValues.last.positionRetioy
-                  : coordinateAxisModel
-                      .baseBean.yDialValues[i + 1].positionRetioy) *
-              coordinateAxisModel.fixedHeight;
+          var nextLength =
+              ((i == coordinateAxisModel.baseBean.yDialValues.length - 1)
+                      ? 0.0
+                      : coordinateAxisModel
+                          .baseBean.yDialValues[i + 1].positionRetioy) *
+                  coordinateAxisModel.fixedHeight;
           var subLength = (yLength + nextLength) / 2;
-          var tpSub = TextPainter(
-              textAlign: TextAlign.center,
-              ellipsis: '.',
-              maxLines: 5,
-              text: TextSpan(
-                  text: tempYModel.centerSubTitle,
-                  style: tempYModel.centerSubTextStyle),
-              textDirection: TextDirection.ltr)
-            ..layout();
-          tpSub.paint(
-              canvas,
-              Offset(
-                  coordinateAxisModel.baseBean.isLeftYDialSub
-                      ? (coordinateAxisModel.baseBean.basePadding.left -
-                          tpSub.width -
-                          10)
-                      : (_endX + 8),
-                  _startY - subLength - tpSub.height / 2));
-
-          if (coordinateAxisModel.baseBean.isShowHintX && yLength != 0) {
+          if (tempYModel.leftSub != null) {
+            _drawYText(
+                tempYModel.leftSub!,
+                true,
+                coordinateAxisModel.baseBean.basePadding.left - 10,
+                _startY,
+                _endX,
+                yLength,
+                subLength,
+                canvas);
+          }
+          if (tempYModel.rightSub != null) {
+            _drawYText(
+                tempYModel.rightSub!,
+                false,
+                coordinateAxisModel.baseBean.basePadding.left - 10,
+                _startY,
+                _endX,
+                yLength,
+                subLength,
+                canvas);
+          }
+          if (coordinateAxisModel.baseBean.isShowHintX &&
+              yLength != baseLineYHeight) {
             //x轴辅助线
             var hitXPath = Path();
             hitXPath
@@ -380,7 +381,7 @@ class PainterTool {
             }
           }
           if (coordinateAxisModel.baseBean.isShowYScale) {
-            ///y轴刻度
+            //y轴刻度
             canvas.drawLine(
                 Offset(coordinateAxisModel.baseBean.basePadding.left,
                     _startY - yLength),
@@ -395,6 +396,42 @@ class PainterTool {
         }
       }
     }
+  }
+
+  static void _drawYText(
+    DialStyleYSub model,
+    bool isLeft,
+    double leftStart,
+    double startY,
+    double endX,
+    double yLength,
+    double subLength,
+    Canvas canvas,
+  ) {
+    //绘制y轴文本
+    var tpY = TextPainter(
+        textAlign: TextAlign.right,
+        ellipsis: '.',
+        maxLines: 1,
+        text: TextSpan(text: '${model.title}', style: model.titleStyle),
+        textDirection: TextDirection.ltr)
+      ..layout();
+    tpY.paint(
+        canvas,
+        Offset(isLeft ? (leftStart - tpY.width) : endX + 8,
+            startY - yLength - tpY.height / 2));
+    var tpSub = TextPainter(
+        textAlign: TextAlign.center,
+        ellipsis: '.',
+        maxLines: 5,
+        text: TextSpan(
+            text: model.centerSubTitle, style: model.centerSubTextStyle),
+        textDirection: TextDirection.ltr)
+      ..layout();
+    tpSub.paint(
+        canvas,
+        Offset(isLeft ? (leftStart - tpSub.width) : (endX + 8),
+            startY - subLength - tpSub.height / 2));
   }
 
   //绘制隔离带，x轴
@@ -419,7 +456,7 @@ class PainterTool {
       var tempPaint = Paint()
         ..isAntiAlias = true
         ..strokeWidth = item.borderWidth ?? 1
-        ..color = item.fillColor!
+        ..color = item.fillColor ?? Colors.transparent
         ..style = PaintingStyle.fill;
       canvas.drawPath(tempPath, tempPaint);
       //边缘线
@@ -453,19 +490,37 @@ class PainterTool {
           borderLinePaint,
         );
       }
-//文字显示
-      var tempText = TextPainter(
-          textAlign: TextAlign.center,
-          ellipsis: '.',
-          maxLines: 1,
-          text: TextSpan(text: item.title, style: item.titleStyle),
-          textDirection: TextDirection.ltr)
-        ..layout();
-      //定义在图表上层显示
-      tempText.paint(
-          canvas,
-          Offset(tempStartX + tempWidth / 2 - tempText.width / 2,
-              endY - tempText.height));
+      if (item.textTitle != null) {
+        //文字显示
+        var tempText = TextPainter(
+            textAlign: TextAlign.center,
+            ellipsis: '.',
+            maxLines: 1,
+            text: TextSpan(
+                text: item.textTitle!.title, style: item.textTitle!.titleStyle),
+            textDirection: TextDirection.ltr)
+          ..layout();
+        //定义在图表上层显示
+        tempText.paint(
+            canvas,
+            Offset(tempStartX + tempWidth / 2 - tempText.width / 2,
+                endY - tempText.height - item.titleBottomSpace));
+      }
+
+      if (item.imgTitle != null) {
+        //图片显示
+        canvas.drawImageRect(
+          item.imgTitle!.img,
+          Rect.fromLTWH(0, 0, item.imgTitle!.img.width.toDouble(),
+              item.imgTitle!.img.height.toDouble()),
+          Rect.fromLTWH(
+              tempStartX + tempWidth / 2 - item.imgTitle!.imgSize.width / 2,
+              endY - item.imgTitle!.imgSize.height - item.titleBottomSpace,
+              item.imgTitle!.imgSize.width,
+              item.imgTitle!.imgSize.height),
+          Paint(),
+        );
+      }
     }
   }
 

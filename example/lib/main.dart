@@ -29,50 +29,54 @@ import 'chart_dimensionality_view_2.dart';
 import 'chart_line_gradiet.dart';
 import 'normal_widget.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 final Map<String, WidgetBuilder> _routes = {
   //FN专注力样式图
-  FocusChartLinePage.routeName: (_) => FocusChartLinePage(),
+  FocusChartLinePage.routeName: (_) => const FocusChartLinePage(),
   //FN专注力特殊点样式图
-  FocusChartSpecialPointPage.routeName: (_) => FocusChartSpecialPointPage(),
+  FocusChartSpecialPointPage.routeName: (_) =>
+      const FocusChartSpecialPointPage(),
   //FN专注力颜色渐变曲线
-  FocusChartGradientLinePage.routeName: (_) => FocusChartGradientLinePage(),
+  FocusChartGradientLinePage.routeName: (_) =>
+      const FocusChartGradientLinePage(),
   //FN大师竞赛双专注力样式图
-  FNDoubleLinePage.routeName: (_) => FNDoubleLinePage(),
+  FNDoubleLinePage.routeName: (_) => const FNDoubleLinePage(),
   //FN步进曲线，可拖拽
-  StepCurveLine.routeName: (_) => StepCurveLine(),
+  StepCurveLine.routeName: (_) => const StepCurveLine(),
   //柱状顶部半圆型
-  ChartBarCirclePage.routeName: (_) => ChartBarCirclePage(),
+  ChartBarCirclePage.routeName: (_) => const ChartBarCirclePage(),
   //柱状图顶部自定义弧角
-  ChartBarRoundPage.routeName: (_) => ChartBarRoundPage(),
+  ChartBarRoundPage.routeName: (_) => const ChartBarRoundPage(),
   //平滑曲线带填充颜色
-  ChartCurvePage.routeName: (_) => ChartCurvePage(),
+  ChartCurvePage.routeName: (_) => const ChartCurvePage(),
   //折线y轴区间放大
-  ChartLineSectionEnlarge.routeName: (_) => ChartLineSectionEnlarge(),
+  ChartLineSectionEnlarge.routeName: (_) => const ChartLineSectionEnlarge(),
   //折线带填充颜色
-  ChartLinePage.routeName: (_) => ChartLinePage(),
+  ChartLinePage.routeName: (_) => const ChartLinePage(),
   //折线线条渐变色
-  ChartLineGradientPage.routeName: (_) => ChartLineGradientPage(),
+  ChartLineGradientPage.routeName: (_) => const ChartLineGradientPage(),
   //双折线
-  DoubleChartlinePage.routeName: (_) => DoubleChartlinePage(),
+  DoubleChartlinePage.routeName: (_) => const DoubleChartlinePage(),
   //饼状图
-  ChartPiePage.routeName: (_) => ChartPiePage(),
+  ChartPiePage.routeName: (_) => const ChartPiePage(),
   //维度图
-  ChartDimensionalityView.routeName: (_) => ChartDimensionalityView(),
+  ChartDimensionalityView.routeName: (_) => const ChartDimensionalityView(),
   //纬度图另一种显示样式
-  ChartDimensionaView.routeName: (_) => ChartDimensionaView(),
+  ChartDimensionaView.routeName: (_) => const ChartDimensionaView(),
   //纬度图第二种显示样式
-  ChartDimensionaView2.routeName: (_) => ChartDimensionaView2(),
+  ChartDimensionaView2.routeName: (_) => const ChartDimensionaView2(),
   //圆圈进度指示器
-  PercentIndicatorCircle.routeName: (_) => PercentIndicatorCircle(),
+  PercentIndicatorCircle.routeName: (_) => const PercentIndicatorCircle(),
   //线条进度指示器
-  PercentIndicatorLine.routeName: (_) => PercentIndicatorLine(),
+  PercentIndicatorLine.routeName: (_) => const PercentIndicatorLine(),
   //常用小组件展示
-  NormalWidget.routeName: (_) => NormalWidget(),
+  NormalWidget.routeName: (_) => const NormalWidget(),
 };
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -81,17 +85,19 @@ class MyApp extends StatelessWidget {
       routes: _routes,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('绘图图表测试'),
+          title: const Text('绘图图表测试'),
         ),
-        body: MyAppPage(),
+        body: const MyAppPage(),
       ),
     );
   }
 }
 
 class MyAppPage extends StatefulWidget {
+  const MyAppPage({super.key});
+
   @override
-  _MyAppPageState createState() => _MyAppPageState();
+  State<MyAppPage> createState() => _MyAppPageState();
 }
 
 class _MyAppPageState extends State<MyAppPage> {
@@ -177,5 +183,5 @@ class CellModel {
   //路由地址名
   String routeName;
 
-  CellModel({this.title, this.routeName});
+  CellModel({required this.title, required this.routeName});
 }

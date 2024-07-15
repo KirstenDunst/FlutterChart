@@ -10,6 +10,7 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
@@ -17,10 +18,11 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class FNDoubleLinePage extends StatefulWidget {
   static const String routeName = 'focus_chart_double_line';
   static const String title = 'FN大师竞赛双专注力样式图';
-  FNDoubleLinePage({Key key}) : super(key: key);
+
+  const FNDoubleLinePage({super.key});
 
   @override
-  _FNDoubleLinePageState createState() => _FNDoubleLinePageState();
+  State<FNDoubleLinePage> createState() => _FNDoubleLinePageState();
 }
 
 class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
@@ -28,7 +30,7 @@ class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FNDoubleLinePage.title),
+        title: const Text(FNDoubleLinePage.title),
       ),
       body: ChangeNotifierProvider(
         create: (_) => ChartFocusDoubleLineProvider(),
@@ -37,31 +39,32 @@ class _FNDoubleLinePageState extends State<FNDoubleLinePage> {
           return Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
             color: Colors.white,
+            clipBehavior: Clip.antiAlias,
             child: ChartLineFocus(
               size: Size(MediaQuery.of(context).size.width,
                   MediaQuery.of(context).size.height / 5 * 1.6),
               focusChartBeans: provider.focusChartBeanMains,
               baseBean: BaseBean(
-                basePadding:
-                    EdgeInsets.only(left: 20, bottom: 10, right: 20, top: 10),
+                basePadding: const EdgeInsets.only(
+                    left: 20, bottom: 10, right: 20, top: 10),
                 isShowHintX: true,
                 isShowHintY: false,
                 hintLineColor: Colors.blue,
                 isHintLineImaginary: false,
-                isLeftYDialSub: false,
                 xColor: Colors.black,
                 yColor: Colors.black,
                 yMax: 100.0,
                 yMin: 0.0,
                 yDialValues: provider.yArr,
+                yDialLeftMain: false,
               ),
               xMax: 60,
               xDialValues: provider.xArr,
             ),
-            clipBehavior: Clip.antiAlias,
           );
         }),
       ),
@@ -77,14 +80,15 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
         _focusChartBeanMain2,
       ];
 
-  FocusChartBeanMain _focusChartBeanMain1, _focusChartBeanMain2;
-  Timer _countdownTimer;
-  int _index = 0;
-  List<DialStyleX> _xArr;
-  List<DialStyleY> _yArr;
-  List<ChartBeanFocus> _beanList1, _beanList2;
+  late FocusChartBeanMain _focusChartBeanMain1, _focusChartBeanMain2;
+  Timer? _countdownTimer;
+  late int _index;
+  late List<DialStyleX> _xArr;
+  late List<DialStyleY> _yArr;
+  late List<ChartBeanFocus> _beanList1, _beanList2;
 
   ChartFocusDoubleLineProvider() {
+    _index = 0;
     _yArr = [];
     _xArr = [];
     _beanList1 = [];
@@ -96,32 +100,39 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
     var xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
     var yTexts = ['', '忘我', '一般', '走神'];
     var yTextColors = [
-      Color(0xEE172B88),
-      Color(0xEEF75E36),
-      Color(0xEEFFC278),
-      Color(0xEE172B88),
+      const Color(0xEE172B88),
+      const Color(0xEEF75E36),
+      const Color(0xEEFFC278),
+      const Color(0xEE172B88),
     ];
 
     for (var i = 0; i < yValues.length; i++) {
       _xArr.add(DialStyleX(
-        titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+        titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black),
         title: xValues[i],
         positionRetioy: xPositionRetioy[i],
       ));
       _yArr.add(
         DialStyleY(
-          title: yValues[i],
-          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-          centerSubTitle: yTexts[i],
+          leftSub: DialStyleYSub(
+              title: yValues[i],
+              titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black)),
+          rightSub: DialStyleYSub(
+            centerSubTitle: yTexts[i],
+            centerSubTextStyle:
+                TextStyle(fontSize: 10.0, color: yTextColors[i]),
+          ),
+          yValue: double.parse(yValues[i]),
           positionRetioy: 1 - double.parse(yValues[i]) / 100.0,
-          centerSubTextStyle: TextStyle(fontSize: 10.0, color: yTextColors[i]),
         ),
       );
     }
 
     _focusChartBeanMain1 = FocusChartBeanMain(
         sectionModel: LineSectionModel(),
-        gradualColors: [Colors.orange, Colors.orange],
+        lineShader: LineShaderSetModel(
+            baseLineTopGradient: LinearGradientModel(
+                shaderColors: [Colors.orange, Colors.orange])),
         lineWidth: 1,
         isLinkBreak: false,
         lineColor: Colors.blue);
@@ -142,19 +153,21 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
     _focusChartBeanMain2.canvasEnd = () {
       _countdownTimer?.cancel();
       _countdownTimer = null;
-      print('毁灭定时器4');
+      if (kDebugMode) {
+        print('毁灭定时器4');
+      }
     };
     //制造假数据结束
     _loadNewData();
   }
 
   void _loadNewData() async {
-    var _image1 = await UIImageUtil.loadImage('assets/head1.png');
-    var _image2 = await UIImageUtil.loadImage('assets/head2.jpeg');
+    var image1 = await UIImageUtil.loadImage('assets/head1.png');
+    var image2 = await UIImageUtil.loadImage('assets/head2.jpeg');
     _index = 0;
     _beanList1.clear();
     _beanList2.clear();
-    _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+    _countdownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_beanList1.isNotEmpty) {
         var model = _beanList1.last;
         model.cellPointSet = CellPointSet.normal;
@@ -172,10 +185,10 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
           second: _index > 10 ? (10 + _index) : _index,
           cellPointSet: CellPointSet(
             pointType: PointType.PlacehoderImage,
-            placehoderImage: _image1,
-            placeImageSize: Size(20, 20),
+            placehoderImage: image1,
+            placeImageSize: const Size(20, 20),
             centerPointOffsetLineColor: Colors.blue,
-            centerPointOffset: Offset(0, -20),
+            centerPointOffset: const Offset(0, -20),
           ),
         ),
       );
@@ -187,10 +200,10 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
           second: _index > 10 ? (10 + _index) : _index,
           cellPointSet: CellPointSet(
             pointType: PointType.PlacehoderImage,
-            placehoderImage: _image2,
-            placeImageSize: Size(20, 20),
+            placehoderImage: image2,
+            placeImageSize: const Size(20, 20),
             centerPointOffsetLineColor: Colors.red,
-            centerPointOffset: Offset(0, -20),
+            centerPointOffset: const Offset(0, -20),
           ),
         ),
       );
@@ -206,7 +219,9 @@ class ChartFocusDoubleLineProvider extends ChangeNotifier {
   void dispose() {
     _countdownTimer?.cancel();
     _countdownTimer = null;
-    print('毁灭');
+    if (kDebugMode) {
+      print('毁灭');
+    }
     super.dispose();
   }
 }

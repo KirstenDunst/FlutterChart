@@ -13,12 +13,14 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class DoubleChartlinePage extends StatefulWidget {
   static const String routeName = 'double_chart_line';
   static const String title = '双折线';
+
+  const DoubleChartlinePage({super.key});
   @override
-  _DoubleChartlineState createState() => _DoubleChartlineState();
+  State<DoubleChartlinePage> createState() => _DoubleChartlineState();
 }
 
 class _DoubleChartlineState extends State<DoubleChartlinePage> {
-  ChartBeanSystem _chartLineBeanSystem1, _chartLineBeanSystem2;
+  ChartBeanSystem? _chartLineBeanSystem1, _chartLineBeanSystem2;
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
           ChartLineBean(
             xPositionRetioy: 0 / 7,
             y: 30,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointSize: Size(8, 8),
               pointRadius: Radius.circular(4),
             ),
@@ -41,14 +43,14 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointType: PointType.PlacehoderImage,
               placehoderImage: uiimage,
-              placeImageSize: Size(10, 10),
-              pointSize: Size(8, 8),
-              pointRadius: Radius.circular(4),
+              placeImageSize: const Size(10, 10),
+              pointSize: const Size(8, 8),
+              pointRadius: const Radius.circular(4),
             ),
           ),
           ChartLineBean(
             xPositionRetioy: 2 / 7,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointSize: Size(8, 8),
               pointRadius: Radius.circular(4),
             ),
@@ -56,7 +58,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
           ChartLineBean(
             xPositionRetioy: 3 / 7,
             y: 67,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointSize: Size(8, 8),
               pointRadius: Radius.circular(4),
             ),
@@ -64,7 +66,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
           ChartLineBean(
             xPositionRetioy: 4 / 7,
             // y: 10,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointSize: Size(8, 8),
               pointRadius: Radius.circular(4),
             ),
@@ -75,15 +77,15 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointType: PointType.PlacehoderImage,
               placehoderImage: uiimage,
-              placeImageSize: Size(10, 10),
-              pointSize: Size(8, 8),
-              pointRadius: Radius.circular(4),
+              placeImageSize: const Size(10, 10),
+              pointSize: const Size(8, 8),
+              pointRadius: const Radius.circular(4),
             ),
           ),
           ChartLineBean(
             xPositionRetioy: 6 / 7,
             y: 10,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointSize: Size(8, 8),
               pointRadius: Radius.circular(4),
             ),
@@ -91,7 +93,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
           ChartLineBean(
             xPositionRetioy: 7 / 7,
             y: 100,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointType: PointType.PlacehoderImage,
               placehoderImage: null,
               placeImageSize: Size(10, 10),
@@ -100,10 +102,16 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             ),
           ),
         ],
-        shaderColors: [
-          Colors.blue.withOpacity(0.3),
-          Colors.blue.withOpacity(0.1)
-        ],
+        lineShader: LineShaderSetModel(
+          baseLineBottomGradient: LinearGradientModel(shaderColors: [
+            Colors.blueAccent.withOpacity(0.3),
+            Colors.blueAccent.withOpacity(0.1)
+          ]),
+          baseLineTopGradient: LinearGradientModel(shaderColors: [
+            Colors.blueAccent.withOpacity(0.3),
+            Colors.blueAccent.withOpacity(0.1)
+          ]),
+        ),
         lineColor: Colors.cyan,
       );
       _chartLineBeanSystem2 = ChartBeanSystem(
@@ -114,8 +122,8 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             xPositionRetioy: 0 / 7,
             y: 70,
             cellPointSet: CellPointSet(
-              pointSize: Size(10, 10),
-              pointRadius: Radius.circular(5),
+              pointSize: const Size(10, 10),
+              pointRadius: const Radius.circular(5),
               pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
             ),
           ),
@@ -123,15 +131,15 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
               xPositionRetioy: 1 / 7,
               y: 20,
               cellPointSet: CellPointSet(
-                pointSize: Size(10, 10),
+                pointSize: const Size(10, 10),
                 pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
               )),
           ChartLineBean(
             xPositionRetioy: 2 / 7,
             y: 30,
             cellPointSet: CellPointSet(
-              pointSize: Size(10, 10),
-              pointRadius: Radius.circular(5),
+              pointSize: const Size(10, 10),
+              pointRadius: const Radius.circular(5),
               pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
             ),
           ),
@@ -139,8 +147,8 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             xPositionRetioy: 3 / 7,
             y: 50,
             cellPointSet: CellPointSet(
-              pointSize: Size(10, 10),
-              pointRadius: Radius.circular(5),
+              pointSize: const Size(10, 10),
+              pointRadius: const Radius.circular(5),
               pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
             ),
           ),
@@ -148,8 +156,8 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             xPositionRetioy: 4 / 7,
             y: 100,
             cellPointSet: CellPointSet(
-              pointSize: Size(10, 10),
-              pointRadius: Radius.circular(5),
+              pointSize: const Size(10, 10),
+              pointRadius: const Radius.circular(5),
               pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
             ),
           ),
@@ -157,15 +165,15 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
               xPositionRetioy: 5 / 7,
               y: 30,
               cellPointSet: CellPointSet(
-                pointSize: Size(10, 10),
+                pointSize: const Size(10, 10),
                 pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
               )),
           ChartLineBean(
             xPositionRetioy: 6 / 7,
             y: 0,
             cellPointSet: CellPointSet(
-              pointSize: Size(10, 10),
-              pointRadius: Radius.circular(5),
+              pointSize: const Size(10, 10),
+              pointRadius: const Radius.circular(5),
               pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
             ),
           ),
@@ -173,16 +181,22 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             xPositionRetioy: 7 / 7,
             y: 0,
             cellPointSet: CellPointSet(
-              pointSize: Size(10, 10),
-              pointRadius: Radius.circular(5),
+              pointSize: const Size(10, 10),
+              pointRadius: const Radius.circular(5),
               pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
             ),
           ),
         ],
-        shaderColors: [
-          Colors.red.withOpacity(0.3),
-          Colors.red.withOpacity(0.1)
-        ],
+        lineShader: LineShaderSetModel(
+          baseLineBottomGradient: LinearGradientModel(shaderColors: [
+            Colors.red.withOpacity(0.3),
+            Colors.red.withOpacity(0.1)
+          ]),
+          baseLineTopGradient: LinearGradientModel(shaderColors: [
+            Colors.red.withOpacity(0.3),
+            Colors.red.withOpacity(0.1)
+          ]),
+        ),
         lineColor: Colors.red,
       );
       setState(() {});
@@ -193,7 +207,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(DoubleChartlinePage.title),
+        title: const Text(DoubleChartlinePage.title),
       ),
       body: _buildDoubleChartLine(context),
     );
@@ -206,13 +220,16 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       tempXs.add(
         DialStyleX(
             title: xarr[i],
-            titleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+            titleStyle: const TextStyle(color: Colors.grey, fontSize: 12),
             positionRetioy: (1 / (xarr.length - 1)) * i),
       );
     }
     var chartLine = ChartLine(
       xDialValues: tempXs,
-      chartBeanSystems: [_chartLineBeanSystem1, _chartLineBeanSystem2],
+      chartBeanSystems:
+          _chartLineBeanSystem1 == null || _chartLineBeanSystem2 == null
+              ? []
+              : [_chartLineBeanSystem1!, _chartLineBeanSystem2!],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
       baseBean: BaseBean(
@@ -221,23 +238,35 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
         rulerWidth: 3,
         yDialValues: [
           DialStyleY(
-            title: '0',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            leftSub: DialStyleYSub(
+                title: '0',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 0,
             positionRetioy: 0 / 100.0,
           ),
           DialStyleY(
-            title: '35',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            leftSub: DialStyleYSub(
+                title: '35',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 35,
             positionRetioy: 35 / 100.0,
           ),
           DialStyleY(
-            title: '65',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            leftSub: DialStyleYSub(
+                title: '65',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 65,
             positionRetioy: 65 / 100.0,
           ),
           DialStyleY(
-            title: '100',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            leftSub: DialStyleYSub(
+                title: '100',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 100,
             positionRetioy: 100 / 100.0,
           )
         ],
@@ -250,11 +279,11 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
       color: Colors.white.withOpacity(0.4),
-      child: chartLine,
       clipBehavior: Clip.antiAlias,
+      child: chartLine,
     );
   }
 }

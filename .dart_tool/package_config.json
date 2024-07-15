@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "async",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/async-2.10.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/async-2.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -15,7 +15,7 @@
     },
     {
       "name": "characters",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/characters-1.2.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/characters-1.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -27,9 +27,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/collection-1.17.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/collection-1.18.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "fake_async",
@@ -39,45 +39,57 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/caoshixin/flutter/packages/flutter",
+      "rootUri": "file:///Users/caoshixin/Flutter/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/caoshixin/flutter/packages/flutter_test",
+      "rootUri": "file:///Users/caoshixin/Flutter/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "leak_tracker",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker-10.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_flutter_testing",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker_flutter_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_testing",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "matcher",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/matcher-0.12.16+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "material_color_utilities",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/material_color_utilities-0.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
-      "name": "js",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/js-0.6.5",
-      "packageUri": "lib/",
-      "languageVersion": "2.16"
-    },
-    {
-      "name": "matcher",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/matcher-0.12.13",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "material_color_utilities",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/material_color_utilities-0.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.13"
-    },
-    {
       "name": "meta",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/meta-1.8.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/meta-1.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "path",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path-1.8.2",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path-1.9.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "path_drawing",
@@ -99,27 +111,27 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/caoshixin/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/caoshixin/Flutter/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.2"
     },
     {
       "name": "source_span",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/source_span-1.9.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/source_span-1.10.0",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/stack_trace-1.11.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/stack_trace-1.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "stream_channel",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/stream_channel-2.1.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/stream_channel-2.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.19"
     },
     {
       "name": "string_scanner",
@@ -135,9 +147,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.4.16",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.6.1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "vector_math",
@@ -146,13 +158,19 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "vm_service",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/vm_service-13.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "flutter_chart_csx",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2023-03-28T07:37:50.454156Z",
+  "generated": "2024-07-15T00:48:59.903426Z",
   "generator": "pub",
-  "generatorVersion": "2.19.5"
+  "generatorVersion": "3.3.4"
 }

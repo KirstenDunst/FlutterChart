@@ -22,6 +22,7 @@ export 'chart/bean/chart_bean_pie.dart';
 export 'chart/bean/chart_bean_dimensionality.dart';
 export 'chart/bean/chart_bean_bar.dart';
 export 'chart/bean/chart_bean_line.dart';
+export 'chart/bean/chart_bean_line_common.dart';
 export 'chart/bean/chart_typedef.dart';
 
 export 'chart/util/ui_image_util.dart';

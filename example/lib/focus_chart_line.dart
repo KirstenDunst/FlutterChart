@@ -10,6 +10,7 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
@@ -17,8 +18,10 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class FocusChartLinePage extends StatefulWidget {
   static const String routeName = 'focus_chart_line';
   static const String title = 'FN单专注力样式图';
+
+  const FocusChartLinePage({super.key});
   @override
-  _FocusChartLineState createState() => _FocusChartLineState();
+  State<FocusChartLinePage> createState() => _FocusChartLineState();
 }
 
 class _FocusChartLineState extends State<FocusChartLinePage> {
@@ -26,7 +29,7 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FocusChartLinePage.title),
+        title: const Text(FocusChartLinePage.title),
       ),
       body: ChangeNotifierProvider(
         create: (_) => ChartFocusLineProvider(),
@@ -35,9 +38,11 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
           return Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
             color: Colors.white,
+            clipBehavior: Clip.antiAlias,
             child: ChartLineFocus(
               size: Size(MediaQuery.of(context).size.width,
                   MediaQuery.of(context).size.height / 5 * 1.6),
@@ -47,10 +52,10 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
                 isShowHintY: false,
                 hintLineColor: Colors.blue,
                 isHintLineImaginary: false,
-                isLeftYDialSub: false,
                 yMax: 70.0,
                 yMin: 0.0,
                 yDialValues: provider.yArr,
+                yDialLeftMain: false,
               ),
               xSectionBeans: provider.xSectionBeans,
               ySectionBeans: [
@@ -79,7 +84,6 @@ class _FocusChartLineState extends State<FocusChartLinePage> {
               xMax: 60,
               xDialValues: provider.xArr,
             ),
-            clipBehavior: Clip.antiAlias,
           );
         }),
       ),
@@ -93,13 +97,13 @@ class ChartFocusLineProvider extends ChangeNotifier {
   List<DialStyleY> get yArr => _yArr;
   FocusChartBeanMain get focusChartBeanMain => _focusChartBeanMain;
 
-  List<ChartBeanFocus> _beanList;
-  FocusChartBeanMain _focusChartBeanMain;
-  Timer _countdownTimer;
-  int _index = 0;
-  List<DialStyleX> _xArr;
-  List<DialStyleY> _yArr;
-  List<SectionBean> _xSectionBeans;
+  late List<ChartBeanFocus> _beanList;
+  late FocusChartBeanMain _focusChartBeanMain;
+  Timer? _countdownTimer;
+  late int _index = 0;
+  late List<DialStyleX> _xArr;
+  late List<DialStyleY> _yArr;
+  late List<SectionBean> _xSectionBeans;
 
   ChartFocusLineProvider() {
     _beanList = [];
@@ -118,17 +122,23 @@ class ChartFocusLineProvider extends ChangeNotifier {
 
     for (var i = 0; i < yValues.length; i++) {
       _xArr.add(DialStyleX(
-        titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+        titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black),
         title: xValues[i],
         positionRetioy: xPositionRetioy[i],
       ));
-      _yArr.add(DialStyleY(
-          title: yValues[i],
-          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-          centerSubTitle: yTexts[i],
+      _yArr.add(
+        DialStyleY(
+          leftSub: DialStyleYSub(
+              title: yValues[i],
+              titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black)),
+          rightSub: DialStyleYSub(
+              centerSubTitle: yTexts[i],
+              centerSubTextStyle:
+                  TextStyle(fontSize: 10.0, color: yTextColors[i])),
           positionRetioy: 1 - double.parse(yValues[i]) / 70.0,
-          centerSubTextStyle:
-              TextStyle(fontSize: 10.0, color: yTextColors[i])));
+          yValue: double.parse(yValues[i]),
+        ),
+      );
     }
 
     _focusChartBeanMain = FocusChartBeanMain();
@@ -144,13 +154,17 @@ class ChartFocusLineProvider extends ChangeNotifier {
     _focusChartBeanMain.canvasEnd = () {
       _countdownTimer?.cancel();
       _countdownTimer = null;
-      print('毁灭定时器');
+      if (kDebugMode) {
+        print('毁灭定时器');
+      }
     };
 
     _xSectionBeans = [
       SectionBean(
-          title: '训练1',
-          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+          textTitle: TextSetModel(
+            title: '训练1',
+            titleStyle: const TextStyle(color: Colors.red, fontSize: 10),
+          ),
           startRatio: 0.1,
           widthRatio: 0.2,
           fillColor: Colors.orange.withOpacity(0.2),
@@ -158,14 +172,18 @@ class ChartFocusLineProvider extends ChangeNotifier {
           borderWidth: 2,
           isBorderSolid: false),
       SectionBean(
-          title: '训练2',
-          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+          textTitle: TextSetModel(
+            title: '训练2',
+            titleStyle: const TextStyle(color: Colors.red, fontSize: 10),
+          ),
           startRatio: 0.4,
           widthRatio: 0.05,
           fillColor: Colors.orange.withOpacity(0.2)),
       SectionBean(
-          title: '训练3',
-          titleStyle: TextStyle(color: Colors.red, fontSize: 10),
+          textTitle: TextSetModel(
+            title: '训练3',
+            titleStyle: const TextStyle(color: Colors.red, fontSize: 10),
+          ),
           startRatio: 0.7,
           widthRatio: 0.2,
           fillColor: Colors.orange.withOpacity(0.2))
@@ -175,7 +193,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
   }
 
   void _loadNewData() {
-    _countdownTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+    _countdownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_index == 0) {
         _beanList.clear();
       }
@@ -195,7 +213,9 @@ class ChartFocusLineProvider extends ChangeNotifier {
   void dispose() {
     _countdownTimer?.cancel();
     _countdownTimer = null;
-    print('毁灭');
+    if (kDebugMode) {
+      print('毁灭');
+    }
     super.dispose();
   }
 }

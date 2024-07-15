@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 import 'chart_bean.dart';
+import 'chart_bean_line_common.dart';
 
 //内部使用模型
 
@@ -16,11 +17,14 @@ import 'chart_bean.dart';
 class LineCanvasModel {
   List<Path> paths;
   Color pathColor;
+
   ///曲线或折线的整体绘制区域的渐变设置，如果不为空会覆盖 [lineColor]的设置效果，
   Gradient? lineGradient;
   double pathWidth;
-  List<Path> shadowPaths;
-  List<Color>? shaderColors;
+  //基线顶部的渐变区
+  LineShadowModel? baseLineTopShadow;
+  //基线底部的渐变区
+  LineShadowModel? baseLineBottomShadow;
   List<LinePointModel> points;
 
   LineCanvasModel({
@@ -28,9 +32,26 @@ class LineCanvasModel {
     this.pathColor = defaultColor,
     this.lineGradient,
     this.pathWidth = 1,
-    required this.shadowPaths,
-    this.shaderColors,
+    this.baseLineTopShadow,
+    this.baseLineBottomShadow,
     required this.points,
+  });
+}
+
+class LineShadowModel {
+  List<Path> shadowPaths;
+  //渐变色顶部高度
+  double shadowTopHeight;
+  //渐变色底部高度
+  double shadowBottomHeight;
+  double get shadowHeigth => (shadowBottomHeight - shadowTopHeight).abs();
+  LinearGradientModel linearGradient;
+
+  LineShadowModel({
+    required this.shadowPaths,
+    required this.linearGradient,
+    this.shadowTopHeight = 0,
+    this.shadowBottomHeight = 0,
   });
 }
 

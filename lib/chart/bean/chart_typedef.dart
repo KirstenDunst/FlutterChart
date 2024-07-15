@@ -29,5 +29,5 @@ typedef BarPointBack = Function(Offset? point, Size size, dynamic value);
  * index: 选中的维度的下标
  * value：触摸外传的参数（touchBackParam）
  */
-typedef DimensionaBack = Function(bool isTouch,
-    Offset? point, Size size, int index, dynamic value);
+typedef DimensionaBack = Function(
+    bool isTouch, Offset? point, Size size, int index, dynamic value);

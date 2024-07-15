@@ -9,26 +9,29 @@
  */
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartDimensionalityView extends StatefulWidget {
   static const String routeName = 'chart_dimensionality_view';
   static const String title = '维度图';
+
+  const ChartDimensionalityView({super.key});
   @override
-  _ChartDimensionalityViewState createState() =>
+  State<ChartDimensionalityView> createState() =>
       _ChartDimensionalityViewState();
 }
 
 class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
-  Timer _timer;
+  late Timer _timer;
   final GlobalKey<ChartDimensionalityState> globalKey = GlobalKey();
-  int _nowIndex;
+  late int _nowIndex;
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(seconds: 3), (time) {
-      globalKey.currentState.changeSelectDimension();
+    _timer = Timer.periodic(const Duration(seconds: 3), (time) {
+      globalKey.currentState?.changeSelectDimension();
     });
     _nowIndex = 0;
     super.initState();
@@ -44,7 +47,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartDimensionalityView.title),
+        title: const Text(ChartDimensionalityView.title),
       ),
       body: ListView(
         children: [
@@ -62,7 +65,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '选择性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
@@ -75,7 +78,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '持续性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
@@ -88,7 +91,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '转换性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
@@ -101,7 +104,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '分配性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
@@ -113,14 +116,14 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             tip: [
               TipModel(
                 title: '视觉性专注力',
-                titleStyle:
-                    TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+                titleStyle: const TextStyle(
+                    color: Colors.lightBlueAccent, fontSize: 15),
               )
             ],
             normalStyle: DimensionCellStyle(
               backgroundColor: Colors.transparent,
               borderColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               borderWidth: 0,
             )),
         ChartBeanDimensionality(
@@ -128,7 +131,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '玩儿呢',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
@@ -139,8 +142,9 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
       ],
       dimensionalityTags: [
         DimensionalityBean(
-          fillColor: Color(0xFFB1E3AD).withOpacity(0.6),
-          tagTitleStyle: TextStyle(color: Color(0xFF666666), fontSize: 16.0),
+          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
+          tagTitleStyle:
+              const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '初次评测',
           tagContents: [
             DimensionCellModel(value: 0.2),
@@ -152,8 +156,9 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
           ],
         ),
         DimensionalityBean(
-          fillColor: Color(0xFFF88282).withOpacity(0.6),
-          tagTitleStyle: TextStyle(color: Color(0xFF666666), fontSize: 16.0),
+          fillColor: const Color(0xFFF88282).withOpacity(0.6),
+          tagTitleStyle:
+              const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '本次评测',
           tagContents: [
             DimensionCellModel(value: 0.8),
@@ -168,11 +173,13 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 2),
       bgSet: DimensionBGSet(
-        circleLines: [1, 2, 3, 4].map((e) => DimensionBgCircleLine(
-              isHintLineImaginary: false,
-              lineWidth: 1,
-              lineColor: Colors.grey.withOpacity(0.5),
-            )).toList(),
+        circleLines: [1, 2, 3, 4]
+            .map((e) => DimensionBgCircleLine(
+                  isHintLineImaginary: false,
+                  lineWidth: 1,
+                  lineColor: Colors.grey.withOpacity(0.5),
+                ))
+            .toList(),
       ),
       centerR: 120,
       backgroundColor: Colors.white,
@@ -185,20 +192,20 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '选择性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
         ),
@@ -207,20 +214,20 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '持续性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
         ),
@@ -229,20 +236,20 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '转换性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
         ),
@@ -251,20 +258,20 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '分配性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
         ),
@@ -273,20 +280,20 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '视觉性专注力',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
         ),
@@ -295,28 +302,29 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             TipModel(
               title: '玩儿呢',
               titleStyle:
-                  TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  const TextStyle(color: Colors.lightBlueAccent, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
         )
       ],
       dimensionalityTags: [
         DimensionalityBean(
-          fillColor: Color(0xFFB1E3AD).withOpacity(0.6),
-          tagTitleStyle: TextStyle(color: Color(0xFF666666), fontSize: 16.0),
+          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
+          tagTitleStyle:
+              const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '初次评测',
           tagContents: [
             DimensionCellModel(value: 0.2),
@@ -328,8 +336,9 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
           ],
         ),
         DimensionalityBean(
-          fillColor: Color(0xFFF88282).withOpacity(0.6),
-          tagTitleStyle: TextStyle(color: Color(0xFF666666), fontSize: 16.0),
+          fillColor: const Color(0xFFF88282).withOpacity(0.6),
+          tagTitleStyle:
+              const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '本次评测',
           tagContents: [
             DimensionCellModel(value: 0.8),
@@ -344,18 +353,22 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 2),
       bgSet: DimensionBGSet(
-        circleLines: [1, 2, 3, 4].map((e) => DimensionBgCircleLine(
-              isHintLineImaginary: false,
-              lineWidth: 2,
-              lineColor: Colors.blueAccent,
-            )).toList(),
+        circleLines: [1, 2, 3, 4]
+            .map((e) => DimensionBgCircleLine(
+                  isHintLineImaginary: false,
+                  lineWidth: 2,
+                  lineColor: Colors.blueAccent,
+                ))
+            .toList(),
       ),
       centerR: 120,
       backgroundColor: Colors.white,
       touchSet: DimensionTouchSet(
         touchBack: (isTouch, point, size, index, value) {
-          print(
-              '收到反馈结果>>>>$isTouch>>>>>$point>>>>>>$size>>>>>>>>$index>>>>>>$value');
+          if (kDebugMode) {
+            print(
+                '收到反馈结果>>>>$isTouch>>>>>$point>>>>>>$size>>>>>>>>$index>>>>>>$value');
+          }
           setState(() {
             _nowIndex = index;
           });
@@ -365,27 +378,29 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Text('不可点击，不变化的维度图'),
+          const Text('不可点击，不变化的维度图'),
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
             color: Colors.green.withOpacity(0.5),
+            clipBehavior: Clip.antiAlias,
             child: noChangeChartLine,
-            clipBehavior: Clip.antiAlias,
           ),
-          Text('可点击，可变化的维度图'),
+          const Text('可点击，可变化的维度图'),
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
             color: Colors.green.withOpacity(0.5),
-            child: changeChartLine,
             clipBehavior: Clip.antiAlias,
+            child: changeChartLine,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text('当前选中下标$_nowIndex'),

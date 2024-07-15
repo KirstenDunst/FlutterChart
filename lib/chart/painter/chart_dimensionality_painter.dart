@@ -295,12 +295,12 @@ class ChartDimensionalityPainter extends BasePainter {
         size: Size(rrect.width, rrect.height),
         index: index,
         param: param));
-    canvas.drawDRRect(rrect, RRect.zero, paint);
+    canvas.drawRRect(rrect, paint);
     paint
       ..strokeWidth = cellStyle.borderWidth
       ..color = cellStyle.borderColor
       ..style = PaintingStyle.stroke;
-    canvas.drawDRRect(rrect, RRect.zero, paint);
+    canvas.drawRRect(rrect, paint);
     titleTp.paint(
         canvas,
         Offset(tempOffset.dx + cellStyle.padding.left,

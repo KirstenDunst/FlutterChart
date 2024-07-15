@@ -117,7 +117,10 @@ class LinearPainter extends CustomPainter {
         clipLinearGradient ? Offset.zero : Offset(xProgress, size.height);
     return progressModel.linearGradient!.createShader(
       Rect.fromPoints(
-        Offset(size.width, size.height),
+        Offset(size.width, size.height) +
+            (strokeCap == StrokeCap.square
+                ? Offset(lineWidth / 2, lineWidth / 2)
+                : Offset.zero),
         shaderEndPoint,
       ),
     );
@@ -129,7 +132,9 @@ class LinearPainter extends CustomPainter {
         : Offset(xProgress, size.height);
     return progressModel.linearGradient!.createShader(
       Rect.fromPoints(
-        Offset.zero,
+        strokeCap == StrokeCap.square
+            ? Offset(-lineWidth / 2, lineWidth / 2)
+            : Offset.zero,
         shaderEndPoint,
       ),
     );

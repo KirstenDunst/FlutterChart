@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 
 import 'chart_bean.dart';
+import 'chart_bean_line_common.dart';
 import 'chart_typedef.dart';
 
 //每条线的定义
@@ -20,10 +21,13 @@ class ChartBeanSystem {
   bool isCurve;
   //点集合
   List<ChartLineBean> chartBeans;
-  //Line渐变色，从曲线到x轴从上到下的闭合颜色集,不设置则没有闭合渐变色
-  List<Color>? shaderColors;
+  //单独的点样式设置(两个y为null的数值之间只有一个点的样式展示)
+  CellPointSet alonePointSet;
+  //线条闭合曲线渐变颜色设置,如果为空则不需要渐变填充设置
+  LineShaderSetModel? lineShader;
   //曲线或折线的颜色
   Color lineColor;
+
   ///曲线或折线的整体绘制区域的渐变设置，如果不为空会覆盖 [lineColor]的设置效果，
   Gradient? lineGradient;
   //是否支持可点击，匹配外部的可点击参数设置,多条线都设置可点击的话，只会取最后一条线的点做可点击处理
@@ -33,9 +37,10 @@ class ChartBeanSystem {
       {this.lineWidth = 2,
       this.isCurve = false,
       required this.chartBeans,
-      this.shaderColors,
+      this.lineShader,
       this.lineColor = defaultColor,
       this.lineGradient,
+      this.alonePointSet = CellPointSet.normal,
       this.enableTouch = false});
 }
 

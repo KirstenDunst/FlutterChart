@@ -15,41 +15,47 @@ import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 //xy的显示点位的两员大将
 //y轴
 class DialStyleY {
-  //刻度标志内容(y轴仅适用于内容为数值类型的)
-  String title;
   //与最大数值的比率，用来计算绘制刻度的位置使用。
   ///这个也和[centerSubTitle]有关（比如：1.0和最近的下一个比率0.5之间的居中副标题取的是[positionRetioy]为1.0的副标题）
   double positionRetioy;
-  //y轴获取的值，只读
-  double get titleValue {
-    if (title.isEmpty) {
-      return 0;
-    } else {
-      return double.parse(title);
-    }
-  }
 
+  ///y轴值,用以计算绘制点落的区间比较使用,在区间放大的折线图中体现
+  double yValue;
+  //左侧文案设定
+  DialStyleYSub? leftSub;
+  //右侧文案设定
+  DialStyleYSub? rightSub;
+
+  /// 如果有辅助线的时候，需要特殊设置的辅助线颜色，这个参数对标baseBean模型参数中的[hintLineColor]，这里不为空的以后，这个[positionRetioy]的辅助线颜色设置以此为准
+  Color? hintLineColor;
+
+  /// 目前只对ChartLineFocus有效，其他图表暂时无意义
+  /// 如果FocusChartBeanMain中的参数[gradualColors]参数设置为null的时候，区间渐变从此区间顶topcenter，到区间底部bottomcenter的LinearGradient颜色填充。如果不设置则默认此区间y轴副文本颜色，bottomcenter为此区间y轴副文本颜色的0.3
+  List<Color>? fillColors;
+
+  DialStyleY(
+      {this.hintLineColor,
+      this.fillColors,
+      this.leftSub,
+      this.rightSub,
+      required this.yValue,
+      required this.positionRetioy});
+}
+
+class DialStyleYSub {
+  //刻度标志内容(y轴仅适用于内容为数值类型的)
+  String title;
   //刻度标志样式
   TextStyle titleStyle;
   //两个刻度之间的标注文案（y轴在数组中下一个元素之间绘制）,不需要的话不设置
   String centerSubTitle;
   //标注文案样式，centerSubTitle有内容时有效
   TextStyle centerSubTextStyle;
-
-  /// 如果有辅助线的时候，需要特殊设置的辅助线颜色，这个参数对标baseBean模型参数中的[hintLineColor]，这里不为空的以后，这个[positionRetioy]的辅助线颜色设置以此为准
-  Color? hintLineColor;
-  /// 目前只对ChartLineFocus有效，其他图表暂时无意义
-  /// 如果FocusChartBeanMain中的参数[gradualColors]参数设置为null的时候，区间渐变从此区间顶topcenter，到区间底部bottomcenter的LinearGradient颜色填充。如果不设置则默认此区间y轴副文本颜色，bottomcenter为此区间y轴副文本颜色的0.3
-  List<Color>? fillColors;
-
-  DialStyleY(
-      {required this.title,
+  DialStyleYSub(
+      {this.title = '',
       this.titleStyle = defaultTextStyle,
       this.centerSubTitle = '',
-      this.centerSubTextStyle = defaultTextStyle,
-      this.hintLineColor,
-      this.fillColors,
-      required this.positionRetioy});
+      this.centerSubTextStyle = defaultTextStyle});
 }
 
 //x轴
@@ -77,10 +83,8 @@ class BaseBean {
   bool isShowBorderRight;
   //y轴左侧刻度显示，传空数组则没有y轴刻度等信息
   List<DialStyleY> yDialValues;
-  //y轴刻度显示在左侧还是右侧，默认左侧
-  bool isLeftYDial;
-  //y轴显示副刻度是在左侧还是在右侧，默认左侧
-  bool isLeftYDialSub;
+  //y轴两个文案依赖.默认true:左侧为主,兼容之前区间线条颜色显示区间附文本颜色的需求
+  bool yDialLeftMain;
   //是否显示x轴文本,
   bool isShowX;
   //y轴最大值
@@ -88,7 +92,7 @@ class BaseBean {
   //y轴最小值
   double yMin;
   //y轴可容纳的区间值大小
-  double get yAdmissSecValue => yMax - yMin;
+  double get yAdmissSecValue => yMin == yMax ? 1.0 : yMax - yMin;
   //xy轴默认的边距，不包含周围的标注文字高度，只是xy轴的方框距离周围容器的间距
   EdgeInsets basePadding;
   //x轴辅助线
@@ -107,10 +111,11 @@ class BaseBean {
   bool isShowYScale;
   //xy轴刻度的高度
   double rulerWidth;
-  //x轴的单位。默认null，不绘制单位
-  UnitXY? unitX;
-  //y轴的单位。默认null，不绘制单位
-  UnitXY? unitY;
+  //xy轴的单位。默认null，不绘制单位
+  List<UnitXY>? units;
+
+  ///x轴在y轴上的数值，不设置表示x轴在坐标系的最底部（如果不为空，则按照此数值在[yMax]和[yMin]之间的占比对应位置绘制一条水平线）
+  double? xBaseLineY;
 
   BaseBean({
     this.xyLineWidth = 2,
@@ -119,8 +124,7 @@ class BaseBean {
     this.isShowBorderTop = false,
     this.isShowBorderRight = false,
     required this.yDialValues,
-    this.isLeftYDial = true,
-    this.isLeftYDialSub = true,
+    this.yDialLeftMain = true,
     this.isShowX = true,
     this.yMax = 100.0,
     this.yMin = 0.0,
@@ -133,8 +137,8 @@ class BaseBean {
     this.isShowXScale = false,
     this.isShowYScale = false,
     this.rulerWidth = 4,
-    this.unitX,
-    this.unitY,
+    this.units,
+    this.xBaseLineY,
   }) {
     //比率大的在前面排序
     yDialValues
@@ -142,19 +146,27 @@ class BaseBean {
   }
 }
 
+enum UnitOrientation {
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+}
+
 //x、y轴两侧的单位标记模型
 //都是横向展示的文案
 class UnitXY {
-  //偏移量，默认没有偏移
-  //x轴：文案的显示区域的左上角至x轴最右端点的偏移量（dx、dy正方向👉👇）
-  //y轴：文案的显示区域的右下角至y轴最上端点的偏移量（dx、dy正方向👈👆）
-  Offset offset;
-  //文案内容
+  //基准点的方位
+  UnitOrientation baseOrientation;
+  //文案对应基准点的x,y间距差，默认没有间距差.按照常规设计(左上:文案的右下点,左下:文案的右上点,右上:文案的左下点,右下:文案的左上点)分别对应相应的基准点的偏移
+  Offset spaceDif;
+  //文案内
   String text;
   //内容样式
   TextStyle textStyle;
   UnitXY(
-      {this.offset = Offset.zero,
+      {required this.baseOrientation,
+      this.spaceDif = Offset.zero,
       this.text = '',
       this.textStyle = defaultTextStyle});
 }
@@ -239,4 +251,20 @@ class PointHintParam {
       {this.hintColor = defaultColor,
       this.isHintLineImaginary = true,
       this.hintLineWidth = 1.0});
+}
+
+class TextSetModel {
+  //标题
+  String title;
+  //标题字体样式
+  TextStyle titleStyle;
+  TextSetModel({this.title = '', this.titleStyle = defaultTextStyle});
+}
+
+class ImgSetModel {
+  //图片
+  ui.Image img;
+  //图片尺寸
+  Size imgSize;
+  ImgSetModel({required this.img, required this.imgSize});
 }

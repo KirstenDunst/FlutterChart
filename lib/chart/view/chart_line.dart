@@ -29,6 +29,12 @@ class ChartLine extends StatefulWidget {
   final LineTouchSet? touchSet;
   //内容绘制结束
   final VoidCallback? paintEnd;
+  //可点击选中的时候是否支持横向推拽选中,默认true, 当需要长按触发滑动选中的时候设置为false(场景:外部可缩放,滚动的时候和内部的手势冲突问题)
+  final bool touchEnableNormalselect;
+  //缩放回传(由于缩放对数据的处理需要自由度更大一些,所以手势参数外传,外部设置)
+  final GestureScaleUpdateCallback? onScaleUpdate;
+  final GestureScaleStartCallback? onScaleStart;
+  final GestureScaleEndCallback? onScaleEnd;
 
   const ChartLine({
     Key? key,
@@ -40,6 +46,10 @@ class ChartLine extends StatefulWidget {
     this.xDialValues,
     this.touchSet,
     this.paintEnd,
+    this.touchEnableNormalselect = true,
+    this.onScaleStart,
+    this.onScaleUpdate,
+    this.onScaleEnd,
   }) : super(key: key);
 
   @override
@@ -91,21 +101,30 @@ class ChartLineState extends State<ChartLine>
       ..baseBean = widget.baseBean ?? BaseBean(yDialValues: []);
     _painter = painter;
     if (_isCanTouch) {
-      return GestureDetector(
-        onTapDown: (details) => _dealTouchPoint(painter, details.localPosition),
-        onHorizontalDragUpdate: (details) =>
+      return Listener(
+        onPointerDown: (details) =>
             _dealTouchPoint(painter, details.localPosition),
-        child: CustomPaint(
-          size: widget.size,
-          painter: widget.backgroundColor == null ? painter : null,
-          foregroundPainter: widget.backgroundColor != null ? painter : null,
-          child: widget.backgroundColor != null
-              ? Container(
-                  width: widget.size.width,
-                  height: widget.size.height,
-                  color: widget.backgroundColor,
-                )
-              : null,
+        onPointerMove: widget.touchEnableNormalselect == true
+            ? (details) => _dealTouchPoint(painter, details.localPosition)
+            : null,
+        child: GestureDetector(
+          onScaleEnd: widget.onScaleEnd,
+          onScaleStart: widget.onScaleStart,
+          onScaleUpdate: widget.onScaleUpdate,
+          onLongPressMoveUpdate: (details) =>
+              _dealTouchPoint(painter, details.localPosition),
+          child: CustomPaint(
+            size: widget.size,
+            painter: widget.backgroundColor == null ? painter : null,
+            foregroundPainter: widget.backgroundColor != null ? painter : null,
+            child: widget.backgroundColor != null
+                ? Container(
+                    width: widget.size.width,
+                    height: widget.size.height,
+                    color: widget.backgroundColor,
+                  )
+                : null,
+          ),
         ),
       );
     } else {

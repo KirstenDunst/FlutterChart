@@ -9,6 +9,7 @@
  */
 import 'package:flutter/material.dart';
 import 'chart_bean.dart';
+import 'chart_bean_line_common.dart';
 import 'chart_typedef.dart';
 
 class FocusChartBeanMain {
@@ -16,6 +17,7 @@ class FocusChartBeanMain {
   List<ChartBeanFocus>? chartBeans;
   //曲线或折线的颜色
   Color lineColor;
+
   ///曲线或折线的整体绘制区域的渐变设置，如果不为空会覆盖 [lineColor]的设置效果，
   Gradient? lineGradient;
   //曲线或折线的线宽
@@ -28,9 +30,11 @@ class FocusChartBeanMain {
   bool touchEnable;
   //线条区间带的设置参数模型,不为null表示展示线条区间带(chartBeans中的focusMax与focusMin才有意义)
   LineSectionModel? sectionModel;
-  //内部的渐变颜色。不设置的话默认按照解释文案的分层显示，如果设置，即为整体颜色渐变显示,
+
+  ///内部的渐变颜色。不设置的话默认按照解释文案的分层显示，如果设置，即为整体颜色渐变显示,
   ///如果[sectionModel]不为null，则显示区间带颜色，不显示闭合x轴的曲线渐变色
-  List<Color>? gradualColors;
+  ///线条闭合曲线渐变颜色设置,如果为空则不需要渐变填充设置
+  LineShaderSetModel? lineShader;
   //beans的时间轴如果断开，true： 是继续上一个有数值的值绘制，还是 false：断开。按照多条绘制,默认true
   bool isLinkBreak;
   //结束回调
@@ -44,7 +48,7 @@ class FocusChartBeanMain {
       this.isCurve = true,
       this.touchEnable = false,
       this.sectionModel,
-      this.gradualColors,
+      this.lineShader,
       this.isLinkBreak = true,
       this.canvasEnd});
 }
@@ -94,10 +98,12 @@ class ChartBeanFocus {
 
 //颜色区间
 class SectionBean {
-  //标题
-  String title;
-  //标题字体样式
-  TextStyle? titleStyle;
+  //文本标题
+  TextSetModel? textTitle;
+  //图片标题
+  ImgSetModel? imgTitle;
+  //标题底部距离坐标轴顶部的间隔,默认0;
+  double titleBottomSpace;
   //开始绘制的起始位置占总长度的比例
   double startRatio;
   //绘制的宽度与总宽度的比较
@@ -112,8 +118,9 @@ class SectionBean {
   bool isBorderSolid;
 
   SectionBean(
-      {this.title = '',
-      this.titleStyle,
+      {this.textTitle,
+      this.imgTitle,
+      this.titleBottomSpace = 0,
       this.startRatio = 0,
       this.widthRatio = 0,
       this.fillColor,

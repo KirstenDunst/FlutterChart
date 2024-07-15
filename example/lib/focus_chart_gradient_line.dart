@@ -7,6 +7,7 @@
  */
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
@@ -14,15 +15,18 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class FocusChartGradientLinePage extends StatefulWidget {
   static const String routeName = 'focus_chart_gradient_line';
   static const String title = 'FN专注力颜色渐变曲线';
+
+  const FocusChartGradientLinePage({super.key});
   @override
-  _FocusChartGradientLineState createState() => _FocusChartGradientLineState();
+  State<FocusChartGradientLinePage> createState() =>
+      _FocusChartGradientLineState();
 }
 
 class _FocusChartGradientLineState extends State<FocusChartGradientLinePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(FocusChartGradientLinePage.title)),
+      appBar: AppBar(title: const Text(FocusChartGradientLinePage.title)),
       body: ChangeNotifierProvider(
         create: (_) => ChartFocusLineProvider(),
         child: Consumer<ChartFocusLineProvider>(
@@ -34,10 +38,11 @@ class _FocusChartGradientLineState extends State<FocusChartGradientLinePage> {
                     Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           left: 16, right: 16, top: 8, bottom: 8),
                       semanticContainer: true,
                       color: Colors.white,
+                      clipBehavior: Clip.antiAlias,
                       child: Stack(
                         children: [
                           ChartLineFocus(
@@ -51,29 +56,28 @@ class _FocusChartGradientLineState extends State<FocusChartGradientLinePage> {
                               isShowHintY: false,
                               hintLineColor: Colors.blue,
                               isHintLineImaginary: false,
-                              isLeftYDial: false,
-                              isLeftYDialSub: false,
-                              yMax: 70.0,
+                              // yMax: 70.0,
                               yMin: 0.0,
                               rulerWidth: -4,
                               isShowXScale: true,
                               yDialValues: provider.yArr,
+                              yDialLeftMain: false,
                             ),
                             xMax: 60,
                             xDialValues: provider.xArr,
                           ),
                         ],
                       ),
-                      clipBehavior: Clip.antiAlias,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           left: 16, right: 16, top: 8, bottom: 8),
                       semanticContainer: true,
                       color: Colors.white,
+                      clipBehavior: Clip.antiAlias,
                       child: Stack(
                         children: [
                           ChartLineFocus(
@@ -87,18 +91,16 @@ class _FocusChartGradientLineState extends State<FocusChartGradientLinePage> {
                               isShowHintY: false,
                               hintLineColor: Colors.blue,
                               isHintLineImaginary: false,
-                              isLeftYDial: false,
-                              isLeftYDialSub: false,
                               rulerWidth: -4,
                               isShowXScale: true,
                               yDialValues: provider.reverseYarr,
+                              yDialLeftMain: false,
                             ),
                             xMax: 60,
                             xDialValues: provider.xArr,
                           ),
                         ],
                       ),
-                      clipBehavior: Clip.antiAlias,
                     ),
                   ],
                 );
@@ -114,9 +116,9 @@ class ChartFocusLineProvider extends ChangeNotifier {
   List<DialStyleY> get reverseYarr => _reverseYarr;
   List<FocusChartBeanMain> get focusChartBeanMains => _focusChartBeanMains;
 
-  List<FocusChartBeanMain> _focusChartBeanMains;
-  List<DialStyleX> _xArr;
-  List<DialStyleY> _yArr, _reverseYarr;
+  late List<FocusChartBeanMain> _focusChartBeanMains;
+  late List<DialStyleX> _xArr;
+  late List<DialStyleY> _yArr, _reverseYarr;
 
   ChartFocusLineProvider() {
     _focusChartBeanMains = [];
@@ -125,9 +127,9 @@ class ChartFocusLineProvider extends ChangeNotifier {
     _yArr = [];
     _reverseYarr = [];
     //制造假数据
-    var yValues = ['100', '66', '33', '0'];
+    var yValues = ['100', '80', '20', '0'];
     var xValues = ['0', "20'", "40'", "60'"];
-    var xPositionRetioy = [0.0, 0.33, 0.66, 1.0];
+    var xPositionRetioy = [0.0, 0.20, 0.80, 1.0];
     var yTexts = ['Relaxed', 'Neutral', 'Active', ''];
     var yTextColors = [
       Colors.blue,
@@ -138,31 +140,38 @@ class ChartFocusLineProvider extends ChangeNotifier {
 
     for (var i = 0; i < yValues.length; i++) {
       _xArr.add(DialStyleX(
-        titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+        titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black),
         title: xValues[i],
         positionRetioy: xPositionRetioy[i],
       ));
       _reverseYarr.add(DialStyleY(
-          title: yValues[i],
-          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-          centerSubTitle: yTexts[yTexts.length - 1 - i],
-          positionRetioy: 1 - double.parse(yValues[i]) / 100.0,
-          hintLineColor: i == yValues.length - 1
-              ? Colors.transparent
-              : (i == yValues.length - 2 ? Colors.orange : null),
-          fillColors: yTexts[yTexts.length - 1 - i] == 'Relaxed'
-              ? [Colors.blue.withOpacity(0.3), Colors.blue.withOpacity(0.1)]
-              : null,
-          centerSubTextStyle: TextStyle(
-              fontSize: 10.0, color: yTextColors[yTextColors.length - 1 - i])));
+        rightSub: DialStyleYSub(
+            title: yValues[i],
+            titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black),
+            centerSubTitle: yTexts[yTexts.length - 1 - i],
+            centerSubTextStyle: TextStyle(
+                fontSize: 10.0,
+                color: yTextColors[yTextColors.length - 1 - i])),
+        positionRetioy: 1 - double.parse(yValues[i]) / 100.0,
+        yValue: double.parse(yValues[i]),
+        hintLineColor: i == yValues.length - 1
+            ? Colors.transparent
+            : (i == yValues.length - 2 ? Colors.orange : null),
+        fillColors: yTexts[yTexts.length - 1 - i] == 'Relaxed'
+            ? [Colors.blue.withOpacity(0.3), Colors.blue.withOpacity(0.1)]
+            : null,
+      ));
 
       _yArr.add(DialStyleY(
-          title: yValues[i],
-          titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-          centerSubTitle: yTexts[i],
-          positionRetioy: double.parse(yValues[i]) / 100.0,
-          centerSubTextStyle:
-              TextStyle(fontSize: 10.0, color: yTextColors[i])));
+        rightSub: DialStyleYSub(
+            title: yValues[i],
+            titleStyle: const TextStyle(fontSize: 10.0, color: Colors.black),
+            centerSubTitle: yTexts[i],
+            centerSubTextStyle:
+                TextStyle(fontSize: 10.0, color: yTextColors[i])),
+        yValue: double.parse(yValues[i]),
+        positionRetioy: double.parse(yValues[i]) / 100.0,
+      ));
     }
     _loadData();
   }
@@ -170,16 +179,16 @@ class ChartFocusLineProvider extends ChangeNotifier {
   Future _loadData() async {
     var image = await UIImageUtil.loadImage('assets/head1.png');
     for (var i = 0; i < 1; i++) {
-      var _focusChartBeanMain = FocusChartBeanMain();
+      var focusChartBeanMain = FocusChartBeanMain();
       // _focusChartBeanMain.gradualColors = [
       //   Colors.transparent,
       //   Colors.transparent
       // ];
-      _focusChartBeanMain.lineWidth = 5;
-      _focusChartBeanMain.isLinkBreak = false;
-      _focusChartBeanMain.lineColor = Colors.red;
+      focusChartBeanMain.lineWidth = 3;
+      focusChartBeanMain.isLinkBreak = false;
+      focusChartBeanMain.lineColor = Colors.red;
       //此处设置lineGradient,则上面的lineColor已经意义不大了
-      _focusChartBeanMain.lineGradient = LinearGradient(
+      focusChartBeanMain.lineGradient = const LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
           tileMode: TileMode.mirror,
@@ -193,29 +202,31 @@ class ChartFocusLineProvider extends ChangeNotifier {
           ],
           stops: [
             0.0,
-            0.32,
-            0.34,
-            0.65,
-            0.67,
+            0.19,
+            0.21,
+            0.79,
+            0.81,
             1.0
           ]);
-      _focusChartBeanMain.canvasEnd = () {
-        print('小伙子，你画到头了');
+      focusChartBeanMain.canvasEnd = () {
+        if (kDebugMode) {
+          print('小伙子，你画到头了');
+        }
       };
       var tempArr = [30, 50];
-      var _beanList = <ChartBeanFocus>[];
+      var beanList = <ChartBeanFocus>[];
       for (var i = 0; i < 60; i++) {
         if (i < 10) {
           continue;
         }
-        _beanList.add(ChartBeanFocus(
+        beanList.add(ChartBeanFocus(
           focus: Random().nextDouble() * 100,
           second: i,
           tag: '$i',
           cellPointSet: i == 40
               ? CellPointSet(
                   pointType: PointType.PlacehoderImage,
-                  placeImageSize: Size(15, 15),
+                  placeImageSize: const Size(15, 15),
                   placehoderImage: image,
                   hintEdgeInset: HintEdgeInset.only(
                     left: PointHintParam(
@@ -231,25 +242,25 @@ class ChartFocusLineProvider extends ChangeNotifier {
                 )
               : (tempArr.contains(i)
                   ? CellPointSet(
-                      pointSize: Size(6, 6),
-                      pointRadius: Radius.circular(3),
+                      pointSize: const Size(6, 6),
+                      pointRadius: const Radius.circular(3),
                       pointShaderColors: i == 30
                           ? [Colors.cyan, Colors.cyan]
                           : [Colors.orange, Colors.orange],
                       hintEdgeInset: HintEdgeInset.only(
                         top: PointHintParam(
-                            hintColor: Color(0xFF779795),
+                            hintColor: const Color(0xFF779795),
                             isHintLineImaginary: false),
                         bottom: PointHintParam(
-                            hintColor: Color(0xFF779795),
+                            hintColor: const Color(0xFF779795),
                             isHintLineImaginary: true),
                       ),
                     )
                   : CellPointSet.normal),
         ));
       }
-      _focusChartBeanMain.chartBeans = _beanList;
-      _focusChartBeanMains.add(_focusChartBeanMain);
+      focusChartBeanMain.chartBeans = beanList;
+      _focusChartBeanMains.add(focusChartBeanMain);
     }
     notifyListeners();
   }

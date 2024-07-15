@@ -12,8 +12,10 @@ class PercentIndicatorLine extends StatefulWidget {
   static const String routeName = '/percent_indicator_line';
   static const String title = '线条进度指示器';
 
+  const PercentIndicatorLine({super.key});
+
   @override
-  _PercentIndicatorLineState createState() => _PercentIndicatorLineState();
+  State<PercentIndicatorLine> createState() => _PercentIndicatorLineState();
 }
 
 class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
@@ -25,10 +27,10 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text('Percent Indicators Line'),
+        title: const Text('Percent Indicators Line'),
         actions: [
           IconButton(
-              icon: Icon(Icons.stop),
+              icon: const Icon(Icons.stop),
               onPressed: () {
                 setState(() {
                   isRunning = false;
@@ -39,13 +41,13 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 50,
               animationSet: AnimationSet(
                 animationDuration: 3000,
-                animateFromLastPercent:true,
-                widgetIndicator: RotatedBox(
+                animateFromLastPercent: true,
+                widgetIndicator: const RotatedBox(
                   quarterTurns: 1,
                   child: Icon(Icons.airplanemode_active, size: 50),
                 ),
@@ -54,13 +56,13 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                 percent: isRunning ? 0.5 : 0.2,
               ),
               lineHeight: 20.0,
-              centerSet: CenterSet(center: Text('50.0%')),
+              centerSet: CenterSet(center: const Text('50.0%')),
               strokeCap: StrokeCap.butt,
               progressGradient: ColorGradientModel(color: Colors.red),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 50,
               lineHeight: 20.0,
@@ -71,23 +73,23 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
               percentModel: PercentModel(
                 percent: 0.5,
               ),
-              centerSet: CenterSet(center: Text('50.0%')),
+              centerSet: CenterSet(center: const Text('50.0%')),
               strokeCap: StrokeCap.butt,
               progressGradient: ColorGradientModel(
-                linearGradient: LinearGradient(
+                linearGradient: const LinearGradient(
                   colors: <Color>[Color(0xffB07BE6), Color(0xff5BA2E0)],
                 ),
               ),
               // clipLinearGradient: true,
               backgroundGradient: ColorGradientModel(
-                linearGradient: LinearGradient(
+                linearGradient: const LinearGradient(
                   colors: <Color>[Color(0xffe5d6fa), Color(0xffc8dff8)],
                 ),
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: FittedBox(
               child: LinearPercentIndicator(
                 width: 140.0,
@@ -97,14 +99,14 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                   fillColor: Colors.green,
                 ),
                 centerSet: CenterSet(
-                    center: Text(
+                    center: const Text(
                   '70.0%',
                   style: TextStyle(fontSize: 12.0),
                 )),
                 strokeCap: StrokeCap.square,
                 backgroundGradient: ColorGradientModel(color: Colors.orange),
                 progressGradient: ColorGradientModel(
-                  linearGradient: LinearGradient(
+                  linearGradient: const LinearGradient(
                     colors: [Colors.red, Colors.blue],
                   ),
                 ),
@@ -112,7 +114,7 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: FittedBox(
               child: LinearPercentIndicator(
                 width: 140.0,
@@ -122,7 +124,7 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                   percent: 0.5,
                 ),
                 centerSet: CenterSet(
-                    center: Text(
+                    center: const Text(
                   '50.0%',
                   style: TextStyle(fontSize: 12.0),
                 )),
@@ -133,7 +135,7 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: LinearPercentIndicator(
               animationSet: AnimationSet(
                 animationDuration: 500,
@@ -142,13 +144,13 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
               percentModel: PercentModel(
                 percent: 0.2,
               ),
-              centerSet: CenterSet(center: Text('20.0%')),
+              centerSet: CenterSet(center: const Text('20.0%')),
               strokeCap: StrokeCap.butt,
               progressGradient: ColorGradientModel(color: Colors.red),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 50,
               animationSet: AnimationSet(
@@ -160,14 +162,14 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                 percent: 0.9,
               ),
               lineHeight: 20.0,
-              centerSet: CenterSet(center: Text('90.0%')),
+              centerSet: CenterSet(center: const Text('90.0%')),
               strokeCap: StrokeCap.square,
               progressGradient: ColorGradientModel(color: Colors.greenAccent),
-              maskFilter: MaskFilter.blur(BlurStyle.solid, 3),
+              maskFilter: const MaskFilter.blur(BlurStyle.solid, 3),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 50,
               animationSet: AnimationSet(
@@ -177,13 +179,13 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
               percentModel: PercentModel(
                 percent: 0.8,
               ),
-              centerSet: CenterSet(center: Text('80.0%')),
+              centerSet: CenterSet(center: const Text('80.0%')),
               strokeCap: StrokeCap.square,
               progressGradient: ColorGradientModel(color: Colors.green),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: LinearPercentIndicator(
               animationSet: AnimationSet(
                 animationDuration: 2500,
@@ -192,13 +194,13 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
               percentModel: PercentModel(
                 percent: 0.55,
               ),
-              centerSet: CenterSet(center: Text('55.0%')),
+              centerSet: CenterSet(center: const Text('55.0%')),
               strokeCap: StrokeCap.square,
               progressGradient: ColorGradientModel(color: Colors.green),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: Column(
               children: <Widget>[
                 LinearPercentIndicator(
@@ -209,7 +211,7 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                   ),
                   progressGradient: ColorGradientModel(color: Colors.red),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 LinearPercentIndicator(
@@ -220,7 +222,7 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                   ),
                   progressGradient: ColorGradientModel(color: Colors.orange),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 LinearPercentIndicator(
@@ -231,7 +233,7 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
                   ),
                   progressGradient: ColorGradientModel(color: Colors.blue),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 LinearPercentIndicator(
@@ -251,10 +253,10 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child: LinearPercentIndicator(
               lineHeight: 20,
-              centerSet: CenterSet(center: Text('50%')),
+              centerSet: CenterSet(center: const Text('50%')),
               progressGradient: ColorGradientModel(color: Colors.blueAccent),
               percentModel: PercentModel(
                 percent: .5,
@@ -268,11 +270,12 @@ class _PercentIndicatorLineState extends State<PercentIndicatorLine> {
           ),
           Text(stateLine),
           Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child: LinearPercentIndicator(
               lineHeight: 20,
               centerSet: CenterSet(
-                  centerText: '进度显示: 50%', centerTextStyle: defaultTextStyle.copyWith(fontSize: 20)),
+                  centerText: '进度显示: 50%',
+                  centerTextStyle: defaultTextStyle.copyWith(fontSize: 20)),
               progressGradient: ColorGradientModel(color: Colors.blueAccent),
               percentModel: PercentModel(
                 percent: .5,

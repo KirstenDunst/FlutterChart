@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';
 import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
 import 'package:path_drawing/path_drawing.dart';
+import '../bean/chart_bean_line_common.dart';
 import 'base_painter.dart';
 import 'base_painter_tool.dart';
 
@@ -89,8 +92,8 @@ class ChartLineFocusPainter extends BasePainter {
     _points = <double, TouchModel>{};
     _tagPoints = <String, TagModel>{};
     try {
-      _isPositiveSequence = baseBean.yDialValues.first.titleValue >
-          baseBean.yDialValues.last.titleValue;
+      _isPositiveSequence =
+          baseBean.yDialValues.first.yValue > baseBean.yDialValues.last.yValue;
     } catch (e) {
       _isPositiveSequence = true;
     }
@@ -127,13 +130,29 @@ class ChartLineFocusPainter extends BasePainter {
     if (tempValueArr.isEmpty) return;
     double? preX, preY, currentY;
     var currentX = _startX, oldX = _startX;
-    Path? oldShadowPath = Path(), path = Path();
+    Path? oldShadowTopPath = Path(),
+        oldShadowBottomPath = Path(),
+        path = Path();
+    var shaderModel = bean.lineShader;
+    var shaderIsContentFill = bean.lineShader?.shaderIsContentFill ?? true;
+    //基准线距离x轴的高度
+    var baseLineYHeight = shaderModel?.baseLineY == null
+        ? 0
+        : ((shaderModel!.baseLineY! - baseBean.yMin) /
+            (baseBean.yMax - baseBean.yMin) *
+            _fixedHeight);
+    //渐变上层最大值点距离顶部最小距离
+    var _shadowTopSpaceMin =
+        shaderIsContentFill ? 0.0 : (_fixedHeight - baseLineYHeight);
+    //渐变下层最小值点距离x轴最小距离
+    var _shadowBottomSpaceMin = shaderIsContentFill ? 0.0 : baseLineYHeight;
     //线条区间带的记录上下连续
     var lineSections = <LineSection>[];
-    var topPoints = <Offset>[];
-    var bottomPoints = <Offset>[];
+    var topPoints = <Offset>[], bottomPoints = <Offset>[];
     //小区域渐变色显示操作
-    var shadowPaths = <ShadowSub>[];
+    var shadowTopPaths = <ShadowSub>[];
+    List<ShadowSub>? shadowBottomPaths =
+        bean.lineShader?.baseLineBottomGradient == null ? null : <ShadowSub>[];
     //线条数组
     var pathArr = <PathModel>[];
     //用来控制中间过度线条的大小。
@@ -153,15 +172,23 @@ class ChartLineFocusPainter extends BasePainter {
             (_isPositiveSequence
                 ? tempNowLength
                 : (_fixedHeight - tempNowLength));
+        if ((_startY - currentY) > baseLineYHeight) {
+          _shadowTopSpaceMin = min(_shadowTopSpaceMin, (currentY - _endY));
+        } else {
+          _shadowBottomSpaceMin =
+              min(_shadowBottomSpaceMin, (_startY - currentY));
+        }
         if (i == 0 || (i > 0 && (tempValueArr[i - 1].value == null))) {
           //初始化新起点
-          var newPath = Path();
-          path = newPath;
-          path.moveTo(currentX, currentY);
-          var shadowPath = Path();
-          shadowPath.moveTo(currentX, _startY);
-          shadowPath.lineTo(currentX, currentY);
-          oldShadowPath = shadowPath;
+          path = Path()..moveTo(currentX, currentY);
+          //顶部曲线向下封
+          oldShadowTopPath = Path()
+            ..moveTo(currentX, _startY)
+            ..lineTo(currentX, currentY);
+          //底部曲线向上封
+          oldShadowBottomPath = Path()
+            ..moveTo(currentX, _endY)
+            ..lineTo(currentX, currentY);
           _dealLineSection(topPoints, bottomPoints, tempValueArr[i].valueMax,
               tempValueArr[i].valueMin, baseBean.yAdmissSecValue, currentX,
               lineSectionShow: bean.sectionModel != null);
@@ -189,28 +216,36 @@ class ChartLineFocusPainter extends BasePainter {
           }
 
           //阴影轨迹(如果渐变色已经设定的话也走一次性绘制)
-          if (bean.gradualColors != null ||
+          if (bean.lineShader != null ||
               _isSamePhase(
                   tempValueArr[i - 1].value!, tempValueArr[i].value!)) {
             if (bean.isCurve) {
-              oldShadowPath!.cubicTo((preX + currentX) / 2, preY,
-                  (preX + currentX) / 2, currentY, currentX, currentY);
+              var x1 = (preX + currentX) / 2;
+              var y1 = preY;
+              var x2 = (preX + currentX) / 2;
+              var y2 = currentY;
+              var x3 = currentX;
+              var y3 = currentY;
+              oldShadowTopPath!.cubicTo(x1, y1, x2, y2, x3, y3);
+              oldShadowBottomPath!.cubicTo(x1, y1, x2, y2, x3, y3);
             } else {
-              oldShadowPath!.lineTo(currentX, currentY);
+              oldShadowTopPath!.lineTo(currentX, currentY);
+              oldShadowBottomPath!.lineTo(currentX, currentY);
             }
             _dealLineSection(topPoints, bottomPoints, tempValueArr[i].valueMax,
                 tempValueArr[i].valueMin, baseBean.yAdmissSecValue, currentX,
                 lineSectionShow: bean.sectionModel != null);
           } else {
+            //这里lineShader为null,则没有oldShadowBottomPath以及相关的东西
             //暂时这里对于线条的曲线还是直线在跨域中不作处理，UI看起来会有点尴尬（即使是直线这里也是有弯曲过渡的），但是相邻点频繁跨域的话直线绘制还是需要有小柱显示（曲线的绘制方式），
             //处理比较麻烦暂时这个判断里面没有好的处理方式，其他的地方直线和曲线的处理已经做好了，只剩这里没有好的方案
-            oldShadowPath!.lineTo(preX + gradualStep, preY);
+            oldShadowTopPath!.lineTo(preX + gradualStep, preY);
             var shadowPath = Path();
             if ((_isPositiveSequence &&
                     tempValueArr[i - 1].value! > tempValueArr[i].value!) ||
                 (!_isPositiveSequence &&
                     tempValueArr[i - 1].value! < tempValueArr[i].value!)) {
-              oldShadowPath
+              oldShadowTopPath
                 ..cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
                     currentY, currentX - gradualStep, currentY)
                 ..lineTo(currentX - gradualStep, _startY)
@@ -222,7 +257,7 @@ class ChartLineFocusPainter extends BasePainter {
                 ..lineTo(currentX - gradualStep, _startY)
                 ..lineTo(currentX - gradualStep, currentY);
             } else {
-              oldShadowPath
+              oldShadowTopPath
                 ..lineTo(preX + gradualStep, _startY)
                 ..lineTo(stepBegainX, _startY)
                 ..close();
@@ -235,14 +270,14 @@ class ChartLineFocusPainter extends BasePainter {
                     currentY, currentX - gradualStep, currentY);
             }
             shadowPath.lineTo(currentX, currentY);
-            shadowPaths.add(
+            shadowTopPaths.add(
               ShadowSub(
-                focusPath: oldShadowPath,
-                rectGradient: _shader(i - 1, stepBegainX, currentX,
-                    tempValueArr, bean.gradualColors),
+                focusPath: oldShadowTopPath,
+                rectGradient:
+                    _shader(i - 1, stepBegainX, currentX, tempValueArr),
               ),
             );
-            oldShadowPath = shadowPath;
+            oldShadowTopPath = shadowPath;
             stepBegainX = currentX;
           }
         }
@@ -252,26 +287,33 @@ class ChartLineFocusPainter extends BasePainter {
             (i == tempValueArr.length - 1)) {
           //结束点
           pathArr.add(
-            PathModel(path: path, isHintLineImaginary: bean.isLineImaginary),
-          );
+              PathModel(path: path, isHintLineImaginary: bean.isLineImaginary));
           var isBeyond = (currentX + gradualStep) > _endX;
           var tempX = isBeyond
               ? _endX
               : bean.isCurve
                   ? (currentX + gradualStep)
                   : currentX;
-          oldShadowPath!
+          oldShadowTopPath!
             ..lineTo(tempX, currentY)
             ..lineTo(tempX, _startY)
             ..lineTo(stepBegainX, _startY)
             ..close();
-          shadowPaths.add(
-            ShadowSub(
-              focusPath: oldShadowPath,
-              rectGradient: _shader(
-                  i, stepBegainX, currentX, tempValueArr, bean.gradualColors),
-            ),
-          );
+          oldShadowBottomPath!
+            ..lineTo(tempX, currentY)
+            ..lineTo(tempX, _endY)
+            ..lineTo(stepBegainX, _endY)
+            ..close();
+          shadowTopPaths.add(ShadowSub(
+              focusPath: oldShadowTopPath,
+              rectGradient: bean.lineShader != null
+                  ? null
+                  : _shader(i, stepBegainX, currentX, tempValueArr)));
+          shadowBottomPaths?.add(ShadowSub(
+              focusPath: oldShadowBottomPath,
+              rectGradient: bean.lineShader != null
+                  ? null
+                  : _shader(i, stepBegainX, currentX, tempValueArr)));
           if (topPoints.isNotEmpty || bottomPoints.isNotEmpty) {
             lineSections.add(
                 LineSection(topPoints: topPoints, bottomPoints: bottomPoints));
@@ -279,16 +321,17 @@ class ChartLineFocusPainter extends BasePainter {
             bottomPoints = <Offset>[];
           }
           path = null;
-          oldShadowPath = null;
+          oldShadowTopPath = null;
+          oldShadowBottomPath = null;
         }
         if (tempValueArr[i].value != null) {
           tempPointArr.add(
             PointModel(
                 offset: Offset(currentX, currentY),
                 cellPointSet: tempValueArr[i].cellPointSet,
-                sectionColor: _getGradualColor(tempValueArr[i].value!, null,
-                        isPoint: true)
-                    .first),
+                sectionColor:
+                    _getGradualColor(tempValueArr[i].value!, isPoint: true)
+                        .first),
           );
         }
         if (isPressPoints) {
@@ -305,21 +348,29 @@ class ChartLineFocusPainter extends BasePainter {
 
       if ((currentX + gradualStep) > _endX) {
         // 绘制结束
-        if (path != null && oldShadowPath != null) {
+        if (path != null &&
+            oldShadowTopPath != null &&
+            oldShadowBottomPath != null) {
           pathArr.add(
-            PathModel(path: path, isHintLineImaginary: bean.isLineImaginary),
-          );
-          oldShadowPath
+              PathModel(path: path, isHintLineImaginary: bean.isLineImaginary));
+          oldShadowTopPath
             ..lineTo(_endX, _startY)
             ..lineTo(stepBegainX, _startY)
             ..close();
-          shadowPaths.add(
-            ShadowSub(
-              focusPath: oldShadowPath,
-              rectGradient: _shader(
-                  i, stepBegainX, currentX, tempValueArr, bean.gradualColors),
-            ),
-          );
+          oldShadowBottomPath
+            ..lineTo(_endX, _endY)
+            ..lineTo(stepBegainX, _endY)
+            ..close();
+          shadowTopPaths.add(ShadowSub(
+              focusPath: oldShadowTopPath,
+              rectGradient: bean.lineShader != null
+                  ? null
+                  : _shader(i, stepBegainX, currentX, tempValueArr)));
+          shadowBottomPaths?.add(ShadowSub(
+              focusPath: oldShadowBottomPath,
+              rectGradient: bean.lineShader != null
+                  ? null
+                  : _shader(i, stepBegainX, currentX, tempValueArr)));
           if (topPoints.isNotEmpty || bottomPoints.isNotEmpty) {
             lineSections.add(
                 LineSection(topPoints: topPoints, bottomPoints: bottomPoints));
@@ -327,16 +378,17 @@ class ChartLineFocusPainter extends BasePainter {
             bottomPoints = <Offset>[];
           }
           path = null;
-          oldShadowPath = null;
+          oldShadowTopPath = null;
+          oldShadowBottomPath = null;
         }
         if (tempValueArr[i].value != null) {
           tempPointArr.add(
             PointModel(
                 offset: Offset(currentX, currentY!),
                 cellPointSet: tempValueArr[i].cellPointSet,
-                sectionColor: _getGradualColor(tempValueArr[i].value!, null,
-                        isPoint: true)
-                    .first),
+                sectionColor:
+                    _getGradualColor(tempValueArr[i].value!, isPoint: true)
+                        .first),
           );
         }
         if (isPressPoints) {
@@ -356,10 +408,26 @@ class ChartLineFocusPainter extends BasePainter {
     if (lineSections.isNotEmpty) {
       //绘制线条区间带
       _drawLineSection(lineSections, canvas, bean);
-      shadowPaths.clear();
+      shadowTopPaths.clear();
+      shadowBottomPaths?.clear();
     }
-    _drawLine(canvas, size, tempValueArr, shadowPaths, pathArr, tempPointArr,
-        bean); //曲线或折线
+    if (tempValueArr.isEmpty || baseBean.yAdmissSecValue <= 0) return;
+    //先画阴影再画曲线，目的是防止阴影覆盖曲线
+    if (bean.lineShader != null) {
+      _drawShader(
+          canvas,
+          shadowTopPaths,
+          shadowBottomPaths,
+          _endY + _shadowTopSpaceMin,
+          bean.lineShader!.baseLineTopGradient,
+          _startY - baseLineYHeight,
+          _startY - _shadowBottomSpaceMin,
+          bean.lineShader!.baseLineBottomGradient);
+    } else {
+      _drawBulkShader(canvas, shadowTopPaths);
+    }
+
+    _drawLine(canvas, size, tempValueArr, pathArr, tempPointArr, bean); //曲线或折线
   }
 
   /// 处理线条区间
@@ -382,29 +450,25 @@ class ChartLineFocusPainter extends BasePainter {
 
   /// 是否属于同一区间
   bool _isSamePhase(double one, double other) {
-    var oneExtrem = _getExtremum(one, null);
-    var otherExtrem = _getExtremum(other, null);
+    var oneExtrem = _getExtremum(one);
+    var otherExtrem = _getExtremum(other);
     return oneExtrem == otherExtrem;
   }
 
   /// 获取可承载的阴影所在的最大高度
-  double _getExtremum(double value, List<Color>? gradualColors) {
-    if (gradualColors != null) {
-      return _fixedHeight;
-    }
+  double _getExtremum(double value) {
     var extremum = (_getCommonDealValueRelyOn(value)?.positionRetioy ?? 0.0) *
         _fixedHeight;
     return extremum;
   }
 
   /// 获取渐变色, [isPoint]应该是之前calm的时候定制的可渐变的点显示使用，后面优化可以以此参考
-  List<Color> _getGradualColor(double value, List<Color>? gradualColors,
-      {bool isPoint = false}) {
-    if (gradualColors != null) {
-      return gradualColors;
-    }
+  List<Color> _getGradualColor(double value, {bool isPoint = false}) {
     var tempModel = _getCommonDealValueRelyOn(value);
-    var defaultMainColor = tempModel?.centerSubTextStyle.color ?? defaultColor;
+    var defaultMainColor = (baseBean.yDialLeftMain
+            ? tempModel?.leftSub?.centerSubTextStyle.color
+            : tempModel?.rightSub?.centerSubTextStyle.color) ??
+        defaultColor;
     if (isPoint) {
       return [defaultMainColor, defaultMainColor.withOpacity(0.3)];
     }
@@ -416,27 +480,27 @@ class ChartLineFocusPainter extends BasePainter {
   DialStyleY? _getCommonDealValueRelyOn(double value) {
     DialStyleY? _tempDialStyleY;
     if (_isPositiveSequence) {
-      if (value >= baseBean.yDialValues.first.titleValue) {
+      if (value >= baseBean.yDialValues.first.yValue) {
         _tempDialStyleY = baseBean.yDialValues.first;
-      } else if (value <= baseBean.yDialValues.last.titleValue) {
+      } else if (value <= baseBean.yDialValues.last.yValue) {
         _tempDialStyleY = baseBean.yDialValues.last;
       } else {
         for (var i = 0; i < baseBean.yDialValues.length - 1; i++) {
-          if (value <= baseBean.yDialValues[i].titleValue &&
-              value > baseBean.yDialValues[i + 1].titleValue) {
+          if (value <= baseBean.yDialValues[i].yValue &&
+              value > baseBean.yDialValues[i + 1].yValue) {
             _tempDialStyleY = baseBean.yDialValues[i];
           }
         }
       }
     } else {
-      if (value >= baseBean.yDialValues.last.titleValue) {
+      if (value >= baseBean.yDialValues.last.yValue) {
         _tempDialStyleY = baseBean.yDialValues.last;
-      } else if (value <= baseBean.yDialValues.first.titleValue) {
+      } else if (value <= baseBean.yDialValues.first.yValue) {
         _tempDialStyleY = baseBean.yDialValues.first;
       } else {
         for (var i = 0; i < baseBean.yDialValues.length - 1; i++) {
-          if (value > baseBean.yDialValues[i].titleValue &&
-              value <= baseBean.yDialValues[i + 1].titleValue) {
+          if (value > baseBean.yDialValues[i].yValue &&
+              value <= baseBean.yDialValues[i + 1].yValue) {
             _tempDialStyleY = baseBean.yDialValues[i];
           }
         }
@@ -447,17 +511,16 @@ class ChartLineFocusPainter extends BasePainter {
 
   /// 计算渐变的shader
   Shader _shader(int index, double preX, double currentX,
-      List<BeanDealModel> tempValueArr, List<Color>? gradualColors) {
-    var height =
-        _startY - _getExtremum(tempValueArr[index].value ?? 0, gradualColors);
+      List<BeanDealModel> tempValueArr) {
+    var height = _startY - _getExtremum(tempValueArr[index].value ?? 0);
     //属于该专注力的固定小方块
     var rectFocus = Rect.fromLTRB(preX, height, currentX, _startY);
+    var colors = _getGradualColor(tempValueArr[index].value ?? 0);
     return LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             tileMode: TileMode.mirror,
-            colors:
-                _getGradualColor(tempValueArr[index].value ?? 0, gradualColors))
+            colors: colors)
         .createShader(rectFocus);
   }
 
@@ -558,17 +621,9 @@ class ChartLineFocusPainter extends BasePainter {
     });
   }
 
-  /// 曲线或折线
-  void _drawLine(
-      Canvas canvas,
-      Size size,
-      List<BeanDealModel> tempValueArr,
-      List<ShadowSub> shadowPaths,
-      List<PathModel> pathArr,
-      List<PointModel> points,
-      FocusChartBeanMain bean) {
-    if (tempValueArr.isEmpty || baseBean.yAdmissSecValue <= 0) return;
-    shadowPaths.forEach((sub) {
+  // 绘制块状shader闭合渐变色
+  void _drawBulkShader(Canvas canvas, List<ShadowSub> shadowTopPaths) {
+    shadowTopPaths.forEach((sub) {
       canvas
         ..drawPath(
             sub.focusPath!,
@@ -577,8 +632,84 @@ class ChartLineFocusPainter extends BasePainter {
               ..isAntiAlias = true
               ..style = PaintingStyle.fill);
     });
+  }
 
-    ///先画阴影再画曲线，目的是防止阴影覆盖曲线
+  // 绘制整体渐变shader闭合渐变色
+  void _drawShader(
+      Canvas canvas,
+      List<ShadowSub> shadowTopPaths,
+      List<ShadowSub>? shadowBottomPaths,
+      double topShaderHeight,
+      LinearGradientModel topGradient,
+      double baseShaderHeight,
+      double bottomShaderHeight,
+      LinearGradientModel? bottomGradient) {
+    canvas.save();
+    //设置裁切区域（在区域内的路径才会被绘制）
+    canvas.clipPath(Path()
+      ..moveTo(_startX, topShaderHeight)
+      ..lineTo(_endX, topShaderHeight)
+      ..lineTo(_endX, baseShaderHeight)
+      ..lineTo(_startX, baseShaderHeight)
+      ..lineTo(_startX, topShaderHeight)
+      ..close());
+    shadowTopPaths.forEach((sub) {
+      canvas
+        ..drawPath(
+            sub.focusPath!,
+            Paint()
+              ..shader = LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      tileMode: TileMode.clamp,
+                      colors: topGradient.shaderColors,
+                      stops: topGradient.shadowColorsStops)
+                  .createShader(Rect.fromLTWH(_startX, topShaderHeight,
+                      _fixedWidth, baseShaderHeight - topShaderHeight))
+              ..isAntiAlias = true
+              ..style = PaintingStyle.fill);
+    });
+    canvas.restore();
+    if (shadowBottomPaths != null &&
+        shadowBottomPaths.isNotEmpty &&
+        bottomGradient != null) {
+      canvas.save();
+      //设置裁切区域（在区域内的路径才会被绘制）
+      canvas.clipPath(Path()
+        ..moveTo(_startX, baseShaderHeight)
+        ..lineTo(_endX, baseShaderHeight)
+        ..lineTo(_endX, bottomShaderHeight)
+        ..lineTo(_startX, bottomShaderHeight)
+        ..lineTo(_startX, baseShaderHeight)
+        ..close());
+      shadowBottomPaths.forEach((sub) {
+        canvas
+          ..drawPath(
+              sub.focusPath!,
+              Paint()
+                ..shader = LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        tileMode: TileMode.clamp,
+                        colors: bottomGradient.shaderColors,
+                        stops: bottomGradient.shadowColorsStops)
+                    .createShader(Rect.fromLTWH(_startX, baseShaderHeight,
+                        _fixedWidth, bottomShaderHeight - baseShaderHeight))
+                ..isAntiAlias = true
+                ..style = PaintingStyle.fill);
+      });
+      canvas.restore();
+    }
+  }
+
+  /// 曲线或折线
+  void _drawLine(
+      Canvas canvas,
+      Size size,
+      List<BeanDealModel> tempValueArr,
+      List<PathModel> pathArr,
+      List<PointModel> points,
+      FocusChartBeanMain bean) {
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = bean.lineWidth
@@ -621,9 +752,7 @@ class ChartLineFocusPainter extends BasePainter {
         localPosition.dy < _endY) {
       //不在坐标轴内部的点击
       if (outsidePointClear) {
-        return TouchModel(
-          offset: null,
-        );
+        return TouchModel(offset: null);
       } else {
         return TouchModel(needRefresh: false, offset: null);
       }
@@ -631,10 +760,12 @@ class ChartLineFocusPainter extends BasePainter {
 
     var poinArr = _points.keys.toList();
     poinArr.sort((num1, num2) => num1.compareTo(num2));
+    if (poinArr.isEmpty) {
+      return TouchModel(offset: null);
+    }
 
     TouchModel? touchModel;
-
-    ///修复x轴越界
+    //修复x轴越界
     if (localPosition.dx < poinArr.first) {
       touchModel = _points[poinArr.first];
     } else if (localPosition.dx > poinArr.last) {

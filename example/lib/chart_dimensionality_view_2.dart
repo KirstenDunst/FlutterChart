@@ -8,22 +8,25 @@
  * @Company: BrainCo
  */
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartDimensionaView2 extends StatefulWidget {
   static const String routeName = 'chart_dimensionality_view2';
   static const String title = '维度图(第二种显示)';
+
+  const ChartDimensionaView2({super.key});
   @override
-  _ChartDimensionaView2State createState() => _ChartDimensionaView2State();
+  State<ChartDimensionaView2> createState() => _ChartDimensionaView2State();
 }
 
 class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
   final GlobalKey<ChartDimensionalityState> globalKey = GlobalKey();
-  int _nowIndex;
-  Offset _offset;
+  late int _nowIndex;
+  Offset? _offset;
 
-  ui.Image _placeImage1, _placeImage2;
+  ui.Image? _placeImage1, _placeImage2;
 
   @override
   void initState() {
@@ -35,7 +38,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartDimensionaView2.title),
+        title: const Text(ChartDimensionaView2.title),
         actions: [
           InkWell(
             onTap: () async {
@@ -43,7 +46,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
               _placeImage2 = await UIImageUtil.loadImage('assets/head2.jpeg');
               setState(() {});
             },
-            child: Icon(
+            child: const Icon(
               Icons.local_activity,
               size: 20,
             ),
@@ -66,7 +69,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           tip: [
             TipModel(
                 title: '语言',
-                titleStyle: TextStyle(color: Colors.orange, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.orange, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
@@ -77,48 +80,48 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           tip: [
             TipModel(
                 title: '行为',
-                titleStyle: TextStyle(color: Colors.yellow, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.yellow, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
               backgroundColor: Colors.cyanAccent,
               borderColor: Colors.red,
-              offset: Offset(20, 10),
+              offset: const Offset(20, 10),
               borderWidth: 2),
         ),
         ChartBeanDimensionality(
           tip: [
             TipModel(
                 title: '情绪',
-                titleStyle: TextStyle(color: Colors.green, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.green, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
               backgroundColor: Colors.cyanAccent,
               borderColor: Colors.red,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               borderWidth: 2,
-              offset: Offset(0, 10)),
+              offset: const Offset(0, 10)),
         ),
         ChartBeanDimensionality(
           tip: [
             TipModel(
                 title: '注意力',
-                titleStyle: TextStyle(color: Colors.blue, fontSize: 15)),
+                titleStyle: const TextStyle(color: Colors.blue, fontSize: 15)),
             TipModel(
                 title: '123534rtewtewr',
-                titleStyle: TextStyle(color: Colors.red, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.red, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
               backgroundColor: Colors.cyanAccent,
               borderColor: Colors.red,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               borderWidth: 2,
               borderRadius: 5,
-              offset: Offset(-20, 10)),
+              offset: const Offset(-20, 10)),
         )
       ],
       dimensionalityTags: [
         DimensionalityBean(
-          fillColor: Color(0xFFB1E3AD).withOpacity(0.6),
+          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
           tagTipWidth: 0,
           tagTipHeight: 0,
           tagContents: [
@@ -150,9 +153,9 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
                         ? PointType.PlacehoderImage
                         : PointType.Rectangle,
                     pointShaderColors: e,
-                    pointSize: Size(12, 12),
-                    pointRadius: Radius.circular(6),
-                    placeImageSize: ui.Size(20, 20),
+                    pointSize: const Size(12, 12),
+                    pointRadius: const Radius.circular(6),
+                    placeImageSize: const ui.Size(20, 20),
                     placehoderImage: e.contains(Colors.orange)
                         ? _placeImage1
                         : _placeImage2),
@@ -184,26 +187,27 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           tip: [
             TipModel(
               title: '语言',
-              titleStyle: TextStyle(color: Colors.orange, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+              titleStyle: const TextStyle(color: Colors.orange, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           subTip: [
             TipModel(
                 title: '50',
-                titleStyle: TextStyle(color: Colors.yellow, fontSize: 15),
-                selectStyle: TextStyle(color: Colors.purple, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.yellow, fontSize: 15),
+                selectStyle:
+                    const TextStyle(color: Colors.purple, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
           touchBackParam: '语言',
@@ -212,26 +216,27 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           tip: [
             TipModel(
               title: '行为',
-              titleStyle: TextStyle(color: Colors.yellow, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+              titleStyle: const TextStyle(color: Colors.yellow, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           subTip: [
             TipModel(
                 title: '60',
-                titleStyle: TextStyle(color: Colors.green, fontSize: 15),
-                selectStyle: TextStyle(color: Colors.purple, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.green, fontSize: 15),
+                selectStyle:
+                    const TextStyle(color: Colors.purple, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
           touchBackParam: '行为',
@@ -240,26 +245,27 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           tip: [
             TipModel(
               title: '情绪',
-              titleStyle: TextStyle(color: Colors.green, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+              titleStyle: const TextStyle(color: Colors.green, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           subTip: [
             TipModel(
                 title: '80',
-                titleStyle: TextStyle(color: Colors.blue, fontSize: 15),
-                selectStyle: TextStyle(color: Colors.purple, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.blue, fontSize: 15),
+                selectStyle:
+                    const TextStyle(color: Colors.purple, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
           touchBackParam: '情绪',
@@ -268,26 +274,27 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           tip: [
             TipModel(
               title: '注意力',
-              titleStyle: TextStyle(color: Colors.blue, fontSize: 15),
-              selectStyle: TextStyle(color: Colors.white, fontSize: 15),
+              titleStyle: const TextStyle(color: Colors.blue, fontSize: 15),
+              selectStyle: const TextStyle(color: Colors.white, fontSize: 15),
             )
           ],
           subTip: [
             TipModel(
                 title: '40',
-                titleStyle: TextStyle(color: Colors.purple, fontSize: 15),
-                selectStyle: TextStyle(color: Colors.purple, fontSize: 15))
+                titleStyle: const TextStyle(color: Colors.purple, fontSize: 15),
+                selectStyle:
+                    const TextStyle(color: Colors.purple, fontSize: 15))
           ],
           normalStyle: DimensionCellStyle(
             backgroundColor: Colors.transparent,
             borderColor: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 0,
           ),
           selectStyle: DimensionCellStyle(
             backgroundColor: Colors.black,
             borderColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             borderWidth: 1,
           ),
           touchBackParam: '注意力',
@@ -311,14 +318,14 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
                 (e) => DimensionCellModel(
                   value: 1.0,
                   pointShaderColors: e,
-                  pointSize: Size(12, 12),
-                  pointRadius: Radius.circular(6),
+                  pointSize: const Size(12, 12),
+                  pointRadius: const Radius.circular(6),
                 ),
               )
               .toList(),
         ),
         DimensionalityBean(
-          fillColor: Color(0xFFB1E3AD).withOpacity(0.6),
+          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
           tagTipWidth: 0,
           tagTipHeight: 0,
           tagContents: [
@@ -348,8 +355,10 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
       touchSet: DimensionTouchSet(
         outsidePointClear: false,
         touchBack: (isTouch, point, size, index, value) {
-          print(
-              '收到反馈结果>>>>$isTouch>>>>>$point>>>>>>$size>>>>>>>>$index>>>>>>$value');
+          if (kDebugMode) {
+            print(
+                '收到反馈结果>>>>$isTouch>>>>>$point>>>>>>$size>>>>>>>>$index>>>>>>$value');
+          }
           setState(() {
             _offset = point;
             _nowIndex = index;
@@ -360,55 +369,57 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Text('不可点击，不变化的维度图'),
+          const Text('不可点击，不变化的维度图'),
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
             color: Colors.green.withOpacity(0.5),
-            child: noChangeChartLine,
             clipBehavior: Clip.antiAlias,
+            child: noChangeChartLine,
           ),
-          Text('可点击，可变化的维度图'),
+          const Text('可点击，可变化的维度图'),
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
             color: Colors.green.withOpacity(0.5),
+            clipBehavior: Clip.antiAlias,
             child: Stack(
               children: [
                 changeChartLine,
                 if (_offset != null)
                   Positioned(
+                    left: _offset!.dx,
+                    top: _offset!.dy,
+                    width: 20,
+                    height: 20,
                     child: IgnorePointer(
                       child: Container(
                         color: Colors.red,
                       ),
                     ),
-                    left: _offset.dx,
-                    top: _offset.dy,
-                    width: 20,
-                    height: 20,
                   ),
               ],
             ),
-            clipBehavior: Clip.antiAlias,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text('当前选中下标$_nowIndex'),
           InkWell(
-            child: Text(
+            child: const Text(
               '取消选中',
             ),
             onTap: () {
-              globalKey.currentState.clearTouchPoint();
+              globalKey.currentState?.clearTouchPoint();
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
         ],

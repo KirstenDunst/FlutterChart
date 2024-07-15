@@ -14,8 +14,10 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class ChartBarCirclePage extends StatefulWidget {
   static const String routeName = 'chart_bar_circle';
   static const String title = '柱状顶部半圆型';
+
+  const ChartBarCirclePage({super.key});
   @override
-  _ChartBarCircleState createState() => _ChartBarCircleState();
+  State<ChartBarCirclePage> createState() => _ChartBarCircleState();
 }
 
 class _ChartBarCircleState extends State<ChartBarCirclePage> {
@@ -23,7 +25,7 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartBarCirclePage.title),
+        title: const Text(ChartBarCirclePage.title),
       ),
       body: _buildChartBarCircle(context),
     );
@@ -34,120 +36,172 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
     var chartBar = ChartBar(
       xDialValues: [
         ChartBarBeanX(
-          title: '12-01',
-          value: 30,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.red, Colors.red],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+          xBottomTextModel: TextSetModel(title: '12-01'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 5,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.red, Colors.red],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
             )
           ],
         ),
         ChartBarBeanX(
-          title: '12-02',
-          value: 100,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.yellow, Colors.yellow],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-            )
+          xBottomTextModel: TextSetModel(title: '12-02'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 100,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.yellow, Colors.yellow],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
+            ),
           ],
         ),
         ChartBarBeanX(
-          title: '12-03',
-          value: 70,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.green, Colors.green],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-            )
+          xBottomTextModel: TextSetModel(title: '12-03'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 70,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.green, Colors.green],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
+            ),
           ],
         ),
         ChartBarBeanX(
-          title: '12-04',
-          value: 70,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.blue, Colors.blue],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-            )
+          xBottomTextModel: TextSetModel(title: '12-04'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 70,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.blue, Colors.blue],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
+            ),
           ],
         ),
         ChartBarBeanX(
-          title: '12-05',
-          value: 30,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.deepPurple, Colors.deepPurple],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-            )
+          xBottomTextModel: TextSetModel(title: '12-05'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 30,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.deepPurple, Colors.deepPurple],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
+            ),
           ],
         ),
         ChartBarBeanX(
-          title: '12-06',
-          value: 90,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.deepOrange, Colors.deepOrange],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-            )
+          xBottomTextModel: TextSetModel(title: '12-06'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 90,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.deepOrange, Colors.deepOrange],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
+            ),
           ],
         ),
         ChartBarBeanX(
-          title: '12-07',
-          value: 50,
-          sectionColors: [
-            SectionColor(
-              starRate: 0,
-              endRate: 1,
-              gradualColor: [Colors.greenAccent, Colors.greenAccent],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-            )
+          xBottomTextModel: TextSetModel(title: '12-07'),
+          beanXModels: [
+            ChartBarBeanXCell(
+              value: 50,
+              sectionColors: [
+                SectionColor(
+                  starRate: 0,
+                  endRate: 1,
+                  gradualColor: [Colors.greenAccent, Colors.greenAccent],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                )
+              ],
+            ),
           ],
         )
       ],
+      baseLineY: 35,
       baseBean: BaseBean(
         yDialValues: [
           DialStyleY(
-              title: '100',
-              titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-              centerSubTitle: 'Calm',
-              centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+              leftSub: DialStyleYSub(
+                title: '100',
+                titleStyle:
+                    const TextStyle(color: Colors.lightBlue, fontSize: 10),
+                centerSubTitle: 'Calm',
+                centerSubTextStyle:
+                    const TextStyle(color: Colors.red, fontSize: 10),
+              ),
+              yValue: 100,
               positionRetioy: 100 / 100),
           DialStyleY(
-              title: '65',
-              titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-              centerSubTitle: 'Aware',
-              centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+              leftSub: DialStyleYSub(
+                title: '65',
+                titleStyle:
+                    const TextStyle(color: Colors.lightBlue, fontSize: 10),
+                centerSubTitle: 'Aware',
+                centerSubTextStyle:
+                    const TextStyle(color: Colors.red, fontSize: 10),
+              ),
+              yValue: 65,
               positionRetioy: 65 / 100),
           DialStyleY(
-              title: '35',
-              titleStyle: TextStyle(color: Colors.lightBlue, fontSize: 10),
-              centerSubTitle: 'Focused',
-              centerSubTextStyle: TextStyle(color: Colors.red, fontSize: 10),
+              leftSub: DialStyleYSub(
+                title: '35',
+                titleStyle:
+                    const TextStyle(color: Colors.lightBlue, fontSize: 10),
+                centerSubTitle: 'Focused',
+                centerSubTextStyle:
+                    const TextStyle(color: Colors.red, fontSize: 10),
+              ),
+              yValue: 35,
               positionRetioy: 35 / 100)
         ],
         yMax: 100.0,
         yMin: 0.0,
+        isShowHintX: true
       ),
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
@@ -155,11 +209,11 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.blue.withOpacity(0.4),
-      child: chartBar,
+      color: Colors.orange.withOpacity(0.4),
       clipBehavior: Clip.antiAlias,
+      child: chartBar,
     );
   }
 }

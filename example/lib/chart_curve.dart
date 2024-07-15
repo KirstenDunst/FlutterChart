@@ -13,16 +13,18 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class ChartCurvePage extends StatefulWidget {
   static const String routeName = 'chart_curve';
   static const String title = '平滑曲线带填充颜色';
+
+  const ChartCurvePage({super.key});
   @override
-  _ChartCurveState createState() => _ChartCurveState();
+  State<ChartCurvePage> createState() => _ChartCurveState();
 }
 
 class _ChartCurveState extends State<ChartCurvePage> {
-  ChartBeanSystem _chartLineBeanSystem;
+  late ChartBeanSystem _chartLineBeanSystem;
 
   @override
   void initState() {
-    var dataarr = [30.0, 88.0, 20.0, 67.0, 10.0, 40.0, 10.0];
+    var dataarr = [30.0, 100.0, -20.0, 67.0, 10.0, -100.0, 10.0];
     var tempDatas = <ChartLineBean>[];
     for (var i = 0; i < dataarr.length; i++) {
       tempDatas.add(
@@ -34,10 +36,18 @@ class _ChartCurveState extends State<ChartCurvePage> {
       lineWidth: 2,
       isCurve: true,
       chartBeans: tempDatas,
-      shaderColors: [
-        Colors.blueAccent.withOpacity(0.3),
-        Colors.blueAccent.withOpacity(0.1)
-      ],
+      lineShader: LineShaderSetModel(
+        baseLineBottomGradient: LinearGradientModel(shaderColors: [
+          Colors.red.withOpacity(0.01),
+          Colors.red.withOpacity(0.3)
+        ]),
+        baseLineTopGradient: LinearGradientModel(shaderColors: [
+          Colors.blueAccent.withOpacity(0.3),
+          Colors.blueAccent.withOpacity(0.01)
+        ]),
+        baseLineY: 0,
+        shaderIsContentFill: false
+      ),
       lineColor: Colors.blue,
     );
     super.initState();
@@ -47,7 +57,7 @@ class _ChartCurveState extends State<ChartCurvePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartCurvePage.title),
+        title: const Text(ChartCurvePage.title),
       ),
       body: _buildChartCurve(context),
     );
@@ -61,7 +71,7 @@ class _ChartCurveState extends State<ChartCurvePage> {
       tempXs.add(
         DialStyleX(
             title: xarr[i],
-            titleStyle: TextStyle(color: Colors.red, fontSize: 12),
+            titleStyle: const TextStyle(color: Colors.red, fontSize: 12),
             positionRetioy: (1 / (xarr.length - 1)) * i),
       );
     }
@@ -75,39 +85,59 @@ class _ChartCurveState extends State<ChartCurvePage> {
         yColor: Colors.white,
         yDialValues: [
           DialStyleY(
-            title: '0',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-            positionRetioy: 0 / 100.0,
+            leftSub: DialStyleYSub(
+                title: '-100',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: -100,
+            positionRetioy: 0 / 200.0,
           ),
           DialStyleY(
-            title: '35',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-            positionRetioy: 35 / 100.0,
+            leftSub: DialStyleYSub(
+                title: '-50',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: -50,
+            positionRetioy: 50 / 200.0,
           ),
           DialStyleY(
-            title: '65',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-            positionRetioy: 65 / 100.0,
+            leftSub: DialStyleYSub(
+                title: '0',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 0,
+            positionRetioy: 100 / 200.0,
           ),
           DialStyleY(
-            title: '100',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
-            positionRetioy: 100 / 100.0,
+            leftSub: DialStyleYSub(
+                title: '50',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 50,
+            positionRetioy: 150 / 200.0,
+          ),
+          DialStyleY(
+            leftSub: DialStyleYSub(
+                title: '100',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 100,
+            positionRetioy: 200 / 200.0,
           )
         ],
         yMax: 100.0,
-        yMin: 0.0,
+        yMin: -100.0,
         isShowHintY: true,
         isHintLineImaginary: true,
       ),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
       color: Colors.green.withOpacity(0.5),
-      child: chartLine,
       clipBehavior: Clip.antiAlias,
+      child: chartLine,
     );
   }
 }

@@ -13,8 +13,10 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class ChartPiePage extends StatefulWidget {
   static const String routeName = 'chart_pie';
   static const String title = '饼状图';
+
+  const ChartPiePage({super.key});
   @override
-  _ChartPieState createState() => _ChartPieState();
+  State<ChartPiePage> createState() => _ChartPieState();
 }
 
 class _ChartPieState extends State<ChartPiePage> {
@@ -22,7 +24,7 @@ class _ChartPieState extends State<ChartPiePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartPiePage.title),
+        title: const Text(ChartPiePage.title),
       ),
       body: _buildChartPie(context),
     );
@@ -46,22 +48,23 @@ class _ChartPieState extends State<ChartPiePage> {
             type: '衣服',
             value: 1,
             color: Colors.green,
-            assistTextStyle: TextStyle(fontSize: 12, color: Colors.green)),
+            assistTextStyle:
+                const TextStyle(fontSize: 12, color: Colors.green)),
         ChartPieBean(
             type: '早餐',
             value: 3,
             color: Colors.blue,
-            assistTextStyle: TextStyle(fontSize: 12, color: Colors.blue)),
+            assistTextStyle: const TextStyle(fontSize: 12, color: Colors.blue)),
         ChartPieBean(
             type: '水果',
             value: 200,
             color: Colors.red,
-            assistTextStyle: TextStyle(fontSize: 12, color: Colors.red)),
+            assistTextStyle: const TextStyle(fontSize: 12, color: Colors.red)),
         ChartPieBean(
             type: '你猜',
             value: 2,
             color: Colors.orange,
-            assistTextStyle: TextStyle(fontSize: 20, color: Colors.red)),
+            assistTextStyle: const TextStyle(fontSize: 20, color: Colors.red)),
       ],
       assistTextShowType: AssistTextShowType.NamePercentage,
       arrowBegainLocation: ArrowBegainLocation.Left,
@@ -75,14 +78,14 @@ class _ChartPieState extends State<ChartPiePage> {
       globalR: MediaQuery.of(context).size.width / 6,
       centerR: 6,
       centerColor: Colors.white,
-      centerWidget: Text(
+      centerWidget: const Text(
         '测试中心widget',
         style: TextStyle(color: Colors.black, fontSize: 20),
       ),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       color: Colors.orangeAccent.withOpacity(0.6),
       clipBehavior: Clip.antiAlias,
       borderOnForeground: true,

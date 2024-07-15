@@ -12,8 +12,10 @@ class PercentIndicatorCircle extends StatefulWidget {
   static const String routeName = '/percent_indicator_circle';
   static const String title = '圆圈进度指示器';
 
+  const PercentIndicatorCircle({super.key});
+
   @override
-  _PercentIndicatorCircleState createState() => _PercentIndicatorCircleState();
+  State<PercentIndicatorCircle> createState() => _PercentIndicatorCircleState();
 }
 
 class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
@@ -23,7 +25,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Percent Indicators Circle'),
+        title: const Text('Percent Indicators Circle'),
       ),
       body: Center(
         child: ListView(
@@ -41,12 +43,12 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
               animationSet: AnimationSet(
                 animationDuration: 3000,
                 animateFromLastPercent: true,
-                widgetIndicator: RotatedBox(
+                widgetIndicator: const RotatedBox(
                   quarterTurns: 1,
                   child: Icon(Icons.airplanemode_active, size: 30),
                 ),
               ),
-              center: Text(
+              center: const Text(
                 '70.0%',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
@@ -61,10 +63,10 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
               backgroundModel: LineModel(
                 color: Colors.grey,
               ),
-              center: Text('50%'),
+              center: const Text('50%'),
               strokeCap: StrokeCap.round,
-              maskFilter: MaskFilter.blur(BlurStyle.solid, 3),
-              linearGradient: LinearGradient(
+              maskFilter: const MaskFilter.blur(BlurStyle.solid, 3),
+              linearGradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Colors.orange, Colors.yellow],
@@ -85,8 +87,8 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                 animationDuration: 3000,
                 animateFromLastPercent: true,
               ),
-              center: Text('100%'),
-              linearGradient: LinearGradient(
+              center: const Text('100%'),
+              linearGradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Colors.orange, Colors.yellow],
@@ -105,7 +107,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
               backgroundModel: LineModel(
                 color: Colors.grey,
               ),
-              center: Icon(
+              center: const Icon(
                 Icons.person_pin,
                 size: 50.0,
                 color: Colors.blue,
@@ -130,7 +132,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                   color: Colors.orange,
                 ),
                 arcType: ArcType.HALF,
-                center: Text(
+                center: const Text(
                   '40 hours',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
                 ),
@@ -147,7 +149,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                 progressModel: LineModel(width: 10.0, color: Colors.red),
                 backgroundModel: LineModel(color: Colors.yellow),
                 reverse: true,
-                center: Text(
+                center: const Text(
                   '20 hours',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
                 ),
@@ -163,7 +165,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
               progressModel: LineModel(width: 10.0, color: Colors.red),
               backgroundModel: LineModel(color: Colors.grey),
               startAngle: 90,
-              center: Text(
+              center: const Text(
                 'Start angle 90',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
@@ -178,14 +180,14 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                 animationDuration: 3000,
                 animateFromLastPercent: true,
               ),
-              center: Text(
+              center: const Text(
                 '70.0%',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
               strokeCap: StrokeCap.round,
             ),
             Container(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -195,9 +197,9 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                       size: 45.0,
                       percentModel: PercentModel(percent: 0.10),
                       progressModel: LineModel(width: 4.0, color: Colors.red),
-                      center: Text('10%'),
+                      center: const Text('10%'),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                     ),
                     CircularPercentIndicator(
@@ -207,9 +209,9 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                           LineModel(width: 4.0, color: Colors.orangeAccent),
                       backgroundModel: LineModel(width: 1.0),
                       animationSet: AnimationSet(animationDuration: 500),
-                      center: Text('20%'),
+                      center: const Text('20%'),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                     ),
                     CircularPercentIndicator(
@@ -217,9 +219,9 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                       percentModel: PercentModel(percent: 0.30),
                       progressModel:
                           LineModel(width: 4.0, color: Colors.orange),
-                      center: Text('30%'),
+                      center: const Text('30%'),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                     ),
                     CircularPercentIndicator(
@@ -229,18 +231,18 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                       progressModel:
                           LineModel(color: Colors.yellow, width: 4.0),
                       backgroundModel: LineModel(width: 8),
-                      center: Text('60%'),
+                      center: const Text('60%'),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                     ),
                     CircularPercentIndicator(
                       size: 45.0,
                       percentModel: PercentModel(percent: 0.90),
                       progressModel: LineModel(width: 4.0, color: Colors.green),
-                      center: Text('90%'),
+                      center: const Text('90%'),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                     ),
                     CircularPercentIndicator(
@@ -252,7 +254,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                       ),
                       progressModel:
                           LineModel(width: 4.0, color: Colors.redAccent),
-                      center: CircleAvatar(
+                      center: const CircleAvatar(
                         child: Icon(Icons.person),
                       ),
                     ),
@@ -270,7 +272,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                     setState(() => stateCircle = 'End Animation at 50%'),
               ),
               progressModel: LineModel(width: 5.0, color: Colors.blueAccent),
-              center: Text(
+              center: const Text(
                 '50.0%',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
@@ -282,7 +284,7 @@ class _PercentIndicatorCircleState extends State<PercentIndicatorCircle> {
                 Text(stateCircle),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CircularPercentIndicator(
               size: 80.0,
               percentModel: PercentModel(

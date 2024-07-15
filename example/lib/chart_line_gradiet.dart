@@ -11,12 +11,14 @@ import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 class ChartLineGradientPage extends StatefulWidget {
   static const String routeName = 'chart_line_gradient';
   static const String title = '折线线条渐变色';
+
+  const ChartLineGradientPage({super.key});
   @override
-  _ChartLineGradientState createState() => _ChartLineGradientState();
+  State<ChartLineGradientPage> createState() => _ChartLineGradientState();
 }
 
 class _ChartLineGradientState extends State<ChartLineGradientPage> {
-  ChartBeanSystem _chartLineBeanSystem;
+  late ChartBeanSystem _chartLineBeanSystem;
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _ChartLineGradientState extends State<ChartLineGradientPage> {
             tag: '$e',
             touchBackParam: e,
             cellPointSet: e == 40.0
-                ? CellPointSet(
+                ? const CellPointSet(
                     pointSize: Size(10, 10),
                     pointRadius: Radius.circular(5),
                     pointShaderColors: [Colors.red, Colors.red],
@@ -45,7 +47,7 @@ class _ChartLineGradientState extends State<ChartLineGradientPage> {
       chartBeans: tempDatas,
       lineColor: Colors.red,
       //此处设置lineGradient,则上面的lineColor已经意义不大了
-      lineGradient: LinearGradient(
+      lineGradient: const LinearGradient(
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,
         tileMode: TileMode.mirror,
@@ -67,7 +69,7 @@ class _ChartLineGradientState extends State<ChartLineGradientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartLineGradientPage.title),
+        title: const Text(ChartLineGradientPage.title),
       ),
       body: _buildChartLine(context),
     );
@@ -81,7 +83,7 @@ class _ChartLineGradientState extends State<ChartLineGradientPage> {
       tempXs.add(
         DialStyleX(
             title: xarr[i],
-            titleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+            titleStyle: const TextStyle(color: Colors.grey, fontSize: 12),
             positionRetioy: (1 / (xarr.length - 1)) * i),
       );
     }
@@ -95,26 +97,37 @@ class _ChartLineGradientState extends State<ChartLineGradientPage> {
         yColor: Colors.white,
         rulerWidth: -4,
         isShowXScale: true,
-        isLeftYDial: false,
         yDialValues: [
           DialStyleY(
-            title: '0',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            rightSub: DialStyleYSub(
+                title: '0',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 0,
             positionRetioy: 0 / 100.0,
           ),
           DialStyleY(
-            title: '35',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            rightSub: DialStyleYSub(
+                title: '35',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 35,
             positionRetioy: 35 / 100.0,
           ),
           DialStyleY(
-            title: '65',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            rightSub: DialStyleYSub(
+                title: '65',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 65,
             positionRetioy: 65 / 100.0,
           ),
           DialStyleY(
-            title: '100',
-            titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+            rightSub: DialStyleYSub(
+                title: '100',
+                titleStyle:
+                    const TextStyle(fontSize: 10.0, color: Colors.black)),
+            yValue: 100,
             positionRetioy: 100 / 100.0,
           )
         ],
@@ -126,10 +139,10 @@ class _ChartLineGradientState extends State<ChartLineGradientPage> {
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      child: chartLine,
       clipBehavior: Clip.antiAlias,
+      child: chartLine,
     );
   }
 }

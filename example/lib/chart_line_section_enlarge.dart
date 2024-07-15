@@ -5,33 +5,38 @@
  * @LastEditTime: 2022-07-28 16:14:27
  * @Description: 折线区间放大
  */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLineSectionEnlarge extends StatelessWidget {
   static const String routeName = 'chart_line_section_enlarge';
   static const String title = '折线y轴区间放大+可点击拖拽';
+
+  const ChartLineSectionEnlarge({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ChartLineSectionEnlarge.title),
+        title: const Text(ChartLineSectionEnlarge.title),
       ),
-      body: ChartLineSectionEnlargePage(),
+      body: const ChartLineSectionEnlargePage(),
     );
   }
 }
 
 class ChartLineSectionEnlargePage extends StatefulWidget {
+  const ChartLineSectionEnlargePage({super.key});
+
   @override
-  _ChartLineSectionEnlargePageState createState() =>
+  State<ChartLineSectionEnlargePage> createState() =>
       _ChartLineSectionEnlargePageState();
 }
 
 class _ChartLineSectionEnlargePageState
     extends State<ChartLineSectionEnlargePage> {
-  ChartBeanSystem _chartLineBeanSystem;
-  Offset _offset;
+  late ChartBeanSystem _chartLineBeanSystem;
+  Offset? _offset;
   final GlobalKey<ChartLineState> globalKey = GlobalKey();
 
   @override
@@ -45,7 +50,7 @@ class _ChartLineSectionEnlargePageState
         ChartLineBean(
             xPositionRetioy: 1 / 6,
             y: null,
-            cellPointSet: CellPointSet(
+            cellPointSet: const CellPointSet(
               pointSize: Size(6, 6),
               pointRadius: Radius.circular(3),
               pointShaderColors: [Colors.cyan, Colors.cyan],
@@ -59,10 +64,16 @@ class _ChartLineSectionEnlargePageState
         ChartLineBean(xPositionRetioy: 5 / 6, y: null, touchBackParam: '6'),
         ChartLineBean(xPositionRetioy: 6 / 6, y: null, touchBackParam: '7'),
       ],
-      shaderColors: [
-        Colors.blue.withOpacity(0.3),
-        Colors.blue.withOpacity(0.1)
-      ],
+      lineShader: LineShaderSetModel(
+        baseLineBottomGradient: LinearGradientModel(shaderColors: [
+          Colors.blueAccent.withOpacity(0.3),
+          Colors.blueAccent.withOpacity(0.1)
+        ]),
+        baseLineTopGradient: LinearGradientModel(shaderColors: [
+          Colors.blueAccent.withOpacity(0.3),
+          Colors.blueAccent.withOpacity(0.1)
+        ]),
+      ),
       lineColor: Colors.red,
       enableTouch: true,
     );
@@ -76,7 +87,7 @@ class _ChartLineSectionEnlargePageState
       tempXs.add(
         DialStyleX(
             title: xarr[i],
-            titleStyle: TextStyle(color: Colors.grey, fontSize: 12),
+            titleStyle: const TextStyle(color: Colors.grey, fontSize: 12),
             positionRetioy: (1 / (xarr.length - 1)) * i),
       );
     }
@@ -96,23 +107,35 @@ class _ChartLineSectionEnlargePageState
             isShowXScale: true,
             yDialValues: [
               DialStyleY(
-                title: '30',
-                titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+                leftSub: DialStyleYSub(
+                    title: '30',
+                    titleStyle:
+                        const TextStyle(fontSize: 10.0, color: Colors.black)),
+                yValue: 30,
                 positionRetioy: 0 / 40.0,
               ),
               DialStyleY(
-                title: '35',
-                titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+                leftSub: DialStyleYSub(
+                    title: '35',
+                    titleStyle:
+                        const TextStyle(fontSize: 10.0, color: Colors.black)),
+                yValue: 35,
                 positionRetioy: 5 / 40.0,
               ),
               DialStyleY(
-                title: '65',
-                titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+                leftSub: DialStyleYSub(
+                    title: '65',
+                    titleStyle:
+                        const TextStyle(fontSize: 10.0, color: Colors.black)),
+                yValue: 65,
                 positionRetioy: 35 / 40.0,
               ),
               DialStyleY(
-                title: '70',
-                titleStyle: TextStyle(fontSize: 10.0, color: Colors.black),
+                leftSub: DialStyleYSub(
+                    title: '70',
+                    titleStyle:
+                        const TextStyle(fontSize: 10.0, color: Colors.black)),
+                yValue: 70,
                 positionRetioy: 40 / 40.0,
               )
             ],
@@ -124,7 +147,7 @@ class _ChartLineSectionEnlargePageState
           touchSet: LineTouchSet(
               outsidePointClear: false,
               hintEdgeInset: HintEdgeInset.all(PointHintParam()),
-              pointSet: CellPointSet(
+              pointSet: const CellPointSet(
                   pointSize: Size(10, 10),
                   pointRadius: Radius.circular(5),
                   pointShaderColors: [Colors.cyan, Colors.cyan]),
@@ -132,20 +155,22 @@ class _ChartLineSectionEnlargePageState
                 setState(() {
                   _offset = offset;
                 });
-                print('带出来的参数:$offset,$param');
+                if (kDebugMode) {
+                  print('带出来的参数:$offset,$param');
+                }
               }),
         ),
         if (_offset != null)
           Positioned(
+            left: _offset!.dx,
+            top: _offset!.dy,
+            width: 20,
+            height: 20,
             child: IgnorePointer(
               child: Container(
                 color: Colors.red,
               ),
             ),
-            left: _offset.dx,
-            top: _offset.dy,
-            width: 20,
-            height: 20,
           ),
       ],
     );
@@ -155,22 +180,23 @@ class _ChartLineSectionEnlargePageState
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
-            child: chartLine,
             clipBehavior: Clip.antiAlias,
+            child: chartLine,
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           GestureDetector(
-            onTap: () => globalKey.currentState.clearTouchPoint(),
+            onTap: () => globalKey.currentState?.clearTouchPoint(),
             child: Container(
               width: 200,
               height: 50,
               alignment: Alignment.center,
               color: Colors.orange,
-              child: Text('点击外部关闭图表的选中点'),
+              child: const Text('点击外部关闭图表的选中点'),
             ),
           )
         ],
