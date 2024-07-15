@@ -93,19 +93,13 @@
     },
     {
       "name": "path_drawing",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path_drawing-0.5.1+1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path_drawing-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "path_parsing",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path_parsing-0.2.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "pedantic",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/pedantic-1.11.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path_parsing-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -170,7 +164,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-07-15T01:10:29.407589Z",
+  "generated": "2024-07-15T06:48:49.728597Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }

@@ -7,7 +7,7 @@
  * @Email: cao_shixin@yahoo.com
 -->
 
-## 1.4.1
+## 1.4.1+1
 
 - 柱状图，折线图支持基准线功能
     1.柱状图： 2.一般折线图：ChartBeanSystem 中取消线条渐变色设置属性，调整为 LineShaderSetModel 的 lineShader 属性设置; 3.特殊专注力曲线：FocusChartBeanMain 中取消线条渐变色设置属性，调整为 LineShaderSetModel 的 lineShader 属性设置;
