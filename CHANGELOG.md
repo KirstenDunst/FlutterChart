@@ -7,6 +7,12 @@
  * @Email: cao_shixin@yahoo.com
 -->
 
+## 1.5.0
+
+- 常规折现图扩展
+  x轴的区间带 xSectionBeans
+  y轴区间带 ySectionBeans;
+
 ## 1.4.1+1
 
 - 柱状图，折线图支持基准线功能

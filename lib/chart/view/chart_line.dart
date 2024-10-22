@@ -25,6 +25,10 @@ class ChartLine extends StatefulWidget {
   final List<ChartBeanSystem> chartBeanSystems;
   //x轴刻度显示，不传则没有
   final List<DialStyleX>? xDialValues;
+  //x轴的区间带（不用的话不用设置）
+  final List<SectionBean>? xSectionBeans;
+  //y轴区间带（不用的话不用设置）
+  final List<SectionBeanY>? ySectionBeans;
   //可点击参数设置，不设置表示不支持点击选中最近点功能
   final LineTouchSet? touchSet;
   //内容绘制结束
@@ -44,6 +48,8 @@ class ChartLine extends StatefulWidget {
     this.baseBean,
     this.bothEndPitchX = 0,
     this.xDialValues,
+    this.xSectionBeans,
+    this.ySectionBeans,
     this.touchSet,
     this.paintEnd,
     this.touchEnableNormalselect = true,
@@ -96,6 +102,8 @@ class ChartLineState extends State<ChartLine>
                 ? _lastTouchModel!.startOffset
                 : null,
         xDialValues: widget.xDialValues,
+        xSectionBeans: widget.xSectionBeans,
+        ySectionBeans: widget.ySectionBeans,
         pointSet: widget.touchSet?.pointSet ?? CellPointSet.normal,
         paintEnd: widget.paintEnd)
       ..baseBean = widget.baseBean ?? BaseBean(yDialValues: []);

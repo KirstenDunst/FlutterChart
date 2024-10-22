@@ -37,17 +37,16 @@ class _ChartCurveState extends State<ChartCurvePage> {
       isCurve: true,
       chartBeans: tempDatas,
       lineShader: LineShaderSetModel(
-        baseLineBottomGradient: LinearGradientModel(shaderColors: [
-          Colors.red.withOpacity(0.01),
-          Colors.red.withOpacity(0.3)
-        ]),
-        baseLineTopGradient: LinearGradientModel(shaderColors: [
-          Colors.blueAccent.withOpacity(0.3),
-          Colors.blueAccent.withOpacity(0.01)
-        ]),
-        baseLineY: 0,
-        shaderIsContentFill: false
-      ),
+          baseLineBottomGradient: LinearGradientModel(shaderColors: [
+            Colors.red.withOpacity(0.01),
+            Colors.red.withOpacity(0.3)
+          ]),
+          baseLineTopGradient: LinearGradientModel(shaderColors: [
+            Colors.blueAccent.withOpacity(0.3),
+            Colors.blueAccent.withOpacity(0.01)
+          ]),
+          baseLineY: 0,
+          shaderIsContentFill: false),
       lineColor: Colors.blue,
     );
     super.initState();
@@ -80,6 +79,16 @@ class _ChartCurveState extends State<ChartCurvePage> {
       chartBeanSystems: [_chartLineBeanSystem],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
+      xSectionBeans: [
+        SectionBean(
+            startRatio: 0.4,
+            widthRatio: 0.2,
+            fillColor: Colors.orange.withOpacity(0.4),
+            textTitle: TextSetModel(
+                title: '居中标题',
+                titleStyle: const TextStyle(color: Colors.black, fontSize: 10)),
+            borderColor: Colors.red)
+      ],
       baseBean: BaseBean(
         xColor: Colors.white,
         yColor: Colors.white,

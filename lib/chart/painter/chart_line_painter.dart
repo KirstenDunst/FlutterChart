@@ -14,6 +14,10 @@ class ChartLinePainter extends BasePainter {
   List<ChartBeanSystem> chartBeanSystems;
   //x轴刻度显示，不传则没有
   List<DialStyleX>? xDialValues;
+  //x轴的区间带（不用的话不用设置）
+  List<SectionBean>? xSectionBeans;
+  //y轴区间带（不用的话不用设置）
+  List<SectionBeanY>? ySectionBeans;
   //触摸选中点
   Offset? touchLocalPosition;
   //触摸点设置
@@ -29,6 +33,8 @@ class ChartLinePainter extends BasePainter {
       {this.bothEndPitchX = 0,
       this.touchLocalPosition,
       this.xDialValues,
+      this.xSectionBeans,
+      this.ySectionBeans,
       this.pointSet = CellPointSet.normal,
       this.paintEnd});
 
@@ -36,6 +42,16 @@ class ChartLinePainter extends BasePainter {
   void paint(Canvas canvas, Size size) {
     super.paint(canvas, size);
     _init(canvas, size);
+    //绘制x轴区间带
+    if (xSectionBeans != null && xSectionBeans!.isNotEmpty) {
+      PainterTool.drawXIntervalSegmentation(
+          canvas, xSectionBeans!, _startX, _endX, _startY, _endY);
+    }
+    //绘制y轴区间带
+    if (ySectionBeans != null && ySectionBeans!.isNotEmpty) {
+      PainterTool.drawYIntervalSegmentation(
+          canvas, ySectionBeans!, _startX, _endX, _startY, _endY);
+    }
     var models = _initPath();
     _drawLine(canvas, models, size); //曲线或折线
     _drawTouchSpecialPointAndHitLine(canvas); //拖拽+点击的特殊点显示
