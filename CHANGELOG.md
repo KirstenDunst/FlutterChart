@@ -6,6 +6,10 @@
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
 -->
+## 1.5.0+1
+
+- 修复常规曲线基准线以下渐变色绘制异常问题
+
 
 ## 1.5.0
 

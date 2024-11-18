@@ -41,31 +41,31 @@
       "name": "flutter",
       "rootUri": "file:///Users/caoshixin/Flutter/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_test",
       "rootUri": "file:///Users/caoshixin/Flutter/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker-10.0.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker-10.0.5",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker_flutter_testing-2.0.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker_flutter_testing-3.0.5",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_testing",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker_testing-2.0.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/leak_tracker_testing-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "matcher",
@@ -75,13 +75,13 @@
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/material_color_utilities-0.8.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/material_color_utilities-0.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/meta-1.11.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/meta-1.15.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -141,9 +141,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.6.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "vector_math",
@@ -153,9 +153,9 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/vm_service-13.0.0",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/vm_service-14.2.5",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_chart_csx",
@@ -164,7 +164,10 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-10-22T05:39:13.198748Z",
+  "generated": "2024-11-18T08:13:59.024563Z",
   "generator": "pub",
-  "generatorVersion": "3.3.4"
+  "generatorVersion": "3.5.4",
+  "flutterRoot": "file:///Users/caoshixin/Flutter/flutter",
+  "flutterVersion": "3.24.4",
+  "pubCache": "file:///Users/caoshixin/.pub-cache"
 }

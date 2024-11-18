@@ -150,7 +150,7 @@ class ChartLinePainter extends BasePainter {
                 ..close();
               shadowTopPaths.add(_shadowTopPath);
               _shadowBottomPath
-                ..lineTo(preX, _startY)
+                ..lineTo(preX, _endY)
                 ..lineTo(_shadowBottomStartPoint.x.toDouble(),
                     _shadowBottomStartPoint.y.toDouble())
                 ..close();
