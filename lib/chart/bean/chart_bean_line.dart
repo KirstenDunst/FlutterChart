@@ -7,11 +7,11 @@
  * @FilePath: /flutter_chart/lib/chart/bean/chart_bean_line.dart
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 
-import 'chart_bean.dart';
+import '../base/chart_bean.dart';
 import 'chart_bean_line_common.dart';
-import 'chart_typedef.dart';
+import '../base/chart_typedef.dart';
 
 //每条线的定义
 class ChartBeanSystem {

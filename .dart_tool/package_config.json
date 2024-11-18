@@ -99,9 +99,9 @@
     },
     {
       "name": "path_parsing",
-      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path_parsing-1.0.1",
+      "rootUri": "file:///Users/caoshixin/.pub-cache/hosted/pub.flutter-io.cn/path_parsing-1.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.3"
     },
     {
       "name": "sky_engine",
@@ -164,7 +164,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-11-18T08:13:59.024563Z",
+  "generated": "2024-11-18T09:14:25.196411Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///Users/caoshixin/Flutter/flutter",

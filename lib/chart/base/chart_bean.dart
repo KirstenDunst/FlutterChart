@@ -10,7 +10,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 
 //xy的显示点位的两员大将
 //y轴

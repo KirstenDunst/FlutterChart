@@ -9,7 +9,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 
 ///内部使用
 class RedrawModel {

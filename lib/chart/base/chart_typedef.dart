@@ -31,3 +31,9 @@ typedef BarPointBack = Function(Offset? point, Size size, dynamic value);
  */
 typedef DimensionaBack = Function(
     bool isTouch, Offset? point, Size size, int index, dynamic value);
+
+/* 
+ * 柱状线图的处理
+ * 相对于起始的偏移point,如果为null则辅助消失，size：柱体的大小，value：触摸外传的参数（touchBackParam）
+ */
+typedef LineBarPointBack = Function(Offset? startPoint, Size size, dynamic value);

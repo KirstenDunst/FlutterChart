@@ -1,15 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 import 'package:path_drawing/path_drawing.dart';
 import '../bean/chart_bean_line_common.dart';
-import 'base_painter.dart';
-import 'base_painter_tool.dart';
+import '../base/base_painter.dart';
+import '../util/base_painter_tool.dart';
 
 class ChartLineFocusPainter extends BasePainter {
   List<FocusChartBeanMain> focusChartBeans;

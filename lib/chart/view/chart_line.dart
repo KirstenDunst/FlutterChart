@@ -7,7 +7,7 @@
  * @FilePath: /flutter_chart/lib/chart/view/chart_line.dart
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_line.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_line_content.dart';

@@ -7,7 +7,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../enum/common_enum.dart';
 
 class ColorGradientModel {
   ///单一颜色

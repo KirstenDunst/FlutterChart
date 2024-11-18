@@ -9,12 +9,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';
 import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 import 'package:path_drawing/path_drawing.dart';
 
 class LineFocusPainterTool {

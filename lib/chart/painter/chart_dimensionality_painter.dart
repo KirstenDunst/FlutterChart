@@ -10,15 +10,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_dimensionality.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_dimensionality_content.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
-import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
+import '../base/painter_const.dart';
+import 'package:flutter_chart_csx/chart/base/base_painter.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-import 'base_painter_tool.dart';
+import '../util/base_painter_tool.dart';
 
 class ChartDimensionalityPainter extends BasePainter {
   //维度划分的重要参数(决定有几个内容就是几个维度，从正上方顺时针方向绘制)

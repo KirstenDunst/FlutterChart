@@ -13,17 +13,19 @@ export 'chart/view/chart_line.dart';
 export 'chart/view/chart_line_focus.dart';
 export 'chart/view/chart_pie.dart';
 export 'chart/view/chart_dimensionality.dart';
+export 'chart/view/chart_line_bar.dart';
 
 export 'chart/enum/chart_pie_enum.dart';
 
-export 'chart/bean/chart_bean.dart';
+export 'chart/base/chart_bean.dart';
 export 'chart/bean/chart_bean_focus.dart';
 export 'chart/bean/chart_bean_pie.dart';
 export 'chart/bean/chart_bean_dimensionality.dart';
 export 'chart/bean/chart_bean_bar.dart';
 export 'chart/bean/chart_bean_line.dart';
 export 'chart/bean/chart_bean_line_common.dart';
-export 'chart/bean/chart_typedef.dart';
+export 'chart/base/chart_typedef.dart';
+export 'chart/bean/chart_bean_bar_line.dart';
 
 export 'chart/util/ui_image_util.dart';
 

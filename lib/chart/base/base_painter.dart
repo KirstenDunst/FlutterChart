@@ -7,7 +7,7 @@
  * @FilePath: /flutter_chart/lib/chart/painter/base_painter.dart
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 
 class BasePainter extends CustomPainter {
   //基础设置

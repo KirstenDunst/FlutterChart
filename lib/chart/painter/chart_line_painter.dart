@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_line_content.dart';
-import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
-import 'package:flutter_chart_csx/chart/painter/base_painter_tool.dart';
+import 'package:flutter_chart_csx/chart/base/base_painter.dart';
+import 'package:flutter_chart_csx/chart/util/base_painter_tool.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
 
 class ChartLinePainter extends BasePainter {
@@ -449,9 +449,7 @@ class ChartLinePainter extends BasePainter {
         localPosition.dy < _endY) {
       //不在坐标轴内部的点击
       if (outsidePointClear) {
-        return LineTouchBackModel(
-          startOffset: null,
-        );
+        return LineTouchBackModel(startOffset: null);
       } else {
         return LineTouchBackModel(needRefresh: false, startOffset: null);
       }
@@ -481,9 +479,7 @@ class ChartLinePainter extends BasePainter {
       }
     }
     if (touchModel == null) {
-      return LineTouchBackModel(
-        startOffset: null,
-      );
+      return LineTouchBackModel(startOffset: null);
     } else {
       return LineTouchBackModel(
           startOffset: touchModel.begainPoint, backParam: touchModel.param);

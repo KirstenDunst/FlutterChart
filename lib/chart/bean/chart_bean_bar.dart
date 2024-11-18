@@ -7,10 +7,10 @@
  * @FilePath: /flutter_chart/lib/chart/bean/chart_bean_bar.dart
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_typedef.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import 'package:flutter_chart_csx/chart/base/chart_typedef.dart';
+import '../base/painter_const.dart';
 
-import 'chart_bean.dart';
+import '../base/chart_bean.dart';
 
 class ChartBarBeanX {
   //x轴顶部显示的图片内容设置

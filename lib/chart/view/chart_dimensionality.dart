@@ -8,7 +8,7 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_dimensionality.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_dimensionality_content.dart';
 import 'package:flutter_chart_csx/chart/painter/chart_dimensionality_painter.dart';

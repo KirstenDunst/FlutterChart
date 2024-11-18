@@ -8,7 +8,7 @@
 //线上面点模型
 import 'package:flutter/material.dart';
 
-import 'chart_bean.dart';
+import '../base/chart_bean.dart';
 
 class PointModel {
   //位置偏移

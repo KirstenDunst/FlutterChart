@@ -8,7 +8,7 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 
 class ChartPieBean {
   //占比数值，可以任意写数值，会统一计算最后每块的占比

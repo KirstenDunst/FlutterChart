@@ -24,6 +24,7 @@ import 'package:example/percent_indicator_line.dart';
 import 'package:example/step_curve_line.dart';
 import 'package:flutter/material.dart';
 
+import 'chart_bar_line.dart';
 import 'chart_dimensionality_view_1.dart';
 import 'chart_dimensionality_view_2.dart';
 import 'chart_line_gradiet.dart';
@@ -72,6 +73,8 @@ final Map<String, WidgetBuilder> _routes = {
   PercentIndicatorLine.routeName: (_) => const PercentIndicatorLine(),
   //常用小组件展示
   NormalWidget.routeName: (_) => const NormalWidget(),
+  //柱状线图
+  ChartBarLinePage.routeName: (_)=> const ChartBarLinePage(),
 };
 
 class MyApp extends StatelessWidget {
@@ -154,6 +157,7 @@ class _MyAppPageState extends State<MyAppPage> {
           title: PercentIndicatorLine.title,
           routeName: PercentIndicatorLine.routeName),
       CellModel(title: NormalWidget.title, routeName: NormalWidget.routeName),
+      CellModel(title: ChartBarLinePage.title, routeName: ChartBarLinePage.routeName),
     ];
   }
 

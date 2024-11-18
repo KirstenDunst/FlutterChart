@@ -8,10 +8,10 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_pie.dart';
 import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 import 'package:flutter_chart_csx/chart/painter/chart_pie_painter.dart';
 
 class ChartPie extends StatefulWidget {

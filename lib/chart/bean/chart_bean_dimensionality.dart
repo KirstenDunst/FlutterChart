@@ -10,9 +10,9 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/enum/chart_pie_enum.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
+import '../base/painter_const.dart';
 
-import 'chart_typedef.dart';
+import '../base/chart_typedef.dart';
 
 //定位维度的分维
 class ChartBeanDimensionality {

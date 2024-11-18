@@ -1,12 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/bean/chart_bean.dart';
+import 'package:flutter_chart_csx/chart/base/chart_bean.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_bar.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_bar_content.dart';
-import 'package:flutter_chart_csx/chart/enum/painter_const.dart';
-import 'package:flutter_chart_csx/chart/painter/base_painter.dart';
-import 'package:flutter_chart_csx/chart/painter/base_painter_tool.dart';
+import 'package:flutter_chart_csx/chart/base/base_painter.dart';
+import 'package:flutter_chart_csx/chart/util/base_painter_tool.dart';
+
+import '../base/painter_const.dart';
 
 class ChartBarPainter extends BasePainter {
   //当前动画值

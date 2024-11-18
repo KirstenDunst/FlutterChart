@@ -8,7 +8,7 @@
  */
 import 'package:flutter/material.dart';
 
-import 'chart_bean.dart';
+import '../base/chart_bean.dart';
 
 ///内部使用的模型
 class ShadowSub {

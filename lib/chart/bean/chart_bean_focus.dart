@@ -8,9 +8,9 @@
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
-import 'chart_bean.dart';
+import '../base/chart_bean.dart';
 import 'chart_bean_line_common.dart';
-import 'chart_typedef.dart';
+import '../base/chart_typedef.dart';
 
 class FocusChartBeanMain {
   //数据显示点集合
