@@ -18,6 +18,8 @@ class ChartLineBar extends StatefulWidget {
   final BaseBean? baseBean;
   //点击设置,null的话不会启动点击效果
   final LineBarTouchSet? touchSet;
+  // 触摸点在当前段的位置类型
+  final PointPositionType pointPositionType;
   //可点击选中的时候是否支持横向推拽选中,默认true, 当需要长按触发滑动选中的时候设置为false(场景:外部可缩放,滚动的时候和内部的手势冲突问题)
   final bool touchEnableNormalselect;
   //缩放回传(由于缩放对数据的处理需要自由度更大一些,所以手势参数外传,外部设置)
@@ -32,6 +34,7 @@ class ChartLineBar extends StatefulWidget {
     this.baseBean,
     this.backgroundColor,
     this.touchSet,
+    this.pointPositionType = PointPositionType.left,
     this.touchEnableNormalselect = true,
     this.onScaleUpdate,
     this.onScaleEnd,
@@ -68,7 +71,8 @@ class ChartLineBarState extends State<ChartLineBar>
       widget.lineBarSystems,
       touchLocalPosition:
           (_lastTouchModel != null && _lastTouchModel!.startOffset != null)
-              ? _lastTouchModel!.startOffset
+              ? _dealPointPosition(
+                  _lastTouchModel!.startOffset, _lastTouchModel!.size.width)
               : null,
       xDialValues: widget.xDialValues,
       pointSet: widget.touchSet?.pointSet ?? CellPointSet.normal,
@@ -123,10 +127,41 @@ class ChartLineBarState extends State<ChartLineBar>
             (_lastTouchModel!.startOffset != tempModel.startOffset))) {
       if (widget.touchSet!.touchBack != null) {
         widget.touchSet!.touchBack!(
-            tempModel.startOffset, tempModel.size, tempModel.backParam);
+            _dealPointPosition(tempModel.startOffset, tempModel.size.width),
+            tempModel.size,
+            tempModel.backParam);
       }
       _lastTouchModel = tempModel;
       setState(() {});
     }
   }
+
+  Offset? _dealPointPosition(Offset? startOffset, double sizeWidth) {
+    if (startOffset == null) {
+      return null;
+    }
+    var back = startOffset;
+    switch (widget.pointPositionType) {
+      case PointPositionType.left:
+        back += Offset.zero;
+        break;
+      case PointPositionType.center:
+        back += Offset(sizeWidth / 2, 0);
+        break;
+      case PointPositionType.right:
+        back += Offset(sizeWidth, 0);
+        break;
+    }
+    return back;
+  }
+}
+
+//触摸点在当前段的位置类型
+enum PointPositionType {
+  //左侧
+  left,
+  //中间
+  center,
+  //右侧
+  right
 }
