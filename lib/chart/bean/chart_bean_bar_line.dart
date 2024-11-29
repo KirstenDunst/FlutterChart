@@ -33,9 +33,9 @@ class LineBarSectionBean {
   num? value;
   //点击参数
   dynamic param;
-  LineBarSectionBean(this.startRatio, this.widthRatio, this.value, this.param);
+  LineBarSectionBean(this.startRatio, this.widthRatio, this.value,
+      {this.param});
 }
-
 
 class LineBarTouchSet {
   //点击坐标轴以外的绘图区域是否取消触摸点的选中？，默认取消选中

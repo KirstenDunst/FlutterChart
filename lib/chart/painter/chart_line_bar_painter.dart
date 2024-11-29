@@ -96,12 +96,14 @@ class ChartLineBarPainter extends BasePainter {
             _path.lineTo(lineStartX, offsetY);
           }
           _path.lineTo(lineEndX, offsetY);
-          _touchCellModels.add(
-            LineBarTouchCellModel(
-                begainPoint: Offset(lineStartX, offsetY),
-                size: Size(contentWidth, contentHeight),
-                param: ele.param),
-          );
+          if (e.enableTouch) {
+            _touchCellModels.add(
+              LineBarTouchCellModel(
+                  begainPoint: Offset(lineStartX, offsetY),
+                  size: Size(contentWidth, contentHeight),
+                  param: ele.param),
+            );
+          }
         } else if (_path != null) {
           paths.add(_path);
           _path = null;
