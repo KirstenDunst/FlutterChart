@@ -149,7 +149,10 @@ class ChartBarPainter extends BasePainter {
       var ele = xDialValues[i];
       var rectLeft = _startX + (_rectPadding + _rectWidth) * i;
       var left = rectLeft + _cellWidth / 2 - _rectWidth / 2;
-      var stepSpace = _rectWidth / (max(1.0, ele.beanXModels.length));
+      var dealLength = max(1.0, ele.beanXModels.length);
+      var stepWidth =
+          (_rectWidth - (dealLength - 1) * ele.cellBarSpace) / dealLength;
+      var stepSpace = stepWidth + ele.cellBarSpace;
       num maxValue = 0;
       for (var j = 0; j < ele.beanXModels.length; j++) {
         var startLeft = left + stepSpace * j;
@@ -166,7 +169,7 @@ class ChartBarPainter extends BasePainter {
             j == 0 && i == selectIndex && selectModelSet != null,
             rectLeft,
             startLeft,
-            startLeft + stepSpace,
+            startLeft + stepWidth,
             baseLineYHeight);
       }
       if (ele.beanXModels.isNotEmpty) {

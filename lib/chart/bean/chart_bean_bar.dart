@@ -23,6 +23,8 @@ class ChartBarBeanX {
   TextSetModel? xBottomTextModel;
   //某一个坐标对应多个柱体(x轴均分设置的宽度)
   List<ChartBarBeanXCell> beanXModels;
+  //如果有多个柱体，之间的间隔
+  double cellBarSpace;
   //点击的时候外带的数据
   dynamic touchBackParam;
 
@@ -31,6 +33,7 @@ class ChartBarBeanX {
       this.xTopImgModel,
       this.xTopSpace = 0,
       required this.beanXModels,
+      this.cellBarSpace = 0,
       this.xBottomTextModel,
       this.touchBackParam});
 }

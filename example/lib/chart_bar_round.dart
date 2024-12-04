@@ -219,10 +219,24 @@ class _ChartBarRoundState extends State<ChartBarRoundPage> {
                   title: '12-08',
                   titleStyle:
                       const TextStyle(color: Colors.white, fontSize: 10)),
+              cellBarSpace: 2,
               beanXModels: [
                 ChartBarBeanXCell(
                   value: 10,
                   rectTopText: '10',
+                  rectTopTextStyle:
+                      const TextStyle(color: Colors.white, fontSize: 12),
+                  sectionColors: [
+                    SectionColor(
+                        starRate: 0,
+                        endRate: 1,
+                        borderRadius: BorderRadius.circular(4),
+                        gradualColor: [Colors.greenAccent, Colors.greenAccent])
+                  ],
+                ),
+                ChartBarBeanXCell(
+                  value: 8,
+                  rectTopText: '8',
                   rectTopTextStyle:
                       const TextStyle(color: Colors.white, fontSize: 12),
                   sectionColors: [

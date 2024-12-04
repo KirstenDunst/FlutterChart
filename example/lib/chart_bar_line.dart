@@ -35,14 +35,16 @@ class _ChartBarLinePageState extends State<ChartBarLinePage> {
                 ChartLineBarBeanSystem(
                     lineBarBeans: List.generate(
                         24,
-                        (index) => LineBarSectionBean(index / 24, 1 / 24,
-                            Random().nextDouble() * 100, '$index')),
+                        (index) => LineBarSectionBean(
+                            index / 24, 1 / 24, Random().nextDouble() * 100,
+                            param: '$index')),
                     lineColor: Colors.blue),
                 ChartLineBarBeanSystem(
                     lineBarBeans: List.generate(
                         24,
-                        (index) => LineBarSectionBean(index / 24, 1 / 24,
-                            Random().nextDouble() * 100, '$index')),
+                        (index) => LineBarSectionBean(
+                            index / 24, 1 / 24, Random().nextDouble() * 100,
+                            param: '$index')),
                     lineColor: Colors.orange,
                     enableTouch: true)
               ],
