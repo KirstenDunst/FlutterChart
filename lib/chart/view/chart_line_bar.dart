@@ -49,6 +49,7 @@ class ChartLineBarState extends State<ChartLineBar>
     with SingleTickerProviderStateMixin {
   late bool _isCanTouch;
   LineBarTouchBackModel? _lastTouchModel;
+  RectModel? _rectModel;
 
   @override
   void initState() {
@@ -62,6 +63,7 @@ class ChartLineBarState extends State<ChartLineBar>
       widget.touchSet!.touchBack!(null, Size.zero, null);
     }
     _lastTouchModel = null;
+    _rectModel = null;
     setState(() {});
   }
 
@@ -75,6 +77,8 @@ class ChartLineBarState extends State<ChartLineBar>
                   _lastTouchModel!.startOffset, _lastTouchModel!.size.width)
               : null,
       xDialValues: widget.xDialValues,
+      selectModelSet: widget.touchSet?.selelctSet,
+      rectModel: _rectModel,
       pointSet: widget.touchSet?.pointSet ?? CellPointSet.normal,
     )..baseBean = widget.baseBean ?? BaseBean(yDialValues: []);
     if (_isCanTouch) {
@@ -152,6 +156,7 @@ class ChartLineBarState extends State<ChartLineBar>
         back += Offset(sizeWidth, 0);
         break;
     }
+    _rectModel = RectModel(back.dx, sizeWidth);
     return back;
   }
 }

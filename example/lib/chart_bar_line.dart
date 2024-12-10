@@ -14,6 +14,9 @@ class ChartBarLinePage extends StatefulWidget {
 }
 
 class _ChartBarLinePageState extends State<ChartBarLinePage> {
+  final GlobalKey<ChartLineBarState> _globalKey =
+      GlobalKey<ChartLineBarState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +34,7 @@ class _ChartBarLinePageState extends State<ChartBarLinePage> {
             color: Colors.white,
             clipBehavior: Clip.antiAlias,
             child: ChartLineBar(
+              key: _globalKey,
               lineBarSystems: [
                 ChartLineBarBeanSystem(
                     lineBarBeans: List.generate(
@@ -48,6 +52,14 @@ class _ChartBarLinePageState extends State<ChartBarLinePage> {
                     lineColor: Colors.orange,
                     enableTouch: true)
               ],
+              touchSet: LineBarTouchSet(
+                selelctSet: LineBarSelectSet(
+                  highLightColor: Colors.black.withOpacity(0.4),
+                ),
+                touchBack: (startPoint, size, value) {
+                  print('>>>>>>>$startPoint');
+                },
+              ),
               baseBean: BaseBean(yDialValues: [
                 DialStyleY(
                     leftSub: DialStyleYSub(
@@ -73,6 +85,18 @@ class _ChartBarLinePageState extends State<ChartBarLinePage> {
               ], yMax: 100.0, yMin: 0.0, isShowHintX: true),
               size: Size(MediaQuery.of(context).size.width,
                   MediaQuery.of(context).size.height / 5 * 1.8),
+            ),
+          ),
+          const SizedBox(height: 10),
+          InkWell(
+            onTap: () {
+              _globalKey.currentState?.clearTouchPoint();
+            },
+            child: Container(
+              width: 100,
+              height: 40,
+              alignment: Alignment.center,
+              child: const Text('取消选中'),
             ),
           )
         ],

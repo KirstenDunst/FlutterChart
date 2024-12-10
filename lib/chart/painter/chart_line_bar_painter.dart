@@ -16,6 +16,9 @@ class ChartLineBarPainter extends BasePainter {
   Offset? touchLocalPosition;
   //触摸点设置
   CellPointSet pointSet;
+  //选中
+  RectModel? rectModel;
+  LineBarSelectSet? selectModelSet;
 
   late double _fixedHeight, _fixedWidth, _startX, _endX, _startY, _endY;
   late List<LineBarTouchCellModel> _touchCellModels;
@@ -25,6 +28,8 @@ class ChartLineBarPainter extends BasePainter {
     this.xDialValues,
     this.touchLocalPosition,
     this.pointSet = CellPointSet.normal,
+    this.rectModel,
+    this.selectModelSet,
   });
 
   @override
@@ -35,6 +40,8 @@ class ChartLineBarPainter extends BasePainter {
     _drawXy(canvas, size);
     //柱状线图
     _drawLineBar(canvas, size);
+    //选中背景
+    _drawSelectBg(canvas);
     //拖拽+点击的特殊点显示
     _drawTouchSpecialPointAndHitLine(canvas);
   }
@@ -149,6 +156,20 @@ class ChartLineBarPainter extends BasePainter {
           _endX,
           _startY,
           _endY);
+    }
+  }
+
+  //选中柱，添加背景色
+  void _drawSelectBg(Canvas canvas) {
+    if (rectModel != null && selectModelSet != null) {
+      canvas.drawRect(
+          Rect.fromLTWH(
+              rectModel!.offsetX, _endY, rectModel!.sizeWidth, _fixedHeight),
+          Paint()
+            ..isAntiAlias = true
+            ..strokeCap = StrokeCap.round
+            ..color = selectModelSet!.highLightColor
+            ..style = PaintingStyle.fill);
     }
   }
 

@@ -25,3 +25,9 @@ class LineBarTouchCellModel {
   LineBarTouchCellModel(
       {required this.begainPoint, required this.size, this.param});
 }
+
+class RectModel {
+  double offsetX;
+  double sizeWidth;
+  RectModel(this.offsetX, this.sizeWidth);
+}

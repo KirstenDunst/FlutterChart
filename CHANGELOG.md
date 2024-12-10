@@ -7,6 +7,10 @@
  * @Email: cao_shixin@yahoo.com
 -->
 
+## 1.6.2
+
+- 柱状线图支持设置选中的背景底色块设置(LineBarTouchSet 中新增 LineBarSelectSet selelctSet)
+
 ## 1.6.1
 
 - 柱状图支持某点多个子柱体之间添加间隔 cellBarSpace，默认间隔为 0，即无间隔。

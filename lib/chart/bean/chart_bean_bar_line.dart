@@ -44,8 +44,18 @@ class LineBarTouchSet {
   final LineBarPointBack? touchBack;
   //触摸点设置
   final CellPointSet pointSet;
+  //选中的区域高亮蒙层颜色
+  final LineBarSelectSet selelctSet;
   LineBarTouchSet(
       {this.outsidePointClear = true,
       this.pointSet = CellPointSet.normal,
+      this.selelctSet = LineBarSelectSet.normal,
       this.touchBack});
+}
+
+class LineBarSelectSet {
+  //选中的区域高亮蒙层颜色
+  final Color highLightColor;
+  const LineBarSelectSet({this.highLightColor = Colors.transparent});
+  static const LineBarSelectSet normal = LineBarSelectSet();
 }
