@@ -1,6 +1,6 @@
 name: flutter_chart_csx
 description: Chart library(bar chart,line chart,pie chart,multi-dimensional chart,drag and drop line,custom cylindrical radius,support multi-curve drawing).
-version: 1.6.2
+version: 1.6.3
 homepage: https://github.com/KirstenDunst/FlutterChart
 
 environment:

@@ -7,6 +7,11 @@
  * @Email: cao_shixin@yahoo.com
 -->
 
+## 1.6.3
+
+- 折线图修复单个数据的时候无法点击以及单独点展示不出来问题。
+
+
 ## 1.6.2
 
 - 柱状线图支持设置选中的背景底色块设置(LineBarTouchSet 中新增 LineBarSelectSet selelctSet)

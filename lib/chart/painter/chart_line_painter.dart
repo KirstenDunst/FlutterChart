@@ -197,6 +197,13 @@ class ChartLinePainter extends BasePainter {
           if (pointIsSpecial) {
             pointModels
                 .add(_getPointModel(currentX, cellBean, currentY: currentY));
+          } else if (lastPoint == null &&
+              cellBean.y != null &&
+              j == length - 1 &&
+              item.alonePointSet != CellPointSet.normal) {
+            //这条线最后一点有值，前面没数值，也做孤独点处理
+            pointModels.add(LinePointModel(
+                x: currentX, y: currentY, cellPointSet: item.alonePointSet));
           }
           if (j == 0 || (j > 0 && item.chartBeans[j - 1].y == null)) {
             _path.moveTo(currentX, currentY);
@@ -457,25 +464,29 @@ class ChartLinePainter extends BasePainter {
     _lineTouchCellModels
         .sort((a, b) => a.begainPoint.dx.compareTo(b.begainPoint.dx));
     LineTouchCellModel? touchModel;
-    for (var i = 0; i < _lineTouchCellModels.length - 1; i++) {
-      var currentX = _lineTouchCellModels[i].begainPoint.dx;
-      var nextX = _lineTouchCellModels[i + 1].begainPoint.dx;
-      if (i == 0 && localPosition.dx < currentX) {
-        touchModel = _lineTouchCellModels.first;
-        break;
-      }
-      if (i == _lineTouchCellModels.length - 2 && localPosition.dx >= nextX) {
-        touchModel = _lineTouchCellModels[i + 1];
-        break;
-      }
-      if (localPosition.dx >= currentX && localPosition.dx < nextX) {
-        var speaceWidth = nextX - currentX;
-        if (localPosition.dx <= currentX + speaceWidth / 2) {
-          touchModel = _lineTouchCellModels[i];
-        } else {
-          touchModel = _lineTouchCellModels[i + 1];
+    if (_lineTouchCellModels.length == 1) {
+      touchModel = _lineTouchCellModels.first;
+    } else {
+      for (var i = 0; i < _lineTouchCellModels.length - 1; i++) {
+        var currentX = _lineTouchCellModels[i].begainPoint.dx;
+        var nextX = _lineTouchCellModels[i + 1].begainPoint.dx;
+        if (i == 0 && localPosition.dx < currentX) {
+          touchModel = _lineTouchCellModels.first;
+          break;
         }
-        break;
+        if (i == _lineTouchCellModels.length - 2 && localPosition.dx >= nextX) {
+          touchModel = _lineTouchCellModels[i + 1];
+          break;
+        }
+        if (localPosition.dx >= currentX && localPosition.dx < nextX) {
+          var speaceWidth = nextX - currentX;
+          if (localPosition.dx <= currentX + speaceWidth / 2) {
+            touchModel = _lineTouchCellModels[i];
+          } else {
+            touchModel = _lineTouchCellModels[i + 1];
+          }
+          break;
+        }
       }
     }
     if (touchModel == null) {
