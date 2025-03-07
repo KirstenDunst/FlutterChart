@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chart_csx/chart/base/painter_const.dart';
 
 import '../base/base_painter.dart';
 import '../base/chart_bean.dart';
@@ -122,10 +123,46 @@ class ChartLineBarPainter extends BasePainter {
       }
 
       if (paths.isNotEmpty) {
-        paint
-          ..strokeWidth = e.lineWidth
-          ..color = e.lineColor;
-        paths.forEach((e) => canvas.drawPath(e, paint));
+        if (e.segmentationModel != null) {
+          var baseLineY = _startY -
+              (e.segmentationModel!.baseLineY - baseBean.yMin) /
+                  (baseBean.yMax - baseBean.yMin) *
+                  _fixedHeight;
+          var topPath = Path()
+            ..moveTo(_startX, baseLineY)
+            ..lineTo(_endX, baseLineY)
+            ..lineTo(_endX, _endY)
+            ..lineTo(_startX, _endY)
+            ..lineTo(_startX, baseLineY)
+            ..close();
+          canvas.save();
+          canvas.clipPath(topPath);
+          paint
+            ..strokeWidth = e.lineWidth
+            ..color = e.segmentationModel!.baseLineTopColor;
+          paths.forEach((e) => canvas.drawPath(e, paint));
+          canvas.restore();
+
+          var bottomPath = Path()
+            ..moveTo(_startX, baseLineY)
+            ..lineTo(_endX, baseLineY)
+            ..lineTo(_endX, _startY)
+            ..lineTo(_startX, _startY)
+            ..lineTo(_startX, baseLineY)
+            ..close();
+          canvas.save();
+          canvas.clipPath(bottomPath);
+          paint
+            ..strokeWidth = e.lineWidth
+            ..color = e.segmentationModel!.baseLineBottomColor;
+          paths.forEach((e) => canvas.drawPath(e, paint));
+          canvas.restore();
+        } else {
+          paint
+            ..strokeWidth = e.lineWidth
+            ..color = e.lineColor ?? defaultColor;
+          paths.forEach((e) => canvas.drawPath(e, paint));
+        }
       }
     });
   }

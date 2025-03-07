@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chart_csx/chart/base/painter_const.dart';
 
 import '../base/chart_bean.dart';
 import '../base/chart_typedef.dart';
@@ -7,10 +6,12 @@ import '../base/chart_typedef.dart';
 class ChartLineBarBeanSystem {
   //线宽
   double lineWidth;
-  //线颜色
-  Color lineColor;
-  //标记是否为曲线
-  bool isCurve;
+
+  /// 线颜色 ,与参数[segmentationModel]互斥
+  Color? lineColor;
+
+  ///线条分段颜色设置，如果不为空则会覆盖[lineColor]效果,故此参数设置和[lineColor]参数互斥
+  LineColorSegmentationModel? segmentationModel;
   //数据集合
   List<LineBarSectionBean> lineBarBeans;
   //是否支持可点击，匹配外部的可点击参数设置,多条线都设置可点击的话，只会取最后一条线的点做可点击处理
@@ -18,10 +19,22 @@ class ChartLineBarBeanSystem {
 
   ChartLineBarBeanSystem(
       {this.lineWidth = 2,
-      this.isCurve = false,
       required this.lineBarBeans,
-      this.lineColor = defaultColor,
+      this.lineColor,
+      this.segmentationModel,
       this.enableTouch = false});
+}
+
+class LineColorSegmentationModel {
+  //基准线以上的线条颜色
+  Color baseLineTopColor;
+  //基准线以下的线条颜色
+  Color baseLineBottomColor;
+  //基准线数值
+  double baseLineY;
+
+  LineColorSegmentationModel(
+      this.baseLineTopColor, this.baseLineBottomColor, this.baseLineY);
 }
 
 class LineBarSectionBean {

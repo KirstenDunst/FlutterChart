@@ -39,50 +39,59 @@ class _ChartBarLinePageState extends State<ChartBarLinePage> {
                 ChartLineBarBeanSystem(
                     lineBarBeans: List.generate(
                         24,
-                        (index) => LineBarSectionBean(
-                            index / 24, 1 / 24, Random().nextDouble() * 100,
+                        (index) => LineBarSectionBean(index / 24, 1 / 24,
+                            Random().nextDouble() * 300 - 150,
                             param: '$index')),
-                    lineColor: Colors.blue),
-                ChartLineBarBeanSystem(
-                    lineBarBeans: List.generate(
-                        24,
-                        (index) => LineBarSectionBean(
-                            index / 24, 1 / 24, Random().nextDouble() * 100,
-                            param: '$index')),
-                    lineColor: Colors.orange,
-                    enableTouch: true)
+                    lineColor: Colors.blue,
+                    segmentationModel: LineColorSegmentationModel(
+                        Colors.red, Colors.orange, -200)),
+                // ChartLineBarBeanSystem(
+                //     lineBarBeans: List.generate(
+                //         24,
+                //         (index) => LineBarSectionBean(index / 24, 1 / 24,
+                //             Random().nextDouble() * 300 - 150,
+                //             param: '$index')),
+                //     lineColor: Colors.orange,
+                //     enableTouch: true)
               ],
               touchSet: LineBarTouchSet(
                 selelctSet: LineBarSelectSet(
                   highLightColor: Colors.black.withOpacity(0.4),
                 ),
                 touchBack: (startPoint, size, value) {
-                  print('>>>>>>>$startPoint');
+                  // print('>>>>>>>$startPoint');
                 },
               ),
               baseBean: BaseBean(yDialValues: [
                 DialStyleY(
                     leftSub: DialStyleYSub(
-                        title: '100',
+                        title: '140',
                         titleStyle:
                             const TextStyle(color: Colors.black, fontSize: 10)),
-                    yValue: 100,
-                    positionRetioy: 100 / 100),
+                    yValue: 140,
+                    positionRetioy: 29 / 30),
                 DialStyleY(
                     leftSub: DialStyleYSub(
-                        title: '65',
+                        title: '50',
                         titleStyle:
                             const TextStyle(color: Colors.black, fontSize: 10)),
-                    yValue: 65,
-                    positionRetioy: 65 / 100),
+                    yValue: 50,
+                    positionRetioy: 2 / 3),
                 DialStyleY(
                     leftSub: DialStyleYSub(
-                        title: '35',
+                        title: '-50',
                         titleStyle:
                             const TextStyle(color: Colors.black, fontSize: 10)),
-                    yValue: 35,
-                    positionRetioy: 35 / 100)
-              ], yMax: 100.0, yMin: 0.0, isShowHintX: true),
+                    yValue: -50,
+                    positionRetioy: 1 / 3),
+                DialStyleY(
+                    leftSub: DialStyleYSub(
+                        title: '',
+                        titleStyle:
+                            const TextStyle(color: Colors.black, fontSize: 10)),
+                    yValue: 0,
+                    positionRetioy: 1 / 2),
+              ], yMax: 150.0, yMin: -150.0, isShowHintX: true),
               size: Size(MediaQuery.of(context).size.width,
                   MediaQuery.of(context).size.height / 5 * 1.8),
             ),
