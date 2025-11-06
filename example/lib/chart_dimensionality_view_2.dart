@@ -121,7 +121,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
       ],
       dimensionalityTags: [
         DimensionalityBean(
-          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
+          fillColor: const Color(0xFFB1E3AD).withValues(alpha: 0.6),
           tagTipWidth: 0,
           tagTipHeight: 0,
           tagContents: [
@@ -132,7 +132,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
           ],
         ),
         DimensionalityBean(
-          fillColor: Colors.red.withOpacity(0.5),
+          fillColor: Colors.red.withValues(alpha: 0.5),
           lineWidth: 3,
           lineColor: Colors.green,
           tagTipWidth: 0,
@@ -171,7 +171,8 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
             .map((e) => DimensionBgCircleLine(
                   isHintLineImaginary: e != 1,
                   lineWidth: 2,
-                  lineColor: e == 1 ? Colors.red : Colors.grey.withOpacity(0.5),
+                  lineColor:
+                      e == 1 ? Colors.red : Colors.grey.withValues(alpha: 0.5),
                 ))
             .toList(),
         dimensionLineColor: Colors.red,
@@ -325,7 +326,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
               .toList(),
         ),
         DimensionalityBean(
-          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
+          fillColor: const Color(0xFFB1E3AD).withValues(alpha: 0.6),
           tagTipWidth: 0,
           tagTipHeight: 0,
           tagContents: [
@@ -344,7 +345,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
             .map((e) => DimensionBgCircleLine(
                   isHintLineImaginary: false,
                   lineWidth: 1,
-                  lineColor: Colors.grey.withOpacity(0.5),
+                  lineColor: Colors.grey.withValues(alpha: 0.5),
                 ))
             .toList(),
         dimensionLineColor: Colors.red,
@@ -376,7 +377,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
             margin:
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
-            color: Colors.green.withOpacity(0.5),
+            color: Colors.green.withValues(alpha: 0.5),
             clipBehavior: Clip.antiAlias,
             child: noChangeChartLine,
           ),
@@ -387,7 +388,7 @@ class _ChartDimensionaView2State extends State<ChartDimensionaView2> {
             margin:
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
-            color: Colors.green.withOpacity(0.5),
+            color: Colors.green.withValues(alpha: 0.5),
             clipBehavior: Clip.antiAlias,
             child: Stack(
               children: [

@@ -171,7 +171,7 @@
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.blue.withOpacity(0.4),
+      color: Colors.blue.withValues(alpha: 0.4),
       child: chartBar,
       clipBehavior: Clip.antiAlias,
     );
@@ -225,7 +225,7 @@
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      color: Colors.orangeAccent.withOpacity(0.6),
+      color: Colors.orangeAccent.withValues(alpha: 0.6),
       clipBehavior: Clip.antiAlias,
       borderOnForeground: true,
       child: chartPie,
@@ -265,8 +265,8 @@ class _ChartLineState extends State<ChartLinePage> {
       ],
       //Line渐变色，从曲线到x轴从上到下的闭合颜色集
       shaderColors: [
-        Colors.blue.withOpacity(0.3),
-        Colors.blue.withOpacity(0.1)
+        Colors.blue.withValues(alpha: 0.3),
+        Colors.blue.withValues(alpha: 0.1)
       ],
       //曲线或折线的颜色
       lineColor: Colors.red,
@@ -324,7 +324,7 @@ class _ChartLineState extends State<ChartLinePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.yellow.withOpacity(0.4),
+      color: Colors.yellow.withValues(alpha: 0.4),
       child: chartLine,
       clipBehavior: Clip.antiAlias,
     );
@@ -369,13 +369,13 @@ Widget _buildWidget(BuildContext context) {
      //维度填充数据的重要内容
       dimensionalityTags: [
         DimensionalityBean(
-          tagColor: Color(0xFFB1E3AD).withOpacity(0.6),
+          tagColor: Color(0xFFB1E3AD).withValues(alpha: 0.6),
           tagTitleStyle: TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '初次评测',
           tagContents: [0.2, 0.4, 0.8, 1.0, 0.1, 0.5],
         ),
         DimensionalityBean(
-          tagColor: Color(0xFFF88282).withOpacity(0.6),
+          tagColor: Color(0xFFF88282).withValues(alpha: 0.6),
           tagTitleStyle: TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '本次评测',
           tagContents: [0.8, 0.9, 0.8, 1.0, 0.7, 0.9],
@@ -398,7 +398,7 @@ Widget _buildWidget(BuildContext context) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.green.withOpacity(0.5),
+      color: Colors.green.withValues(alpha: 0.5),
       child: chartLine,
       clipBehavior: Clip.antiAlias,
     );

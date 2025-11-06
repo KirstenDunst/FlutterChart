@@ -57,7 +57,7 @@ class _ChartBarRoundState extends State<ChartBarRoundPage> {
   Widget _buildChartBarRound(context) {
     var chartBar = Stack(children: [
       ChartBar(
-        backgroundColor: Colors.brown.withOpacity(0.6),
+        backgroundColor: Colors.brown.withValues(alpha: 0.6),
         key: globalKey,
         xDialValues: [
           ChartBarBeanX(
@@ -265,7 +265,7 @@ class _ChartBarRoundState extends State<ChartBarRoundPage> {
                         endRate: 1,
                         borderRadius: BorderRadius.circular(4),
                         gradualColor: [
-                          Colors.greenAccent.withOpacity(0.2),
+                          Colors.greenAccent.withValues(alpha: 0.2),
                           Colors.greenAccent
                         ])
                   ],

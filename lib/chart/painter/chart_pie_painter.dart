@@ -218,8 +218,6 @@ class ChartPiePainter extends BasePainter {
       case ArrowBegainLocation.Left:
         startAngle = -pi;
         break;
-      default:
-        startAngle = 0.0;
     }
     startAngle += (residualAngle / total * 2 * pi);
     if (startAngle > 0) {

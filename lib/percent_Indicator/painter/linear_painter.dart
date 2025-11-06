@@ -43,7 +43,7 @@ class LinearPainter extends CustomPainter {
     _paintBackground.strokeWidth = lineWidth;
     var tempProgressColor = (progressModel.color ?? Colors.red);
     _paintLine.color = progress.toString() == '0.0'
-        ? tempProgressColor.withOpacity(0.0)
+        ? tempProgressColor.withValues(alpha: 0.0)
         : tempProgressColor;
     _paintLine.style = PaintingStyle.stroke;
     _paintLine.strokeWidth = lineWidth;

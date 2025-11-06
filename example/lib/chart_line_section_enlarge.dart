@@ -66,12 +66,12 @@ class _ChartLineSectionEnlargePageState
       ],
       lineShader: LineShaderSetModel(
         baseLineBottomGradient: LinearGradientModel(shaderColors: [
-          Colors.blueAccent.withOpacity(0.3),
-          Colors.blueAccent.withOpacity(0.1)
+          Colors.blueAccent.withValues(alpha: 0.3),
+          Colors.blueAccent.withValues(alpha: 0.1)
         ]),
         baseLineTopGradient: LinearGradientModel(shaderColors: [
-          Colors.blueAccent.withOpacity(0.3),
-          Colors.blueAccent.withOpacity(0.1)
+          Colors.blueAccent.withValues(alpha: 0.3),
+          Colors.blueAccent.withValues(alpha: 0.1)
         ]),
       ),
       lineColor: Colors.red,
@@ -95,7 +95,7 @@ class _ChartLineSectionEnlargePageState
       children: [
         ChartLine(
           xDialValues: tempXs,
-          backgroundColor: Colors.yellow.withOpacity(0.4),
+          backgroundColor: Colors.yellow.withValues(alpha: 0.4),
           key: globalKey,
           chartBeanSystems: [_chartLineBeanSystem],
           size: Size(MediaQuery.of(context).size.width,

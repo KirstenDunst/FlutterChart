@@ -53,12 +53,12 @@ class _ChartLineState extends State<ChartLinePage> {
       chartBeans: tempDatas,
       lineShader: LineShaderSetModel(
         baseLineBottomGradient: LinearGradientModel(shaderColors: [
-          Colors.blueAccent.withOpacity(0.3),
-          Colors.blueAccent.withOpacity(0.1)
+          Colors.blueAccent.withValues(alpha: 0.3),
+          Colors.blueAccent.withValues(alpha: 0.1)
         ]),
         baseLineTopGradient: LinearGradientModel(shaderColors: [
-          Colors.blueAccent.withOpacity(0.3),
-          Colors.blueAccent.withOpacity(0.1)
+          Colors.blueAccent.withValues(alpha: 0.3),
+          Colors.blueAccent.withValues(alpha: 0.1)
         ]),
       ),
       lineColor: Colors.red,
@@ -152,7 +152,7 @@ class _ChartLineState extends State<ChartLinePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.yellow.withOpacity(0.4),
+      color: Colors.yellow.withValues(alpha: 0.4),
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [

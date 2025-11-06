@@ -145,7 +145,7 @@ class ChartBarPainter extends BasePainter {
             (baseBean.yMax - baseBean.yMin) *
             _fixedHeight);
     for (var i = 0; i < xDialValues.length; i++) {
-      var defaultColors = [defaultColor.withOpacity(0.1), defaultColor];
+      var defaultColors = [defaultColor.withValues(alpha: 0.1), defaultColor];
       var ele = xDialValues[i];
       var rectLeft = _startX + (_rectPadding + _rectWidth) * i;
       var left = rectLeft + _cellWidth / 2 - _rectWidth / 2;

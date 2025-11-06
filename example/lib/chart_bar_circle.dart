@@ -163,46 +163,41 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
         )
       ],
       baseLineY: 35,
-      baseBean: BaseBean(
-        yDialValues: [
-          DialStyleY(
-              leftSub: DialStyleYSub(
-                title: '100',
-                titleStyle:
-                    const TextStyle(color: Colors.lightBlue, fontSize: 10),
-                centerSubTitle: 'Calm',
-                centerSubTextStyle:
-                    const TextStyle(color: Colors.red, fontSize: 10),
-              ),
-              yValue: 100,
-              positionRetioy: 100 / 100),
-          DialStyleY(
-              leftSub: DialStyleYSub(
-                title: '65',
-                titleStyle:
-                    const TextStyle(color: Colors.lightBlue, fontSize: 10),
-                centerSubTitle: 'Aware',
-                centerSubTextStyle:
-                    const TextStyle(color: Colors.red, fontSize: 10),
-              ),
-              yValue: 65,
-              positionRetioy: 65 / 100),
-          DialStyleY(
-              leftSub: DialStyleYSub(
-                title: '35',
-                titleStyle:
-                    const TextStyle(color: Colors.lightBlue, fontSize: 10),
-                centerSubTitle: 'Focused',
-                centerSubTextStyle:
-                    const TextStyle(color: Colors.red, fontSize: 10),
-              ),
-              yValue: 35,
-              positionRetioy: 35 / 100)
-        ],
-        yMax: 100.0,
-        yMin: 0.0,
-        isShowHintX: true
-      ),
+      baseBean: BaseBean(yDialValues: [
+        DialStyleY(
+            leftSub: DialStyleYSub(
+              title: '100',
+              titleStyle:
+                  const TextStyle(color: Colors.lightBlue, fontSize: 10),
+              centerSubTitle: 'Calm',
+              centerSubTextStyle:
+                  const TextStyle(color: Colors.red, fontSize: 10),
+            ),
+            yValue: 100,
+            positionRetioy: 100 / 100),
+        DialStyleY(
+            leftSub: DialStyleYSub(
+              title: '65',
+              titleStyle:
+                  const TextStyle(color: Colors.lightBlue, fontSize: 10),
+              centerSubTitle: 'Aware',
+              centerSubTextStyle:
+                  const TextStyle(color: Colors.red, fontSize: 10),
+            ),
+            yValue: 65,
+            positionRetioy: 65 / 100),
+        DialStyleY(
+            leftSub: DialStyleYSub(
+              title: '35',
+              titleStyle:
+                  const TextStyle(color: Colors.lightBlue, fontSize: 10),
+              centerSubTitle: 'Focused',
+              centerSubTextStyle:
+                  const TextStyle(color: Colors.red, fontSize: 10),
+            ),
+            yValue: 35,
+            positionRetioy: 35 / 100)
+      ], yMax: 100.0, yMin: 0.0, isShowHintX: true),
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
       rectWidth: 50.0,
@@ -211,7 +206,7 @@ class _ChartBarCircleState extends State<ChartBarCirclePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.orange.withOpacity(0.4),
+      color: Colors.orange.withValues(alpha: 0.4),
       clipBehavior: Clip.antiAlias,
       child: chartBar,
     );

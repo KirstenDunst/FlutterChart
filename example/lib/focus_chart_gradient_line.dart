@@ -158,7 +158,10 @@ class ChartFocusLineProvider extends ChangeNotifier {
             ? Colors.transparent
             : (i == yValues.length - 2 ? Colors.orange : null),
         fillColors: yTexts[yTexts.length - 1 - i] == 'Relaxed'
-            ? [Colors.blue.withOpacity(0.3), Colors.blue.withOpacity(0.1)]
+            ? [
+                Colors.blue.withValues(alpha: 0.3),
+                Colors.blue.withValues(alpha: 0.1)
+              ]
             : null,
       ));
 

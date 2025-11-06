@@ -56,7 +56,7 @@ class _ChartBarLinePageState extends State<ChartBarLinePage> {
               ],
               touchSet: LineBarTouchSet(
                 selelctSet: LineBarSelectSet(
-                  highLightColor: Colors.black.withOpacity(0.4),
+                  highLightColor: Colors.black.withValues(alpha: 0.4),
                 ),
                 touchBack: (startPoint, size, value) {
                   // print('>>>>>>>$startPoint');

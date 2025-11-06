@@ -470,11 +470,11 @@ class ChartLineFocusPainter extends BasePainter {
             : tempModel?.rightSub?.centerSubTextStyle.color) ??
         defaultColor;
     if (isPoint) {
-      return [defaultMainColor, defaultMainColor.withOpacity(0.3)];
+      return [defaultMainColor, defaultMainColor.withValues(alpha: 0.3)];
     }
     //区间渐变颜色可自定义外抛
     return tempModel?.fillColors ??
-        [defaultMainColor, defaultMainColor.withOpacity(0.3)];
+        [defaultMainColor, defaultMainColor.withValues(alpha: 0.3)];
   }
 
   DialStyleY? _getCommonDealValueRelyOn(double value) {

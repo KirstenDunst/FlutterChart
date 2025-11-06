@@ -38,12 +38,12 @@ class _ChartCurveState extends State<ChartCurvePage> {
       chartBeans: tempDatas,
       lineShader: LineShaderSetModel(
           baseLineBottomGradient: LinearGradientModel(shaderColors: [
-            Colors.red.withOpacity(0.01),
-            Colors.red.withOpacity(0.3)
+            Colors.red.withValues(alpha: 0.01),
+            Colors.red.withValues(alpha: 0.3)
           ]),
           baseLineTopGradient: LinearGradientModel(shaderColors: [
-            Colors.blueAccent.withOpacity(0.3),
-            Colors.blueAccent.withOpacity(0.01)
+            Colors.blueAccent.withValues(alpha: 0.3),
+            Colors.blueAccent.withValues(alpha: 0.01)
           ]),
           baseLineY: 0,
           shaderIsContentFill: false),
@@ -83,7 +83,7 @@ class _ChartCurveState extends State<ChartCurvePage> {
         SectionBean(
             startRatio: 0.4,
             widthRatio: 0.2,
-            fillColor: Colors.orange.withOpacity(0.4),
+            fillColor: Colors.orange.withValues(alpha: 0.4),
             textTitle: TextSetModel(
                 title: '居中标题',
                 titleStyle: const TextStyle(color: Colors.black, fontSize: 10)),
@@ -144,7 +144,7 @@ class _ChartCurveState extends State<ChartCurvePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.green.withOpacity(0.5),
+      color: Colors.green.withValues(alpha: 0.5),
       clipBehavior: Clip.antiAlias,
       child: chartLine,
     );

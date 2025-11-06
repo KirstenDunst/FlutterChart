@@ -167,8 +167,8 @@ class ChartFocusLineProvider extends ChangeNotifier {
             shaderColors: [const Color(0xFF17605C), const Color(0x00549A97)]),
         baseLineY: 30,
         baseLineBottomGradient: LinearGradientModel(
-            shaderColors: [Colors.red.withOpacity(0.01), Colors.red]),
-            // shaderIsContentFill: false
+            shaderColors: [Colors.red.withValues(alpha: 0.01), Colors.red]),
+        // shaderIsContentFill: false
       );
       focusChartBeanMain.lineWidth = 1;
       focusChartBeanMain.isLinkBreak = false;

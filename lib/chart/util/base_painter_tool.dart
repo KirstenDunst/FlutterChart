@@ -211,7 +211,6 @@ class PainterTool {
         showX = false;
         showY = true;
         break;
-      default:
     }
     if (showX) {
       if (coordinateAxisModel.baseBean.isShowBorderRight) {
@@ -684,7 +683,7 @@ class PainterTool {
                 end: Alignment.bottomCenter,
                 tileMode: TileMode.mirror,
                 colors: pointModel.cellPointSet.pointShaderColors ??
-                    [defaultColor, defaultColor.withOpacity(0.3)])
+                    [defaultColor, defaultColor.withValues(alpha: 0.3)])
             .createShader(rect);
       canvas
         ..drawDRRect(

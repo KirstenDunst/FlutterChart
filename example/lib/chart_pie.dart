@@ -86,7 +86,7 @@ class _ChartPieState extends State<ChartPiePage> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      color: Colors.orangeAccent.withOpacity(0.6),
+      color: Colors.orangeAccent.withValues(alpha: 0.6),
       clipBehavior: Clip.antiAlias,
       borderOnForeground: true,
       child: chartPie,

@@ -167,7 +167,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
           ),
           startRatio: 0.1,
           widthRatio: 0.2,
-          fillColor: Colors.orange.withOpacity(0.2),
+          fillColor: Colors.orange.withValues(alpha: 0.2),
           borderColor: Colors.red,
           borderWidth: 2,
           isBorderSolid: false),
@@ -178,7 +178,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
           ),
           startRatio: 0.4,
           widthRatio: 0.05,
-          fillColor: Colors.orange.withOpacity(0.2)),
+          fillColor: Colors.orange.withValues(alpha: 0.2)),
       SectionBean(
           textTitle: TextSetModel(
             title: '训练3',
@@ -186,7 +186,7 @@ class ChartFocusLineProvider extends ChangeNotifier {
           ),
           startRatio: 0.7,
           widthRatio: 0.2,
-          fillColor: Colors.orange.withOpacity(0.2))
+          fillColor: Colors.orange.withValues(alpha: 0.2))
     ];
     //制造假数据结束
     _loadNewData();

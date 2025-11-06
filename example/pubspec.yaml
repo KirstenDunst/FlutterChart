@@ -5,13 +5,13 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.4 <4.0.0'
+  sdk: '>=3.3.4'
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  provider: ^6.1.2 # 状态管理
+  provider: ^6.1.5 # 状态管理
   flutter_chart_csx:
     path: ../
 
@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 
 # The following section is specific to Flutter packages.

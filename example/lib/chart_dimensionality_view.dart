@@ -142,7 +142,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
       ],
       dimensionalityTags: [
         DimensionalityBean(
-          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
+          fillColor: const Color(0xFFB1E3AD).withValues(alpha: 0.6),
           tagTitleStyle:
               const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '初次评测',
@@ -156,7 +156,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
           ],
         ),
         DimensionalityBean(
-          fillColor: const Color(0xFFF88282).withOpacity(0.6),
+          fillColor: const Color(0xFFF88282).withValues(alpha: 0.6),
           tagTitleStyle:
               const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '本次评测',
@@ -177,7 +177,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             .map((e) => DimensionBgCircleLine(
                   isHintLineImaginary: false,
                   lineWidth: 1,
-                  lineColor: Colors.grey.withOpacity(0.5),
+                  lineColor: Colors.grey.withValues(alpha: 0.5),
                 ))
             .toList(),
       ),
@@ -322,7 +322,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
       ],
       dimensionalityTags: [
         DimensionalityBean(
-          fillColor: const Color(0xFFB1E3AD).withOpacity(0.6),
+          fillColor: const Color(0xFFB1E3AD).withValues(alpha: 0.6),
           tagTitleStyle:
               const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '初次评测',
@@ -336,7 +336,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
           ],
         ),
         DimensionalityBean(
-          fillColor: const Color(0xFFF88282).withOpacity(0.6),
+          fillColor: const Color(0xFFF88282).withValues(alpha: 0.6),
           tagTitleStyle:
               const TextStyle(color: Color(0xFF666666), fontSize: 16.0),
           tagTitle: '本次评测',
@@ -385,7 +385,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             margin:
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
-            color: Colors.green.withOpacity(0.5),
+            color: Colors.green.withValues(alpha: 0.5),
             clipBehavior: Clip.antiAlias,
             child: noChangeChartLine,
           ),
@@ -396,7 +396,7 @@ class _ChartDimensionalityViewState extends State<ChartDimensionalityView> {
             margin:
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
             semanticContainer: true,
-            color: Colors.green.withOpacity(0.5),
+            color: Colors.green.withValues(alpha: 0.5),
             clipBehavior: Clip.antiAlias,
             child: changeChartLine,
           ),

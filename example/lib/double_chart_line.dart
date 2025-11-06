@@ -104,12 +104,12 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
         ],
         lineShader: LineShaderSetModel(
           baseLineBottomGradient: LinearGradientModel(shaderColors: [
-            Colors.blueAccent.withOpacity(0.3),
-            Colors.blueAccent.withOpacity(0.1)
+            Colors.blueAccent.withValues(alpha: 0.3),
+            Colors.blueAccent.withValues(alpha: 0.1)
           ]),
           baseLineTopGradient: LinearGradientModel(shaderColors: [
-            Colors.blueAccent.withOpacity(0.3),
-            Colors.blueAccent.withOpacity(0.1)
+            Colors.blueAccent.withValues(alpha: 0.3),
+            Colors.blueAccent.withValues(alpha: 0.1)
           ]),
         ),
         lineColor: Colors.cyan,
@@ -124,7 +124,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointSize: const Size(10, 10),
               pointRadius: const Radius.circular(5),
-              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              pointShaderColors: [
+                Colors.red.withValues(alpha: 0.3),
+                Colors.red
+              ],
             ),
           ),
           ChartLineBean(
@@ -132,7 +135,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
               y: 20,
               cellPointSet: CellPointSet(
                 pointSize: const Size(10, 10),
-                pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+                pointShaderColors: [
+                  Colors.red.withValues(alpha: 0.3),
+                  Colors.red
+                ],
               )),
           ChartLineBean(
             xPositionRetioy: 2 / 7,
@@ -140,7 +146,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointSize: const Size(10, 10),
               pointRadius: const Radius.circular(5),
-              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              pointShaderColors: [
+                Colors.red.withValues(alpha: 0.3),
+                Colors.red
+              ],
             ),
           ),
           ChartLineBean(
@@ -149,7 +158,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointSize: const Size(10, 10),
               pointRadius: const Radius.circular(5),
-              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              pointShaderColors: [
+                Colors.red.withValues(alpha: 0.3),
+                Colors.red
+              ],
             ),
           ),
           ChartLineBean(
@@ -158,7 +170,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointSize: const Size(10, 10),
               pointRadius: const Radius.circular(5),
-              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              pointShaderColors: [
+                Colors.red.withValues(alpha: 0.3),
+                Colors.red
+              ],
             ),
           ),
           ChartLineBean(
@@ -166,7 +181,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
               y: 30,
               cellPointSet: CellPointSet(
                 pointSize: const Size(10, 10),
-                pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+                pointShaderColors: [
+                  Colors.red.withValues(alpha: 0.3),
+                  Colors.red
+                ],
               )),
           ChartLineBean(
             xPositionRetioy: 6 / 7,
@@ -174,7 +192,10 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointSize: const Size(10, 10),
               pointRadius: const Radius.circular(5),
-              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              pointShaderColors: [
+                Colors.red.withValues(alpha: 0.3),
+                Colors.red
+              ],
             ),
           ),
           ChartLineBean(
@@ -183,18 +204,21 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
             cellPointSet: CellPointSet(
               pointSize: const Size(10, 10),
               pointRadius: const Radius.circular(5),
-              pointShaderColors: [Colors.red.withOpacity(0.3), Colors.red],
+              pointShaderColors: [
+                Colors.red.withValues(alpha: 0.3),
+                Colors.red
+              ],
             ),
           ),
         ],
         lineShader: LineShaderSetModel(
           baseLineBottomGradient: LinearGradientModel(shaderColors: [
-            Colors.red.withOpacity(0.3),
-            Colors.red.withOpacity(0.1)
+            Colors.red.withValues(alpha: 0.3),
+            Colors.red.withValues(alpha: 0.1)
           ]),
           baseLineTopGradient: LinearGradientModel(shaderColors: [
-            Colors.red.withOpacity(0.3),
-            Colors.red.withOpacity(0.1)
+            Colors.red.withValues(alpha: 0.3),
+            Colors.red.withValues(alpha: 0.1)
           ]),
         ),
         lineColor: Colors.red,
@@ -281,7 +305,7 @@ class _DoubleChartlineState extends State<DoubleChartlinePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
-      color: Colors.white.withOpacity(0.4),
+      color: Colors.white.withValues(alpha: 0.4),
       clipBehavior: Clip.antiAlias,
       child: chartLine,
     );
