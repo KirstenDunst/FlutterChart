@@ -4,7 +4,7 @@ version: 1.6.5
 homepage: https://github.com/KirstenDunst/FlutterChart
 
 environment:
-  sdk: ">=3.0.0"
+  sdk: ^3.0.0
 
 dependencies:
   flutter:
