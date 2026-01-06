@@ -17,6 +17,8 @@ import 'chart_bean_line_common.dart';
 class LineCanvasModel {
   List<Path> paths;
   Color pathColor;
+  // 如果是虚线，则设置(参考:[5.0, 4.0]),不设置则按照实线展示
+  List<double>? dashArray;
 
   ///曲线或折线的整体绘制区域的渐变设置，如果不为空会覆盖 [lineColor]的设置效果，
   Gradient? lineGradient;
@@ -30,6 +32,7 @@ class LineCanvasModel {
   LineCanvasModel({
     required this.paths,
     this.pathColor = defaultColor,
+    this.dashArray,
     this.lineGradient,
     this.pathWidth = 1,
     this.baseLineTopShadow,

@@ -19,6 +19,8 @@ class ChartBeanSystem {
   double lineWidth;
   //标记是否为曲线
   bool isCurve;
+  // 如果是虚线，则设置(参考:[5.0, 4.0]),不设置则按照实线展示
+  List<double>? dashArray;
   //点集合
   List<ChartLineBean> chartBeans;
   //单独的点样式设置(两个y为null的数值之间只有一个点的样式展示)
@@ -36,6 +38,7 @@ class ChartBeanSystem {
   ChartBeanSystem(
       {this.lineWidth = 2,
       this.isCurve = false,
+      this.dashArray,
       required this.chartBeans,
       this.lineShader,
       this.lineColor = defaultColor,

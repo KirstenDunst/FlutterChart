@@ -7,6 +7,10 @@
  * @Email: cao_shixin@yahoo.com
 -->
 
+## 1.6.5
+
+- 折线图线条参数增加 dashArray，支持线条设置虚线样式。
+
 ## 1.6.4
 
 - 柱状线图每条曲线支持设置基准线上下两种颜色设置，参数[segmentationModel]

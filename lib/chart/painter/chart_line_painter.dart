@@ -6,6 +6,7 @@ import 'package:flutter_chart_csx/chart/bean/chart_bean_line_content.dart';
 import 'package:flutter_chart_csx/chart/base/base_painter.dart';
 import 'package:flutter_chart_csx/chart/util/base_painter_tool.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';
+import 'package:path_drawing/path_drawing.dart';
 
 class ChartLinePainter extends BasePainter {
   //起始和结束距离两端y轴的单侧间距。默认无间距
@@ -264,6 +265,7 @@ class ChartLinePainter extends BasePainter {
         var lineModel = LineCanvasModel(
             paths: paths,
             pathColor: item.lineColor,
+            dashArray: item.dashArray,
             pathWidth: item.lineWidth,
             lineGradient: item.lineGradient,
             baseLineTopShadow: shadowTopPaths.isEmpty || item.lineShader == null
@@ -395,7 +397,16 @@ class ChartLinePainter extends BasePainter {
                   size.width - baseBean.basePadding.horizontal,
                   size.height - baseBean.basePadding.vertical));
         }
-        canvas.drawPath(pathElement, pathPaint);
+        if (lineElement.dashArray != null) {
+          canvas.drawPath(
+              dashPath(
+                pathElement,
+                dashArray: CircularIntervalList<double>(lineElement.dashArray!),
+              ),
+              pathPaint);
+        } else {
+          canvas.drawPath(pathElement, pathPaint);
+        }
       });
 
       for (var i = 0; i < lineElement.points.length; i++) {
