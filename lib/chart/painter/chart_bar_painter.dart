@@ -241,6 +241,17 @@ class ChartBarPainter extends BasePainter {
       }
     }
 
+    // 如果选中,则特殊显示此区间（做背景，不影响柱体颜色）
+    if (showSelect) {
+      canvas.drawRect(
+          Rect.fromLTWH(rectLeft, _endY, _cellWidth, _fixedHeight),
+          Paint()
+            ..isAntiAlias = true
+            ..strokeCap = StrokeCap.round
+            ..style = PaintingStyle.fill
+            ..color = selectModelSet!.highLightColor);
+    }
+
     //多段绘制
     if (contentHeight > 0) {
       //向上
@@ -294,16 +305,6 @@ class ChartBarPainter extends BasePainter {
       });
     }
 
-    // 如果选中,则特殊显示此区间
-    if (showSelect) {
-      canvas.drawRect(
-          Rect.fromLTWH(rectLeft, _endY, _cellWidth, _fixedHeight),
-          Paint()
-            ..isAntiAlias = true
-            ..strokeCap = StrokeCap.round
-            ..style = PaintingStyle.fill
-            ..color = selectModelSet!.highLightColor);
-    }
     //顶部文字
     var topText = '${model.rectTopText}';
     var numChange = double.tryParse(topText);
