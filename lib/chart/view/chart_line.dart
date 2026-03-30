@@ -84,11 +84,20 @@ class ChartLineState extends State<ChartLine>
   }
 
   //根据tag查找到点的回传
-  TagSearchedModel? searchWithTag(String tag) {
+  TagSearchedModel? searchWithTag(String tag,
+      {bool needTouchLocalPosition = false}) {
     if (_painter == null) {
       return null;
     } else {
       var result = _painter!.getDetailWithTag(tag);
+      if (needTouchLocalPosition) {
+        setState(() {
+          _lastTouchModel = result == null
+              ? null
+              : LineTouchBackModel(
+                  startOffset: result.pointOffset, backParam: result.backValue);
+        });
+      }
       return result;
     }
   }

@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "flutter_chart_csx",
-      "version": "1.6.6",
+      "version": "1.6.7",
       "dependencies": [
         "flutter",
         "path_drawing"

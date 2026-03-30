@@ -6,6 +6,11 @@
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
 -->
+## 1.6.7
+
+- 折线图增加tag选中点辅助线显示与否参数
+
+折线图增加tag搜索选中辅助线显示参数
 
 ## 1.6.6
 
