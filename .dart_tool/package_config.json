@@ -39,13 +39,13 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/caoshixin/Flutter/flutter/packages/flutter",
+      "rootUri": "file:///Users/caoshixin/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/caoshixin/Flutter/flutter/packages/flutter_test",
+      "rootUri": "file:///Users/caoshixin/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -105,7 +105,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/caoshixin/Flutter/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/caoshixin/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -166,7 +166,7 @@
   ],
   "generator": "pub",
   "generatorVersion": "3.9.2",
-  "flutterRoot": "file:///Users/caoshixin/Flutter/flutter",
+  "flutterRoot": "file:///Users/caoshixin/flutter",
   "flutterVersion": "3.35.7",
   "pubCache": "file:///Users/caoshixin/.pub-cache"
 }

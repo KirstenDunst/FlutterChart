@@ -5,7 +5,6 @@
  * @LastEditTime: 2021-05-07 13:43:51
  * @Description: 饼状图参数
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
 import '../base/painter_const.dart';

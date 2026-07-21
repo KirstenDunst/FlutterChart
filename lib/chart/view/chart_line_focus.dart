@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-06-23 13:38:08
  * @Description: 绘制承载区, 支持多个不同曲线的绘制
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/bean/chart_bean_focus_content.dart';

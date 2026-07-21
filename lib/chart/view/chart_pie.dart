@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-01-21 14:03:27
  * @Description: 饼状图绘制区域
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/chart/base/chart_bean.dart';

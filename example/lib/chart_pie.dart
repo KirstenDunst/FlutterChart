@@ -5,7 +5,6 @@
  * @LastEditTime: 2021-05-08 09:14:59
  * @Description: 
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_chart_csx/flutter_chart_csx.dart';

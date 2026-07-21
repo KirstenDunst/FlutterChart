@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-01-21 14:02:00
  * @Description: 
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

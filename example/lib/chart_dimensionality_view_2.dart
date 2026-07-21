@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-05-24 15:28:27
  * @Description: 
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';

@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-06-01 10:37:23
  * @Description: 
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';

@@ -5,7 +5,6 @@
  * @LastEditTime: 2020-12-10 15:03:42
  * @Description: 
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';

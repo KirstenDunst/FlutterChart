@@ -5,7 +5,6 @@
  * @LastEditTime: 2021-09-22 08:45:22
  * @Description: 双专注力曲线显示
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 
 import 'dart:async';

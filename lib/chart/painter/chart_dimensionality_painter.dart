@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-06-23 09:26:08
  * @Description: 
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'dart:math';
 

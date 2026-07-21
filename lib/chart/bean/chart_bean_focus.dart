@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-10-21 14:30:48
  * @Description: 头环绘制曲线属性设置区
  * @Email: cao_shixin@yahoo.com
- * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
 import '../base/chart_bean.dart';
