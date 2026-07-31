@@ -22,7 +22,7 @@ class ChartLineBarPainter extends BasePainter {
   LineBarSelectSet? selectModelSet;
 
   late double _fixedHeight, _fixedWidth, _startX, _endX, _startY, _endY;
-  late List<LineBarTouchCellModel> _touchCellModels;
+  List<LineBarTouchCellModel> _touchCellModels = [];
 
   ChartLineBarPainter(
     this.lineBarSystems, {

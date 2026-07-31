@@ -31,7 +31,7 @@ class ChartBarPainter extends BasePainter {
   //每一个柱状图的基本宽度
   late double _cellWidth;
   late double _rectWidth;
-  late List<BarTouchCellModel> _touchCellModels;
+  List<BarTouchCellModel> _touchCellModels = [];
 
   ChartBarPainter(
     this.xDialValues, {

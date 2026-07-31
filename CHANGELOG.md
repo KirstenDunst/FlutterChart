@@ -6,6 +6,10 @@
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
 -->
+## 1.6.8
+
+- 修复绘制中根据tag查找数据报错late 对象未初始化问题
+
 ## 1.6.7
 
 - 折线图增加tag选中点辅助线显示与否参数

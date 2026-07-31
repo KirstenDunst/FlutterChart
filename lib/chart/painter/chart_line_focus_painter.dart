@@ -32,8 +32,8 @@ class ChartLineFocusPainter extends BasePainter {
   late double _fixedHeight, _fixedWidth, _xStepWidth;
   //y轴分布数值是否是正序，即y轴向上为正方向，y轴的值也是从下往上为从小变大的
   late bool _isPositiveSequence;
-  late Map<double, TouchModel> _points;
-  late Map<String, TagModel> _tagPoints;
+  Map<double, TouchModel> _points = {};
+  Map<String, TagModel> _tagPoints = {};
 
   ChartLineFocusPainter(
     this.focusChartBeans, {

@@ -27,8 +27,8 @@ class ChartLinePainter extends BasePainter {
   VoidCallback? paintEnd;
 
   late double _startX, _endX, _startY, _endY, _fixedHeight, _fixedWidth;
-  late List<LineTouchCellModel> _lineTouchCellModels;
-  late Map<String, TagModel> _tagPoints;
+  List<LineTouchCellModel> _lineTouchCellModels = [];
+  Map<String, TagModel> _tagPoints = {};
 
   ChartLinePainter(this.chartBeanSystems,
       {this.bothEndPitchX = 0,
