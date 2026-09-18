@@ -53,6 +53,9 @@ class CircularPercentIndicator extends StatefulWidget {
   /// 保存状态，避免重复绘制，默认true
   final bool addAutomaticKeepAlive;
 
+  ///
+  final AnimationBehavior animationBehavior;
+
   CircularPercentIndicator({
     Key? key,
     this.percentModel = PercentModel.normal,
@@ -69,6 +72,7 @@ class CircularPercentIndicator extends StatefulWidget {
     this.reverse = false,
     this.maskFilter,
     this.rotateLinearGradient = false,
+    this.animationBehavior = AnimationBehavior.normal,
   }) : super(key: key) {
     assert(startAngle >= 0.0);
     if (percentModel.percent < 0.0 || percentModel.percent > 1.0) {
@@ -99,7 +103,8 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
       _animationController = AnimationController(
           vsync: this,
           duration:
-              Duration(milliseconds: widget.animationSet.animationDuration));
+              Duration(milliseconds: widget.animationSet.animationDuration),
+          animationBehavior: widget.animationBehavior);
       _animation = Tween(begin: 0.0, end: widget.percentModel.percent).animate(
         CurvedAnimation(
             parent: _animationController!, curve: widget.animationSet.curve),

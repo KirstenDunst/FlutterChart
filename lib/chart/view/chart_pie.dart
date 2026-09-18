@@ -38,6 +38,8 @@ class ChartPie extends StatefulWidget {
   final int decimalDigits;
   //中心组件
   final Widget? centerWidget;
+  //
+  final AnimationBehavior animationBehavior;
 
   const ChartPie({
     Key? key,
@@ -55,6 +57,7 @@ class ChartPie extends StatefulWidget {
     this.assistBGColor = defaultColor,
     this.decimalDigits = 0,
     this.centerWidget,
+    this.animationBehavior = AnimationBehavior.normal,
   }) : super(key: key);
 
   @override
@@ -71,7 +74,10 @@ class ChartPieState extends State<ChartPie>
   void initState() {
     super.initState();
     if (widget.duration != null) {
-      _controller = AnimationController(vsync: this, duration: widget.duration);
+      _controller = AnimationController(
+          vsync: this,
+          duration: widget.duration,
+          animationBehavior: widget.animationBehavior);
       Tween(begin: begin, end: end).animate(_controller!)
         ..addListener(() {
           _value = _controller!.value;

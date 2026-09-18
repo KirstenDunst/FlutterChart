@@ -47,21 +47,25 @@ class LinearPercentIndicator extends StatefulWidget {
   /// 保存状态，避免重复绘制，默认true
   final bool addAutomaticKeepAlive;
 
-  LinearPercentIndicator(
-      {Key? key,
-      this.percentModel = PercentModel.normal,
-      this.animationSet = AnimationSet.normal,
-      this.isRTL = false,
-      this.width,
-      this.lineHeight = 5.0,
-      this.backgroundGradient = ColorGradientModel.backModel,
-      this.progressGradient = ColorGradientModel.progressModel,
-      this.centerSet = CenterSet.normal,
-      this.strokeCap = StrokeCap.butt,
-      this.maskFilter,
-      this.clipLinearGradient = false,
-      this.addAutomaticKeepAlive = true})
-      : super(key: key) {
+  ///
+  final AnimationBehavior animationBehavior;
+
+  LinearPercentIndicator({
+    Key? key,
+    this.percentModel = PercentModel.normal,
+    this.animationSet = AnimationSet.normal,
+    this.isRTL = false,
+    this.width,
+    this.lineHeight = 5.0,
+    this.backgroundGradient = ColorGradientModel.backModel,
+    this.progressGradient = ColorGradientModel.progressModel,
+    this.centerSet = CenterSet.normal,
+    this.strokeCap = StrokeCap.butt,
+    this.maskFilter,
+    this.clipLinearGradient = false,
+    this.addAutomaticKeepAlive = true,
+    this.animationBehavior = AnimationBehavior.normal,
+  }) : super(key: key) {
     if (percentModel.percent < 0.0 || percentModel.percent > 1.0) {
       throw Exception('Percent value must be a double between 0.0 and 1.0');
     }
@@ -108,7 +112,8 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
       _animationController = AnimationController(
           vsync: this,
           duration:
-              Duration(milliseconds: widget.animationSet.animationDuration));
+              Duration(milliseconds: widget.animationSet.animationDuration),
+          animationBehavior: widget.animationBehavior);
       _animation = Tween(begin: 0.0, end: widget.percentModel.percent).animate(
         CurvedAnimation(
             parent: _animationController!, curve: widget.animationSet.curve),

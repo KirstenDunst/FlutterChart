@@ -6,6 +6,10 @@
  * @Description: 版本更替
  * @Email: cao_shixin@yahoo.com
 -->
+## 1.6.9
+
+- 组件内部动画支持外部设置AnimationController的AnimationBehavior参数
+
 ## 1.6.8
 
 - 修复绘制中根据tag查找数据报错late 对象未初始化问题

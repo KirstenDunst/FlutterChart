@@ -36,6 +36,8 @@ class ChartBar extends StatefulWidget {
   final GestureScaleUpdateCallback? onScaleUpdate;
   final GestureScaleStartCallback? onScaleStart;
   final GestureScaleEndCallback? onScaleEnd;
+  //
+  final AnimationBehavior animationBehavior;
 
   const ChartBar({
     Key? key,
@@ -52,6 +54,7 @@ class ChartBar extends StatefulWidget {
     this.onScaleUpdate,
     this.onScaleEnd,
     this.onScaleStart,
+    this.animationBehavior = AnimationBehavior.normal,
   }) : super(key: key);
 
   @override
@@ -70,7 +73,10 @@ class ChartBarState extends State<ChartBar>
   void initState() {
     super.initState();
     if (widget.duration != null) {
-      _controller = AnimationController(vsync: this, duration: widget.duration);
+      _controller = AnimationController(
+          vsync: this,
+          duration: widget.duration,
+          animationBehavior: widget.animationBehavior);
       Tween(begin: 0.0, end: 1.0).animate(_controller!)
         ..addListener(() {
           setState(() {
